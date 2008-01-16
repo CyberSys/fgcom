@@ -36,8 +36,6 @@ USE_PA_JACK=0
 AUDIO_ALSA=0
 AUDIO_OPENAL=1
 
-# USE_LOFI=1
-
 CFLAGS= -I. -Igsm/inc \
 	-Ilibspeex/include --std=c99 -Wall -Wmissing-noreturn
 
@@ -359,10 +357,6 @@ endif
 
 ifeq ($(MEC2_EC),1)
 CFLAGS:= $(CFLAGS) -DUSE_MEC2=1
-endif
-
-ifeq ($(USE_LOFI),1)
-CFLAGS:= $(CFLAGS) -DIAXC_LOFI_FILTER=1
 endif
 
 CFLAGS:= $(CFLAGS) -D$(OSTYPE)

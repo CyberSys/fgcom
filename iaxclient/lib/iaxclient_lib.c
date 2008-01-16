@@ -36,16 +36,6 @@
 
 #undef JB_DEBUGGING
 
-#ifdef IAXC_LOFI_FILTER
-byte x[2]={0,0};
-byte y[2]={0,0};
-const double f0=200.0;
-const double Q=4.0;
-const double dBgain=1.0;
-double A;
-double A2;
-#endif
-
 /* configurable jitterbuffer options */
 static long jb_target_extra = -1; 
 
@@ -541,11 +531,6 @@ EXPORT int iaxc_initialize(int audType, int inCalls) {
 		fprintf(stderr, "can't initialize pv\n");
 		return -1;
 	}
-#endif
-
-#ifdef IAXC_LOFI_FILTER
-        A=exp(0.05756462732485114*dBgain);
-        A2=A*A;
 #endif
 
 	return 0;

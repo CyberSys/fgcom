@@ -19,16 +19,6 @@
 #include "codec_ulaw.h"
 #include "codec_alaw.h"
 #include "codec_speex.h"
-#ifdef IAXC_LOFI_FILTER
-#include <stdlib.h>
-extern short x[2];
-extern short y[2];
-extern double Q;
-extern double A;
-extern double A2;
-extern double f0;
-extern double dBgain;
-#endif
 
 #ifdef CODEC_ILBC
 	#include "codec_ilbc.h"
@@ -54,93 +44,6 @@ static struct iaxc_speex_settings speex_settings = {
   0, 0, /* vbr, abr */
   3     /* complexity */
 };
-
-#ifdef IAXC_LOFI_FILTER
-int iaxc_input_lofi_filter(short* audio, int len, int rate)
-{
-	int i;
-	double noise_level=0.3;
-	static long half_rand_max=RAND_MAX/2;
-	byte* tmp_x=NULL;
-	byte* tmp_y=NULL;
-	byte rand=0;
-	/* EQ paramters */
-	double w0=6.28318530717959*f0/(double)rate;
-	double sin_w0=sin(w0);
-	double cos_w0=cos(w0);
-	double alpha=0.5*sin_w0/Q;
-	double a0=1.0+alpha;
-	double ra0=1.0/a0;
-	/* BPF parameters */
-	double b0=0.5*sin_w0*A2*ra0;
-	double b1=0.0;
-	double b2=-b0*ra0;
-	double a1=-2.0*cos_w0*ra0;
-	double a2=(1.0-alpha)*ra0;
-	/* BPF0 parameters */
-	/* double b0=alpha*A2*ra0;
-	double b1=0.0;
-	double b2=-b0*ra0;
-	double a1=-2.0*cos_w0*ra0;
-	double a2=(1.0-alpha)*ra0; */
-
-	/* create a tmp_x buffer */
-	tmp_x=(byte *)malloc(sizeof(byte)*(len+2));
-	if(tmp_x==NULL)
-	{
-		fprintf(stderr, "can't malloc tmp_x\n");
-		exit(502);
-	}
-
-	/* create a tmp_y buffer */
-	tmp_y=(byte *)malloc(sizeof(byte)*(len+2));
-	if(tmp_y==NULL)
-	{
-		fprintf(stderr, "can't malloc tmp_y\n");
-		exit(503);
-	}
-
-	/* copy the buffered two shorts */
-	tmp_y[0]=y[0];
-	tmp_y[1]=y[1];
-	tmp_x[0]=x[0];
-	tmp_x[1]=x[0];
-
-	/* copy the audio in buffer */
-	if(memcpy(&tmp_x[2],audio,len)!=&tmp_x[2])
-	{
-		fprintf(stderr, "can't memcpy(tmp_x[2],audio,len)\n");
-		exit(504);
-	}
-
-	for(i=2;i<len+2;i++)
-	{
-		/* add random noise */
-		rand=(byte)((((double)random()-half_rand_max)/RAND_MAX)*256*noise_level);
-		tmp_x[i]+=rand;
-
-		/* BPF */
-		tmp_y[i]=(short)(b0*tmp_x[i]+b1*tmp_x[i-1]+b2*tmp_x[i-2]-a1*tmp_y[i-1]-a2*tmp_y[i-2]);
-
-		printf("%03d - in: %-5d, out: %-5d (DIFF=%5d) (RAND=%5d)\n",i,audio[i-2],tmp_y[i],tmp_y[i]-audio[i-2],rand);
-	}
-
-	/* copy the last two shorts for the next calc. frame */
-	y[0]=tmp_y[len-2];
-	y[1]=tmp_y[len-1];
-	x[0]=tmp_x[len-2];
-	x[1]=tmp_x[len-1];
-
-	/* copy back the audio buffer */
-	if(memcpy(audio,&tmp_y[2],len)!=audio)
-	{
-		fprintf(stderr, "can't memcpy(audio,tmp_x[2],len)\n");
-		exit(505);
-	}
-
-	return(0);
-}
-#endif
 
 static double vol_to_db(double vol)
 {
@@ -223,11 +126,6 @@ int iaxc_input_postprocess(void *audio, int len, int rate)
     double volume;
     static double lowest_volume = 1;
     int silent=0;
-
-#ifdef IAXC_LOFI_FILTER
-    /* use our own LoFi filter for realistic radio com */
-    iaxc_input_lofi_filter(audio, len, rate);
-#endif
 
     if(!st || (speex_state_size != len) || (speex_state_rate != rate)) {
 	if(st) speex_preprocess_state_destroy(st);
