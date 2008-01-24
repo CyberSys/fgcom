@@ -14,7 +14,10 @@ usage (char *prog)
     ("--password      | -P     password for VoIP account (default: '%s')\n",
      DEFAULT_PASSWORD);
   printf
-    ("--voipserver    | -s     voip server to ceonnect to (default '%s')\n",
+    ("--voipserver    | -S     voip server to connect to (default '%s')\n",
+     DEFAULT_VOIP_SERVER);
+  printf
+    ("--fg            | -s     fg to connect to (default '%s')\n",
      DEFAULT_FG_SERVER);
   printf
     ("--port          | -p     where we should listen to FG(default '%d')\n",

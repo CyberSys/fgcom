@@ -37,6 +37,7 @@ int connected = 0;
 int reg_id;
 static int port;
 char voipserver[65];
+char fgserver[65];
 char dialstring[65];
 char airport[5];
 static double frequency = -1.0;
@@ -160,6 +161,7 @@ main (int argc, char *argv[])
 
   /* init values */
   strcpy (voipserver, DEFAULT_VOIP_SERVER);
+  strcpy (fgserver, DEFAULT_FG_SERVER);
   port = DEFAULT_FG_PORT;
   strcpy (username, DEFAULT_USER);
   strcpy (password, DEFAULT_PASSWORD);
@@ -219,9 +221,9 @@ main (int argc, char *argv[])
 #endif
 	  debug = 1;
 	  break;
-	case 's':
+	case 'S':
 #ifdef DEBUG
-	  printf ("option -s with value `%s'\n", optarg);
+	  printf ("option -S with value `%s'\n", optarg);
 #endif
 	  strcpy (voipserver, optarg);
 	  voipserver[sizeof (voipserver)] = '\0';
@@ -232,6 +234,14 @@ main (int argc, char *argv[])
 	  printf ("option -p with value `%s'\n", optarg);
 #endif
 	  port = atoi (optarg);
+	  break;
+
+	case 's':
+#ifdef DEBUG
+	  printf ("option -s with value `%s'\n", optarg);
+#endif
+	  strcpy (fgserver, optarg);
+	  fgserver[sizeof (fgserver)] = '\0';
 	  break;
 
 	case 'a':
@@ -411,7 +421,7 @@ main (int argc, char *argv[])
       netInit ();
       netSocket fgsocket;
       fgsocket.open (false);
-      fgsocket.bind ("", port);
+      fgsocket.bind (fgserver, port);
 
       /* mute mic, speaker on */
       iaxc_input_level_set (0);
@@ -511,15 +521,16 @@ alarm_handler (int signal)
   /* Check every DEFAULT_ALARM_TIMER seconds if position related things should happen */
 
   /* Send our coords to the server */
-  if(initialized==1)
-  {
-  sprintf (dest, "%s:%s@%s/0190909090999999", username, password, voipserver);
-  //iaxc_select_call (1);
-  iaxc_call (dest);
-  strcpy(tmp,"HIER DIE KOORDINATEN USW.\n");
-  iaxc_send_text (tmp);
-  iaxc_dump_call ();
-  }
+  if (initialized == 1)
+    {
+      sprintf (dest, "%s:%s@%s/0190909090999999", username, password,
+	       voipserver);
+      //iaxc_select_call (1);
+      iaxc_call (dest);
+      strcpy (tmp, "HIER DIE KOORDINATEN USW.\n");
+      iaxc_send_text (tmp);
+      iaxc_dump_call ();
+    }
 
   if (check_special_frq (selected_frequency))
     {
