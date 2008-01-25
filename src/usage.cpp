@@ -4,7 +4,7 @@ void
 usage (char *prog)
 {
   printf
-    ("Usage: %s [-u user] -w [password] [[-s voipserver] [-p port]] | [[-a airport] [-f frequency]] [-d]\n",
+    ("Usage: %s [-u user] [-w password] [[-S voipserver] [-C codec] [-s fgserver] [-p port]] | [[-a airport] [-f frequency]] [-d]\n",
      prog);
   printf ("\n");
   printf
@@ -31,6 +31,14 @@ usage (char *prog)
   printf ("--list-audio    | -l     list audio devices\n");
   printf ("--set-audio-in  | -r     use <devicename> as audio input\n");
   printf ("--set-audio-out | -k     use <devicename> as audio output\n");
+  printf ("--codec         | -C     use codec <codec> as transfer codec (default: u)\n");
+  printf ("\n");
+  printf ("Usable Codecs are:\n");
+  printf ("u - ulaw (default and best codec because the mixing is based onto ulaw)\n");
+  printf ("a - alaw\n");
+  printf ("g - gsm\n");
+  printf ("s - speex\n");
+  printf ("7 - G.723\n");
   printf ("\n");
   printf ("Mode 1: client for COM1 of flightgear:\n");
   printf ("$ %s\n", prog);

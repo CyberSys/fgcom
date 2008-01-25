@@ -44,6 +44,7 @@ static double frequency = -1.0;
 static double selected_frequency = 0.0;
 double level_in = 0.7;
 double level_out = 0.7;
+int codec=DEFAULT_IAX_CODEC;
 static char username[80];
 static char password[80];
 static char mode = 0;
@@ -188,7 +189,8 @@ main (int argc, char *argv[])
     {
       static struct option long_options[] = {
 	{"debug", no_argument, 0, 'd'},
-	{"voipserver", required_argument, 0, 's'},
+	{"voipserver", required_argument, 0, 'S'},
+	{"fgserver", required_argument, 0, 's'},
 	{"port", required_argument, 0, 'p'},
 	{"airport", required_argument, 0, 'a'},
 	{"frequency", required_argument, 0, 'f'},
@@ -200,13 +202,14 @@ main (int argc, char *argv[])
 	{"list-audio", no_argument, 0, 'l'},
 	{"set-audio-in", required_argument, 0, 'r'},
 	{"set-audio-out", required_argument, 0, 'k'},
+	{"codec", required_argument, 0, 'C'},
 	{0, 0, 0, 0}
       };
       /* getopt_long stores the option index here. */
       int option_index = 0;
 
       c =
-	getopt_long (argc, argv, "dbls:p:a:f:U:P:i:o:r:k:", long_options,
+	getopt_long (argc, argv, "dbls:p:a:f:U:P:i:o:r:k:S:C:", long_options,
 		     &option_index);
 
       /* Detect the end of the options. */
@@ -227,6 +230,30 @@ main (int argc, char *argv[])
 #endif
 	  strcpy (voipserver, optarg);
 	  voipserver[sizeof (voipserver)] = '\0';
+	  break;
+
+	case 'C':
+#ifdef DEBUG
+	  printf ("option -C with value `%s'\n", optarg);
+#endif
+	  switch(optarg[0])
+		{
+		case 'u':
+			codec=IAXC_FORMAT_ULAW;
+			break;
+		case 'a':
+			codec=IAXC_FORMAT_ALAW;
+			break;
+		case 'g':
+			codec=IAXC_FORMAT_GSM;
+			break;
+		case '7':
+			codec=IAXC_FORMAT_G726;
+			break;
+		case 's':
+			codec=IAXC_FORMAT_SPEEX;
+			break;
+		}
 	  break;
 
 	case 'p':
@@ -389,7 +416,7 @@ main (int argc, char *argv[])
 	  voipserver);
 
   iaxc_set_callerid (username, const_cast < char *>("0125252525122750"));
-  iaxc_set_formats (DEFAULT_IAX_CODEC,
+  iaxc_set_formats (codec,
 		    IAXC_FORMAT_ULAW | IAXC_FORMAT_GSM | IAXC_FORMAT_SPEEX);
   iaxc_set_event_callback (iaxc_callback);
 
