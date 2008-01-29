@@ -17,6 +17,7 @@
 #define HAVE_IAX12		/* Only for newer iaxclient libraries */
 #endif
 
+#define VERSION "1.2.2"
 #define DEFAULT_USER "guest"
 #define DEFAULT_PASSWORD "guest"
 #define DEFAULT_FG_SERVER "localhost"
@@ -32,7 +33,6 @@
 #define DEFAULT_LOWER_FRQ_LIMIT 108.0
 #define DEFAULT_UPPER_FRQ_LIMIT 140.0
 #define MAXBUFLEN 1024
-#define VERSION "1.2.1"
 #define MAX_COM 4;
 #define DEFAULT_ALARM_TIMER 15
 

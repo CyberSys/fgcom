@@ -297,7 +297,7 @@ OBJS:= $(OBJS) $(OBJS_MACOSX)
 RANLIB= ranlib
 # comment these lines in to build against version  10.2.7.
 #CC=MACOSX_DEPLOYMENT_TARGET=10.2 NEXT_ROOT=/Developer/SDKs/MacOSX10.2.7.sdk cc
-CFLAGS:= $(CFLAGS) -DPA_USE_COREAUDIO=1 -Iportaudio/src/hostapi/coreaudio
+CFLAGS:= $(CFLAGS) -DPA_USE_COREAUDIO=1 -Iportaudio/src/hostapi/coreaudio -Iportmixer/px_common -Iportaudio/src/common -Iportaudio/include
 
 #architecture
 CC=NEXT_ROOT=/Developer/SDKs/MacOSX10.4u.sdk/ gcc -arch i386 -arch ppc
@@ -305,7 +305,7 @@ CC=NEXT_ROOT=/Developer/SDKs/MacOSX10.4u.sdk/ gcc -arch i386 -arch ppc
 
 #CFLAGS:= $(CFLAGS) -isystem /Developer/SDKs/MacOSX10.2.7.sdk/usr/include
 # Build Universal Binaries on MacOSX
-CC=NEXT_ROOT=/Developer/SDKs/MacOSX10.4u.sdk/ MACOSX_DEPLOYMENT_TARGET=10.3 gcc -arch i386 -arch ppc
+CC=NEXT_ROOT=/Developer/SDKs/MacOSX10.4u.sdk/ MACOSX_DEPLOYMENT_TARGET=10.4 gcc -arch i386 -arch ppc
 DYNLIB=libiaxclient.dylib
 endif
 

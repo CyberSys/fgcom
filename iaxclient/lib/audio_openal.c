@@ -1,7 +1,12 @@
 #include "iaxclient_lib.h"
 
+#ifdef __APPLE__
+#include <OpenAL/al.h>
+#include <OpenAL/alc.h>
+#else
 #include <AL/al.h>
 #include <AL/alc.h>
+#endif
 
 struct openal_priv_data
 {
