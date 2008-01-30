@@ -76,7 +76,7 @@ struct fgdata
 /* function declaratons */
 void quit (int signal);
 void alarm_handler (int signal);
-void strtoupper (char *str, char *buf);
+void strtoupper (const char *str, char *buf, size_t len);
 void usage (char *prog);
 int create_socket (int port);
 void fatal_error (const char *err);
@@ -104,3 +104,4 @@ int set_device (char *name, int out);
 struct pos posbyicao (struct airport *airports, char *icao);
 void parse_fgdata (struct fgdata *data, char *buf);
 int check_special_frq (double frq);
+void do_iaxc_call(const char* username, const char* password, const char* voipserver, const char* number);

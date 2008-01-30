@@ -36,17 +36,17 @@ int initialized = 0;
 int connected = 0;
 int reg_id;
 static int port;
-char voipserver[65];
-char fgserver[65];
-char dialstring[65];
+const char* voipserver;
+const char* fgserver;
+const char* dialstring;
 char airport[5];
 static double frequency = -1.0;
 static double selected_frequency = 0.0;
 double level_in = 0.7;
 double level_out = 0.7;
 int codec=DEFAULT_IAX_CODEC;
-static char username[80];
-static char password[80];
+static const char* username;
+static const char* password;
 static char mode = 0;
 static char tmp[1024];		/* report output buffer */
 static int last_state = 0;	/* previous state of the channel */
@@ -69,7 +69,6 @@ static const char *radio_map[] = {
 struct airport *airportlist;
 struct fgdata data;
 char icao[5];
-char dest[256];
 double special_frq[] = { 999.999, 910.0, 123.45, 122.75, -1.0 };
 
 double previous_com_frequency = 0.0;
@@ -120,9 +119,7 @@ process_packet (char *buf)
 #ifdef DEBUG
       printf ("dialing %s %3.3f MHz: %s\n", icao, selected_frequency, tmp);
 #endif
-      sprintf (dest, "%s:%s@%s/%s", username, password, voipserver, tmp);
-      iaxc_call (dest);
-      iaxc_millisleep (DEFAULT_MILLISLEEP);
+      do_iaxc_call (username, password, voipserver, tmp);
       /* iaxc_select_call (0); */
 
       connected = 1;
@@ -161,11 +158,11 @@ main (int argc, char *argv[])
   printf ("\n");
 
   /* init values */
-  strcpy (voipserver, DEFAULT_VOIP_SERVER);
-  strcpy (fgserver, DEFAULT_FG_SERVER);
+  voipserver = DEFAULT_VOIP_SERVER;
+  fgserver = DEFAULT_FG_SERVER;
   port = DEFAULT_FG_PORT;
-  strcpy (username, DEFAULT_USER);
-  strcpy (password, DEFAULT_PASSWORD);
+  username = DEFAULT_USER;
+  password = DEFAULT_PASSWORD;
   mode = 0;			/* 0=ATC mode, 1=FG mode */
 
 #ifndef _WIN32
@@ -228,8 +225,7 @@ main (int argc, char *argv[])
 #ifdef DEBUG
 	  printf ("option -S with value `%s'\n", optarg);
 #endif
-	  strcpy (voipserver, optarg);
-	  voipserver[sizeof (voipserver)] = '\0';
+	  voipserver = optarg;
 	  break;
 
 	case 'C':
@@ -267,16 +263,14 @@ main (int argc, char *argv[])
 #ifdef DEBUG
 	  printf ("option -s with value `%s'\n", optarg);
 #endif
-	  strcpy (fgserver, optarg);
-	  fgserver[sizeof (fgserver)] = '\0';
+	  fgserver = optarg;
 	  break;
 
 	case 'a':
 #ifdef DEBUG
 	  printf ("option -a with value `%s'\n", optarg);
 #endif
-	  strtoupper (optarg, airport);
-	  airport[sizeof (airport)] = '\0';
+	  strtoupper (optarg, airport, sizeof(airport));
 	  break;
 
 	case 'f':
@@ -290,8 +284,7 @@ main (int argc, char *argv[])
 #ifdef DEBUG
 	  printf ("option -D with value `%s'\n", optarg);
 #endif
-	  strcpy (dialstring, optarg);
-	  dialstring[sizeof (dialstring)] = '\0';
+	  dialstring = optarg;
 	  break;
 
 	case 'i':
@@ -320,16 +313,14 @@ main (int argc, char *argv[])
 #ifdef DEBUG
 	  printf ("option -U with value `%s'\n", optarg);
 #endif
-	  strcpy (username, optarg);
-	  username[sizeof (username)] = '\0';
+	  username = optarg;
 	  break;
 
 	case 'P':
 #ifdef DEBUG
 	  printf ("option -P with value `%s'\n", optarg);
 #endif
-	  strcpy (password, optarg);
-	  password[sizeof (password)] = '\0';
+	  password = optarg;
 	  break;
 
 	case 'b':
@@ -415,7 +406,7 @@ main (int argc, char *argv[])
   printf ("Initializing IAX client as %s:%s@%s\n", username, "xxxxxxxxxxx",
 	  voipserver);
 
-  iaxc_set_callerid (username, const_cast < char *>("0125252525122750"));
+  iaxc_set_callerid (const_cast<char*>(username), const_cast <char*>("0125252525122750"));
   iaxc_set_formats (codec,
 		    IAXC_FORMAT_ULAW | IAXC_FORMAT_GSM | IAXC_FORMAT_SPEEX);
   iaxc_set_event_callback (iaxc_callback);
@@ -424,7 +415,7 @@ main (int argc, char *argv[])
 
   if (username && password && voipserver)
     {
-      reg_id = iaxc_register (username, password, voipserver);
+      reg_id = iaxc_register (const_cast<char*>(username), const_cast<char*>(password), const_cast<char*>(voipserver));
 #ifdef DEBUG
       printf ("Registered as '%s' at '%s'\n", username, voipserver);
 #endif
@@ -512,9 +503,7 @@ main (int argc, char *argv[])
 #ifdef DEBUG
       printf ("dialing %s %3.3f MHz: %s\n", airport, frequency, tmp);
 #endif
-      sprintf (dest, "%s:%s@%s/%s", username, password, voipserver, tmp);
-      iaxc_call (dest);
-      iaxc_millisleep (DEFAULT_MILLISLEEP);
+      do_iaxc_call (username, password, voipserver, tmp);
       /* iaxc_select_call (0); */
 
       while (1)
@@ -550,10 +539,8 @@ alarm_handler (int signal)
   /* Send our coords to the server */
   if (initialized == 1)
     {
-      sprintf (dest, "%s:%s@%s/0190909090999999", username, password,
-	       voipserver);
       //iaxc_select_call (1);
-      iaxc_call (dest);
+      do_iaxc_call (username, password, voipserver, "0190909090999999");
       strcpy (tmp, "HIER DIE KOORDINATEN USW.\n");
       iaxc_send_text (tmp);
       iaxc_dump_call ();
@@ -586,18 +573,17 @@ alarm_handler (int signal)
 #ifdef DEBUG
       printf ("dialing %s %3.3f MHz: %s\n", icao, selected_frequency, tmp);
 #endif
-      sprintf (dest, "%s:%s@%s/%s", username, password, voipserver, tmp);
-      iaxc_call (dest);
+      do_iaxc_call (username, password, voipserver, tmp);
 
       connected = 1;
     }
 }
 
 void
-strtoupper (char *str, char *buf)
+strtoupper (const char *str, char *buf, size_t len)
 {
   int i;
-  for (i = 0; i < strlen (str); i++)
+  for (i = 0; str[i] && i < len - 1; i++)
     {
       buf[i] = toupper (str[i]);
     }
@@ -1194,4 +1180,14 @@ check_special_frq (double frq)
     }
 
   return (0);
+}
+
+void
+do_iaxc_call(const char* username, const char* password, const char* voipserver, const char* number)
+{
+  char dest[256];
+  
+  snprintf (dest, sizeof(dest), "%s:%s@%s/%s", username, password, voipserver, number);
+  iaxc_call (dest);
+  iaxc_millisleep (DEFAULT_MILLISLEEP);
 }
