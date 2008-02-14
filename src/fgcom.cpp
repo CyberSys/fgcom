@@ -537,6 +537,7 @@ alarm_handler (int signal)
   /* Check every DEFAULT_ALARM_TIMER seconds if position related things should happen */
 
   /* Send our coords to the server */
+#ifdef SENDTEXT
   if (initialized == 1)
     {
       //iaxc_select_call (1);
@@ -545,6 +546,7 @@ alarm_handler (int signal)
       iaxc_send_text (tmp);
       iaxc_dump_call ();
     }
+#endif
 
   if (check_special_frq (selected_frequency))
     {
