@@ -23,10 +23,11 @@ endif
 endif
 
 ifeq ($(OSTYPE),LINUX)
-PLIB_PREFIX:=/usr/local
+PLIB_PREFIX:=/usr/local/src/fgfs-builder/install
+OPENAL_PREFIX:=/usr/local/src/fgfs-builder/install
 SVNDEF:=-D'SVN_REV="$(shell svnversion -n .)"'
 #CXXFLAGS:=-O2 -DDEBUG $(SVNDEF)
-CXXFLAGS:=-O2 $(SVNDEF) -I ../iaxclient/lib -I $(PLIB_PREFIX)/include
+CXXFLAGS:=-O2 $(SVNDEF) -I $(OPENAL_PREFIX) -I ../iaxclient/lib -I $(PLIB_PREFIX)/include
 LDFLAGS:=-L $(PLIB_PREFIX)/lib
 STATIC_LIBS:=../iaxclient/lib/libiaxclient.a -lopenal -lasound -lplibul -lplibnet -lpthread -lm
 INDENT:=/usr/bin/indent
