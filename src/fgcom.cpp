@@ -7,7 +7,7 @@
  *
  * For more information read: http://squonk.abacab.org/dokuwiki/fgcom
  *
- * (c) H. Wirtz <wirtz@dfn.de>
+ * (c) H. Wirtz <dcoredump@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -152,7 +152,7 @@ main (int argc, char *argv[])
   /* program header */
   printf ("%s - a communication radio based on VoIP with IAX/Asterisk\n",
 	  argv[0]);
-  printf ("(c)2007 by H. Wirtz <wirtz@dfn.de>\n");
+  printf ("(c)2007 by H. Wirtz <dcoredump@gmail.com>\n");
   printf ("Version %s build %s\n", VERSION, SVN_REV);
   printf ("Using iaxclient library Version %s\n", iaxc_version (tmp));
   printf ("\n");
