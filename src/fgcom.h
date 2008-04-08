@@ -24,6 +24,7 @@
 #define DEFAULT_FG_PORT 16661
 #define DEFAULT_CODE 1
 #define DEFAULT_VOIP_SERVER "fgcom1.parasitstudio.de"
+#define DEFAULT_CODEC 'u'
 #define DEFAULT_IAX_CODEC IAXC_FORMAT_ULAW
 #define DEFAULT_IAX_AUDIO AUDIO_INTERNAL
 #define DEFAULT_MAX_CALLS 2
@@ -100,7 +101,7 @@ const char *icaobypos (struct airport *airports, double frequency,
 		       double plane_lat, double plane_lon, double range);
 void vor (char *icao, double frequency, int mode);
 char *report_devices (int in);
-int set_device (char *name, int out);
+int set_device (const char *name, int out);
 struct pos posbyicao (struct airport *airports, char *icao);
 void parse_fgdata (struct fgdata *data, char *buf);
 int check_special_frq (double frq);

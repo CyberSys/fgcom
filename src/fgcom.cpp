@@ -26,28 +26,35 @@
  *
  */
 
-#include "fgcom.h"
+#include <iostream>
+
 #include <plib/netSocket.h>
+
+#include "fgcom.h"
+#include "fgcom_init.h"
 
 /* global vars */
 int exitcode = 0;
-static char debug = 0;
+
 int initialized = 0;
 int connected = 0;
 int reg_id;
+
+/*
 static int port;
 const char* voipserver;
 const char* fgserver;
+*/
+
 const char* dialstring;
+
 char airport[5];
-static double frequency = -1.0;
+
 static double selected_frequency = 0.0;
-double level_in = 0.7;
-double level_out = 0.7;
-int codec=DEFAULT_IAX_CODEC;
-static const char* username;
-static const char* password;
+
+int codec = DEFAULT_IAX_CODEC;
 static char mode = 0;
+
 static char tmp[1024];		/* report output buffer */
 static int last_state = 0;	/* previous state of the channel */
 static char states[256];	/* buffer to hold ascii states */
@@ -62,10 +69,11 @@ static const char *mode_map[] = {
 static const char *radio_map[] = {
   "COM1", "NAV1", "COM2", "NAV2"
 };
-					/*const */ double earthradius = 6370.0;
-					/* radius of  earth */
-						/*const */ double uf = 0.01745329251994329509;
-						/* conversion factor pi/180 degree->rad */
+
+/*const */ double earthradius = 6370.0;
+/* radius of  earth */
+/*const */ double uf = 0.01745329251994329509;
+/* conversion factor pi/180 degree->rad */
 struct airport *airportlist;
 struct fgdata data;
 char icao[5];
@@ -75,6 +83,45 @@ double previous_com_frequency = 0.0;
 int previous_ptt = 0;
 int com_select = 0;
 int max_com_instruments = 2;
+
+/* program name */
+char *prog;
+
+/* configuration values */
+static bool debug;
+static int port;
+static const char* voipserver;
+static const char* fgserver;
+static const char* airport_option;
+static double frequency = -1.0;
+static const char* audio_in;
+static const char* audio_out;
+static double level_in = 0.7;
+static double level_out = 0.7;
+static bool mic_boost;
+static char codec_option;
+static const char* username;
+static const char* password;
+static bool list_audio;
+
+static const OptionEntry fgcomOptionArray[] = {
+	{"debug", 'd', false, OPTION_NONE, &debug, 0, "show debugging information", 0},
+	{"voipserver", 'S', true, OPTION_STRING, &voipserver, 0, "voip server to connect to", &DEFAULT_VOIP_SERVER},
+	{"fgserver", 's', true, OPTION_STRING, &fgserver, 0, "fg to connect to ", &DEFAULT_FG_SERVER},
+	{"port", 'p', true, OPTION_INT, &port, 0, "where we should listen to FG", &port}, // hm, good idea? don't think so...
+	{"airport", 'a', true, OPTION_STRING, &airport_option, 0, "airport-id (ICAO) for ATC-mode", 0},
+	{"frequency", 'f', true, OPTION_DOUBLE, &frequency, 0, "frequency for ATC-mode", 0},
+	{"user", 'U', true, OPTION_STRING, &username, 0, "username for VoIP account", &DEFAULT_USER},
+	{"password", 'P', true, OPTION_STRING, &password, 0, "password for VoIP account", &DEFAULT_PASSWORD},
+	{"mic", 'i', true, OPTION_DOUBLE, &level_in, 0, "mic input level (0.0 - 1.0)", 0},
+	{"speaker", 'o', true, OPTION_DOUBLE, &level_out, 0, "speaker output level (0.0 - 1.0)", 0},
+	{"mic-boost", 'b', false, OPTION_BOOL, &mic_boost, 0, "enable mic boost", 0},
+	{"list-audio", 'l', false, OPTION_BOOL, &list_audio, 0, "list audio devices", 0},
+	{"set-audio-in", 'r', true, OPTION_STRING, &audio_in, 0, "use <devicename> as audio input", 0},
+	{"set-audio-out", 'k', true, OPTION_STRING, &audio_out, 0, "use <devicename> as audio output", 0},
+	{"codec", 'c', true, OPTION_CHAR, &codec_option, 0, "use codec <codec> as transfer codec", &codec_option},   		
+	{ NULL }
+};
 
 void
 process_packet (char *buf)
@@ -144,384 +191,239 @@ process_packet (char *buf)
 int
 main (int argc, char *argv[])
 {
-  int numbytes;
-  static char buf[MAXBUFLEN];
-  int c;
-  int ret = 0;
+	int numbytes;
+	static char buf[MAXBUFLEN];
+	int c;
+	int ret = 0;
 
-  /* program header */
-  printf ("%s - a communication radio based on VoIP with IAX/Asterisk\n",
-	  argv[0]);
-  printf ("(c)2007 by H. Wirtz <dcoredump@gmail.com>\n");
-  printf ("Version %s build %s\n", VERSION, SVN_REV);
-  printf ("Using iaxclient library Version %s\n", iaxc_version (tmp));
-  printf ("\n");
+	prog = strdup( argv[0] );
+  
+	/* program header */
+	std::cout << prog << " - a communication radio based on VoIP with IAX/Asterisk" << std::endl;
+	std::cout << "(c)2007 by H. Wirtz <wirtz@dfn.de>" << std::endl;
+	std::cout << "Version " << VERSION << " build " << SVN_REV << std::endl;
+	std::cout << "Using iaxclient library Version " << iaxc_version (tmp) << std::endl;
+	std::cout << std::endl;
 
-  /* init values */
-  voipserver = DEFAULT_VOIP_SERVER;
-  fgserver = DEFAULT_FG_SERVER;
-  port = DEFAULT_FG_PORT;
-  username = DEFAULT_USER;
-  password = DEFAULT_PASSWORD;
-  mode = 0;			/* 0=ATC mode, 1=FG mode */
+	/* init values */
+	voipserver = DEFAULT_VOIP_SERVER;
+	fgserver = DEFAULT_FG_SERVER;
+	port = DEFAULT_FG_PORT;
+	username = DEFAULT_USER;
+	password = DEFAULT_PASSWORD;
+	codec_option = DEFAULT_CODEC;
+	mode = 0;			/* 0 = ATC mode, 1 = FG mode */
 
 #ifndef _WIN32
-  /* catch signals */
-  signal (SIGINT, quit);
-  signal (SIGQUIT, quit);
-  signal (SIGTERM, quit);
+	/* catch signals */
+	signal (SIGINT, quit);
+	signal (SIGQUIT, quit);
+	signal (SIGTERM, quit);
 #endif
 
   /* setup iax */
 #ifdef HAVE_IAX12
-  if (iaxc_initialize (DEFAULT_MAX_CALLS))
+	if (iaxc_initialize (DEFAULT_MAX_CALLS))
 #else
-  if (iaxc_initialize (DEFAULT_IAX_AUDIO, DEFAULT_MAX_CALLS))
+	if (iaxc_initialize (DEFAULT_IAX_AUDIO, DEFAULT_MAX_CALLS))
 #endif
-    fatal_error ("cannot initialize iaxclient!");
-  initialized = 1;
+	fatal_error ("cannot initialize iaxclient!");
+	initialized = 1;
 
-  /* get options */
-  while (1)
-    {
-      static struct option long_options[] = {
-	{"debug", no_argument, 0, 'd'},
-	{"voipserver", required_argument, 0, 'S'},
-	{"fgserver", required_argument, 0, 's'},
-	{"port", required_argument, 0, 'p'},
-	{"airport", required_argument, 0, 'a'},
-	{"frequency", required_argument, 0, 'f'},
-	{"user", required_argument, 0, 'U'},
-	{"password", required_argument, 0, 'P'},
-	{"mic", required_argument, 0, 'i'},
-	{"speaker", required_argument, 0, 'o'},
-	{"mic-boost", no_argument, 0, 'b'},
-	{"list-audio", no_argument, 0, 'l'},
-	{"set-audio-in", required_argument, 0, 'r'},
-	{"set-audio-out", required_argument, 0, 'k'},
-	{"codec", required_argument, 0, 'C'},
-	{0, 0, 0, 0}
-      };
-      /* getopt_long stores the option index here. */
-      int option_index = 0;
+	// option parser
+	fgcomInitOptions(fgcomOptionArray, argc, argv);
 
-      c =
-	getopt_long (argc, argv, "dbls:p:a:f:U:P:i:o:r:k:S:C:", long_options,
-		     &option_index);
-
-      /* Detect the end of the options. */
-      if (c == -1)
-	break;
-
-      switch (c)
-	{
-	case 'd':
-#ifdef DEBUG
-	  printf ("option -d\n");
-#endif
-	  debug = 1;
-	  break;
-	case 'S':
-#ifdef DEBUG
-	  printf ("option -S with value `%s'\n", optarg);
-#endif
-	  voipserver = optarg;
-	  break;
-
-	case 'C':
-#ifdef DEBUG
-	  printf ("option -C with value `%s'\n", optarg);
-#endif
-	  switch(optarg[0])
-		{
-		case 'u':
-			codec=IAXC_FORMAT_ULAW;
-			break;
-		case 'a':
-			codec=IAXC_FORMAT_ALAW;
-			break;
-		case 'g':
-			codec=IAXC_FORMAT_GSM;
-			break;
-		case '7':
-			codec=IAXC_FORMAT_G726;
-			break;
-		case 's':
-			codec=IAXC_FORMAT_SPEEX;
-			break;
+	// codec
+	if (codec_option) {
+		switch (codec_option) {
+			case 'u':
+				codec = IAXC_FORMAT_ULAW;
+				break;
+			case 'a':
+				codec = IAXC_FORMAT_ALAW;
+				break;
+			case 'g':
+				codec = IAXC_FORMAT_GSM;
+				break;
+			case '7':
+				codec = IAXC_FORMAT_G726;
+				break;
+			case 's':
+				codec = IAXC_FORMAT_SPEEX;
+				break;
 		}
-	  break;
-
-	case 'p':
-#ifdef DEBUG
-	  printf ("option -p with value `%s'\n", optarg);
-#endif
-	  port = atoi (optarg);
-	  break;
-
-	case 's':
-#ifdef DEBUG
-	  printf ("option -s with value `%s'\n", optarg);
-#endif
-	  fgserver = optarg;
-	  break;
-
-	case 'a':
-#ifdef DEBUG
-	  printf ("option -a with value `%s'\n", optarg);
-#endif
-	  strtoupper (optarg, airport, sizeof(airport));
-	  break;
-
-	case 'f':
-#ifdef DEBUG
-	  printf ("option -f with value `%s'\n", optarg);
-#endif
-	  frequency = atof (optarg);
-	  break;
-
-	case 'D':
-#ifdef DEBUG
-	  printf ("option -D with value `%s'\n", optarg);
-#endif
-	  dialstring = optarg;
-	  break;
-
-	case 'i':
-#ifdef DEBUG
-	  printf ("option -i with value `%s'\n", optarg);
-#endif
-	  level_in = atof (optarg);
-	  if (level_in > 1.0)
-	    level_in = 1.0;
-	  if (level_in < 0.0)
-	    level_in = 0.0;
-	  break;
-
-	case 'o':
-#ifdef DEBUG
-	  printf ("option -o with value `%s'\n", optarg);
-#endif
-	  level_out = atof (optarg);
-	  if (level_out > 1.0)
-	    level_out = 1.0;
-	  if (level_out < 0.0)
-	    level_out = 0.0;
-	  break;
-
-	case 'U':
-#ifdef DEBUG
-	  printf ("option -U with value `%s'\n", optarg);
-#endif
-	  username = optarg;
-	  break;
-
-	case 'P':
-#ifdef DEBUG
-	  printf ("option -P with value `%s'\n", optarg);
-#endif
-	  password = optarg;
-	  break;
-
-	case 'b':
-#ifdef DEBUG
-	  printf ("option -b\n");
-#endif
-	  iaxc_mic_boost_set (1);
-	  break;
-
-	case 'l':
-#ifdef DEBUG
-	  printf ("option -l\n");
-#endif
-
-	  printf ("Input audio devices:\n");
-	  printf ("%s", report_devices (IAXC_AD_INPUT));
-	  printf ("\n");
-
-	  printf ("Output audio devices:\n");
-	  printf ("%s", report_devices (IAXC_AD_OUTPUT));
-	  printf ("\n");
-
-	  iaxc_shutdown ();
-	  exit (1);
-	  break;
-
-	case 'r':
-#ifdef DEBUG
-	  printf ("option -r with value `%s'\n", optarg);
-#endif
-	  set_device (optarg, 0);
-	  break;
-
-	case 'k':
-#ifdef DEBUG
-	  printf ("option -k with value `%s'\n", optarg);
-#endif
-	  set_device (optarg, 1);
-	  break;
-
-	case '?':
-	case 'h':
-	  usage (argv[0]);
-	  exit (10);
-	  break;
-
-	default:
-	  abort ();
 	}
-    }
 
-#ifdef DEBUG
-  /* Print any remaining command line arguments (not options). */
-  if (optind < argc)
-    {
-      printf ("non-option ARGV-elements: ");
-      while (optind < argc)
-	printf ("%s ", argv[optind++]);
-      putchar ('\n');
-    }
-#endif
-
-  /* checking consistency of arguments */
-  if (frequency > 0.0 && frequency < 1000.0)
-    {
-      if (strlen (airport) == 0)
-	{
-	  strcpy (airport, "ZZZZ");
+	// airport
+	if (airport_option) {
+		strtoupper (airport_option, airport, sizeof(airport));
 	}
-      /* airport and frequency are given => ATC mode */
-      mode = 0;
-    }
-  else
-    {
-      /* no airport => FG mode */
-      mode = 1;
-    }
 
-  /* read airport frequencies and positions */
-  airportlist = read_airports (DEFAULT_POSITIONS_FILE);
+	// input level
+	if (level_in > 1.0) {
+		level_in = 1.0;
+	}
+	if (level_in < 0.0) {
+		level_in = 0.0;
+	}
 
-  /* preconfigure iax */
-  printf ("Initializing IAX client as %s:%s@%s\n", username, "xxxxxxxxxxx",
-	  voipserver);
+	// output level
+	if (level_out> 1.0) {
+		level_out = 1.0;
+	}
+	if (level_out < 0.0) {
+		level_out = 0.0;
+	}
 
-  iaxc_set_callerid (const_cast<char*>(username), const_cast <char*>("0125252525122750"));
-  iaxc_set_formats (codec,
-		    IAXC_FORMAT_ULAW | IAXC_FORMAT_GSM | IAXC_FORMAT_SPEEX);
-  iaxc_set_event_callback (iaxc_callback);
+	// microphone boost
+	if (mic_boost) {
+		iaxc_mic_boost_set (1);
+	}
 
-  iaxc_start_processing_thread ();
+	if (list_audio) {
+		std::cout << "Input audio devices:" << std::endl;
+		std::cout << report_devices (IAXC_AD_INPUT) << std::endl;
 
-  if (username && password && voipserver)
-    {
-      reg_id = iaxc_register (const_cast<char*>(username), const_cast<char*>(password), const_cast<char*>(voipserver));
-#ifdef DEBUG
-      printf ("Registered as '%s' at '%s'\n", username, voipserver);
-#endif
-    }
-  else
-    {
-      exitcode = 130;
-      quit (0);
-    }
+		std::cout << "Output audio devices:" << std::endl;
+		std::cout << report_devices (IAXC_AD_OUTPUT) << std::endl;
 
-  iaxc_millisleep (DEFAULT_MILLISLEEP);
+		iaxc_shutdown ();
+		exit (1);
+	}
 
-  /* main loop */
-#ifdef DEBUG
-  printf ("Entering main loop in mode %s\n", mode_map[mode]);
-#endif
+	
+	if (audio_in) {
+		set_device (audio_in, 0);
+	}
 
-  if (mode == 1)
-    {
-      /* only in FG mode */
-      netInit ();
-      netSocket fgsocket;
-      fgsocket.open (false);
-      fgsocket.bind (fgserver, port);
+	if (audio_out) {
+		set_device (audio_out, 1);
+	}
 
-      /* mute mic, speaker on */
-      iaxc_input_level_set (0);
-      iaxc_output_level_set (level_out);
+//#ifdef DEBUG
+	/* Print any remaining command line arguments (not options). */
+	//if (optind < argc) {
+	//	printf ("non-option ARGV-elements: ");
+	//	while (optind < argc)
+	//		printf ("%s ", argv[optind++]);
+	//	putchar ('\n');
+	//}
+//#endif
 
-      ulClock clock;
-      clock.update ();
-      double next_update = clock.getAbsTime () + DEFAULT_ALARM_TIMER;
-      /* get data from flightgear */
-      while (1)
-	{
-	  clock.update ();
-	  double wait = next_update - clock.getAbsTime ();
-	  if (wait > 0.001)
-	    {
-	      netSocket *readsockets[2] = { &fgsocket, 0 };
-	      if (fgsocket.
-		  select (readsockets, readsockets + 1,
-			  (int) (wait * 1000)) == 1)
-		{
-		  netAddress their_addr;
-		  if ((numbytes =
-		       fgsocket.recvfrom (buf, MAXBUFLEN - 1, 0,
-					  &their_addr)) == -1)
-		    {
-		      perror ("recvfrom");
-		      exit (1);
-		    }
-		  buf[numbytes] = '\0';
-#ifdef DEBUG
-		  printf ("got packet from %s:%d\n", their_addr.getHost (),
-			  their_addr.getPort ());
-		  printf ("packet is %d bytes long\n", numbytes);
-		  printf ("packet contains \"%s\"\n", buf);
-#endif
-		  process_packet (buf);
+	/* checking consistency of arguments */
+	if (frequency > 0.0 && frequency < 1000.0) {
+		if (strlen (airport) == 0 || strlen(airport) > 4) {
+			strcpy (airport, "ZZZZ");
 		}
-	    }
-	  else
-	    {
-	      alarm_handler (0);
-	      clock.update ();
-	      next_update = clock.getAbsTime () + DEFAULT_ALARM_TIMER;
-	    }
+		/* airport and frequency are given => ATC mode */
+		mode = 0;
+	} else {
+		/* no airport => FG mode */
+		mode = 1;
 	}
-    }
 
-  else
-    {
-      /* only in ATC mode */
-      struct pos p;
+	/* read airport frequencies and positions */
+	airportlist = read_airports (DEFAULT_POSITIONS_FILE);
 
-      /* mic on, speaker on */
-      iaxc_input_level_set (level_in);
-      iaxc_output_level_set (level_out);
+	/* preconfigure iax */
+	std::cout << "Initializing IAX client as " << username << ":" << "xxxxxxxxxxx@" << voipserver << std::endl;
 
-      /* get geo positions of the airport */
-      p = posbyicao (airportlist, airport);
+	iaxc_set_callerid (const_cast<char*>(username), const_cast <char*>("0125252525122750"));
+	iaxc_set_formats (codec, IAXC_FORMAT_ULAW | IAXC_FORMAT_GSM | IAXC_FORMAT_SPEEX);
+	iaxc_set_event_callback (iaxc_callback);
 
-      icao2number (airport, frequency, tmp);
+	iaxc_start_processing_thread ();
+
+	if (username && password && voipserver) {
+		reg_id = iaxc_register (const_cast<char*>(username), const_cast<char*>(password), const_cast<char*>(voipserver));
 #ifdef DEBUG
-      printf ("dialing %s %3.3f MHz: %s\n", airport, frequency, tmp);
+		std::cout << "Registered as '" << username << "' at '" << voipserver << "'." << std::endl;
 #endif
-      do_iaxc_call (username, password, voipserver, tmp);
-      /* iaxc_select_call (0); */
-
-      while (1)
-	{
-	  /* sleep endless */
-	  ulSleep (3600);
+	} else {
+		exitcode = 130;
+		quit (0);
 	}
-    }
 
-  /* should never be reached */
-  exitcode = 999;
-  quit (0);
+	iaxc_millisleep (DEFAULT_MILLISLEEP);
+
+	/* main loop */
+#ifdef DEBUG
+	std::cout << "Entering main loop in mode " << mode_map[mode] << "." << std::endl;
+#endif
+
+	if (mode == 1) {
+		/* only in FG mode */
+		netInit ();
+		netSocket fgsocket;
+		fgsocket.open (false);
+		fgsocket.bind (fgserver, port);
+
+		/* mute mic, speaker on */
+		iaxc_input_level_set (0);
+		iaxc_output_level_set (level_out);
+
+		ulClock clock;
+		clock.update ();
+		double next_update = clock.getAbsTime () + DEFAULT_ALARM_TIMER;
+		/* get data from flightgear */
+		while (1) {
+			clock.update ();
+			double wait = next_update - clock.getAbsTime ();
+			if (wait > 0.001) {
+				netSocket *readsockets[2] = { &fgsocket, 0 };
+				if (fgsocket.select (readsockets, readsockets + 1, (int) (wait * 1000)) == 1)	{
+					netAddress their_addr;
+					if ((numbytes = fgsocket.recvfrom (buf, MAXBUFLEN - 1, 0, &their_addr)) == -1) {
+						perror ("recvfrom");
+						exit (1);
+					}
+					buf[numbytes] = '\0';
+#ifdef DEBUG
+					std::cout << "got packet from " << their_addr.getHost() << ":" << their_addr.getPort() << std::endl;
+					std::cout << "packet is " << numbytes << " bytes long" << std::endl;
+					std::cout << "packet contains \"" << buf << "\"" << std::endl;
+#endif
+		  		process_packet (buf);
+		  	}
+			} else {
+				alarm_handler (0);
+				clock.update ();
+				next_update = clock.getAbsTime () + DEFAULT_ALARM_TIMER;
+			}
+		}
+	} else {
+		/* only in ATC mode */
+		struct pos p;
+		
+		/* mic on, speaker on */
+		iaxc_input_level_set (level_in);
+		iaxc_output_level_set (level_out);
+
+		/* get geo positions of the airport */
+		p = posbyicao (airportlist, airport);
+
+		icao2number (airport, frequency, tmp);
+#ifdef DEBUG
+		printf ("dialing %s %3.3f MHz: %s\n", airport, frequency, tmp);
+#endif
+		do_iaxc_call (username, password, voipserver, tmp);
+		/* iaxc_select_call (0); */
+
+		while (1) {
+			/* sleep endless */
+			ulSleep (3600);
+		}
+	}
+
+	/* should never be reached */
+	exitcode = 999;
+	quit (0);
 }
 
 void
 quit (int signal)
 {
-  printf ("Stopping service\n");
+  std::cout << "Stopping service." << std::endl;
 
   if (initialized)
     iaxc_shutdown ();
@@ -571,7 +473,7 @@ alarm_handler (int signal)
 void
 strtoupper (const char *str, char *buf, size_t len)
 {
-  int i;
+  unsigned int i;
   for (i = 0; str[i] && i < len - 1; i++)
     {
       buf[i] = toupper (str[i]);
@@ -583,7 +485,7 @@ strtoupper (const char *str, char *buf, size_t len)
 void
 fatal_error (const char *err)
 {
-  fprintf (stderr, "FATAL ERROR: %s\n", err);
+  std::cerr << "FATAL ERROR: " << err << std::endl;
   if (initialized)
     iaxc_shutdown ();
   exit (1);
@@ -640,7 +542,7 @@ void
 event_text (int type, char *message)
 {
   snprintf (tmp, sizeof (tmp), "T%c%d%c%.200s", delim, type, delim, message);
-  printf ("%s\n", message);
+  std::cout << message << std::endl;
   report (tmp);
 }
 
@@ -657,7 +559,7 @@ event_register (int id, int reply, int count)
       reason = "denied";
       if (strcmp (username, "guest") != 0)
 	{
-	  printf ("Registering denied\n");
+    std::cout << "Registering denied" << std::endl;
 	  /* exitcode = 110;
 	     quit (SIGTERM); */
 	}
@@ -732,7 +634,7 @@ report (char *text)
 {
   if (debug > 0)
     {
-      printf ("%s\n", text);
+      std::cout << text << std::endl;
       fflush (stdout);
     }
 }
@@ -740,35 +642,25 @@ report (char *text)
 void
 ptt (int mode)
 {
-  if (mode == 1)
-    {
-      /* mic is muted so unmute and mute speaker */
-      iaxc_input_level_set (level_in);
-      if (!check_special_frq (selected_frequency))
-	{
-	  iaxc_output_level_set (0.0);
-	  printf ("[SPEAK] unmute mic, mute speaker\n");
-	}
-      else
-	{
-	  printf ("[SPEAK] unmute mic\n");
-	}
-    }
-
-  else
-    {
-      /* mic is unmuted so mute and unmute speaker */
-      iaxc_input_level_set (0.0);
-      if (!check_special_frq (selected_frequency))
-	{
-	  iaxc_output_level_set (level_out);
-	  printf ("[LISTEN] mute mic, unmute speaker\n");
-	}
-      else
-	{
-	  printf ("[LISTEN] mute mic\n");
-	}
-    }
+  if (mode == 1) {
+  	/* mic is muted so unmute and mute speaker */
+  	iaxc_input_level_set (level_in);
+  	if (!check_special_frq (selected_frequency)) {
+  		iaxc_output_level_set (0.0);
+  		std::cout << "[SPEAK] unmute mic, mute speaker" << std::endl;
+  	} else {
+  		std::cout << "[SPEAK] unmute mic" << std::endl;
+  	}
+  } else {
+  	/* mic is unmuted so mute and unmute speaker */
+  	iaxc_input_level_set (0.0);
+  	if (!check_special_frq (selected_frequency)) {
+  		iaxc_output_level_set (level_out);
+  		std::cout << "[LISTEN] mute mic, unmute speaker" << std::endl;
+  	} else {
+  		std::cout << "[LISTEN] mute mic" << std::endl;
+  	}
+  }
 }
 
 int
@@ -987,7 +879,7 @@ report_devices (int in)
 }
 
 int
-set_device (char *name, int out)
+set_device (const char *name, int out)
 {
   struct iaxc_audio_device *devs;	/* audio devices */
   int ndevs;			/* audio dedvice count */
@@ -1024,7 +916,7 @@ parse_fgdata (struct fgdata *data, char *buf)
   fields[0] = '\0';
   fields[1] = '\0';
 #ifdef DEBUG
-  printf ("Parsing data: [%s]\n", buf);
+  std::cout << "Parsing data: [" << buf << "]" << std::endl;
 #endif
   /* Parse data from FG */
   data_pair = strtok (buf, ",");
@@ -1160,13 +1052,12 @@ parse_fgdata (struct fgdata *data, char *buf)
 int
 check_special_frq (double frq)
 {
-  int i = 0;
-  while (special_frq[i] >= 0.0)
-    {
-      if (frq == special_frq[i])
-	return (1);
-      i++;
-    }
+	int i = 0;
+  while (special_frq[i] >= 0.0) {
+  	if (frq == special_frq[i])
+  		return (1);
+  	i++;
+  }
 
   return (0);
 }
@@ -1174,9 +1065,9 @@ check_special_frq (double frq)
 void
 do_iaxc_call(const char* username, const char* password, const char* voipserver, const char* number)
 {
-  char dest[256];
+	char dest[256];
   
-  snprintf (dest, sizeof(dest), "%s:%s@%s/%s", username, password, voipserver, number);
-  iaxc_call (dest);
-  iaxc_millisleep (DEFAULT_MILLISLEEP);
+	snprintf (dest, sizeof(dest), "%s:%s@%s/%s", username, password, voipserver, number);
+	iaxc_call (dest);
+	iaxc_millisleep (DEFAULT_MILLISLEEP);
 }

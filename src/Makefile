@@ -28,8 +28,9 @@ OPENAL_PREFIX:=/usr/local/src/fgfs-builder/install
 SVNDEF:=-D'SVN_REV="$(shell svnversion -n .)"'
 #CXXFLAGS:=-O2 -DDEBUG $(SVNDEF)
 CXXFLAGS:=-O2 $(SVNDEF) -I $(OPENAL_PREFIX) -I ../iaxclient/lib -I $(PLIB_PREFIX)/include
+#CXXFLAGS:=-ggdb -Wall -DDEBUG $(SVNDEF) -I $(OPENAL_PREFIX) -I ../iaxclient/lib -I $(PLIB_PREFIX)/include
 LDFLAGS:=-L $(PLIB_PREFIX)/lib
-STATIC_LIBS:=../iaxclient/lib/libiaxclient.a -lopenal -lasound -lplibul -lplibnet -lpthread -lm
+STATIC_LIBS:=../iaxclient/lib/libiaxclient.a -lopenal -lasound -lplibul -lplibnet -lpthread -lsgmisc -lsgdebug -lz -lm
 INDENT:=/usr/bin/indent
 IFLAGS:=
 INSTALL_BIN:=/usr/local/bin
@@ -57,15 +58,16 @@ test: test.o
 	cd ../iaxclient/lib && make
 	$(CC) test.o $(STATIC_LIBS) -o test
 
-fgcomstatic: fgcom.o usage.o position.o
+fgcomstatic: fgcom.o position.o fgcom_init.o
 	cd ../iaxclient/lib && make
-	$(CXX) $(LDFLAGS) fgcom.o usage.o position.o $(STATIC_LIBS) -o fgcom
+	$(CXX) $(LDFLAGS) fgcom.o position.o fgcom_init.o $(STATIC_LIBS) -o fgcom
 
 indent: fgcom.cpp fgcom.h
 	$(INDENT) $(IFLAGS) fgcom.cpp
 	$(INDENT) $(IFLAGS) fgcom.h
-	$(INDENT) $(IFLAGS) usage.cpp
 	$(INDENT) $(IFLAGS) position.cpp
+	$(INDENT) $(IFLAGS) fgcom_init.cxx
+	$(INDENT) $(IFLAGS) fgcom_init.h
 
 install: all
 	install -m 755 -s fgcom $(INSTALL_BIN)/fgcom
@@ -80,8 +82,8 @@ clean:
 fgcom.o: Makefile fgcom.cpp fgcom.h
 	$(CXX) $(CXXFLAGS) -DDEFAULT_POSITIONS_FILE=\"$(INSTALL_DIR)/positions.txt\" -c fgcom.cpp
 
-usage.o: Makefile usage.cpp
-	$(CXX) $(CXXFLAGS) -c usage.cpp
-
 position.o: Makefile position.cpp
 	$(CXX) $(CXXFLAGS) -c position.cpp
+
+fgcom_init.o: Makefile fgcom_init.cpp fgcom_init.h
+	$(CXX) $(CXXFLAGS) -c fgcom_init.cpp
