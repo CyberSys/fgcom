@@ -54,7 +54,7 @@
 
 #include <simgear/compiler.h>
 
-#include STL_STRING
+#include <string>
 
 #include <simgear/constants.h>
 #include <simgear/debug/logstream.hxx>
@@ -77,7 +77,7 @@
 #include "getopt.h"
 #include "fgcom.h"
 
-SG_USING_STD(string);
+using std::string;
 
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof(*(x)))
 
