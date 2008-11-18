@@ -106,7 +106,7 @@ bool fgcomInitOptions ( const OptionEntry *fgcomOptions, int argc, char **argv )
 	int n_options;
 	for (n_options = 0; fgcomOptions[n_options].long_option != NULL; n_options++) ;
 	fgcomOptionArray = (OptionEntry *)realloc(fgcomOptionArray, sizeof (OptionEntry) * (n_options + 1));
-	memcpy (fgcomOptionArray, fgcomOptions, sizeof (OptionEntry) * n_options);
+	memcpy (fgcomOptionArray, fgcomOptions, sizeof (OptionEntry) * (n_options + 1));
 	
 	// parse options
 	_doOptions(argc, argv);
