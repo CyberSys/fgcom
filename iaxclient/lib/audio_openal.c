@@ -247,7 +247,6 @@ int openal_destroy(struct iaxc_audio_driver *d)
 int openal_initialize(struct iaxc_audio_driver *d, int sample_rate)
 {
     struct openal_priv_data* priv = malloc(sizeof(struct openal_priv_data));
-    int capture_frames;
     int err = alGetError();
     ALCdevice* out_dev = alcOpenDevice(0);
     if (out_dev == 0) return openal_error("alcOpenDevice", alGetError());
@@ -273,12 +272,7 @@ int openal_initialize(struct iaxc_audio_driver *d, int sample_rate)
     alGenSources(1, &priv->source);
     if ((err = alGetError())) return openal_error("alGenSources", err);
 
-    /* openal-soft didn't like 160000 on my machine, so lets make it a little flexible */
-    /* unfortunately this may mean error messages are displayed in the terminal */
-    for(capture_frames = 160000; capture_frames > 0 && !priv->in_dev; capture_frames /= 10)
-    {
-        priv->in_dev = alcCaptureOpenDevice(0, 8000, AL_FORMAT_MONO16, capture_frames);
-    }
+    priv->in_dev = alcCaptureOpenDevice(0, 8000, AL_FORMAT_MONO16, 800);
     if (!priv->in_dev) return openal_error("alcCaptureOpenDevice", 0);
 
     alcCaptureStart(priv->in_dev);
