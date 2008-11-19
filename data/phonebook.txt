@@ -906,6 +906,7 @@ EGYE  TWR                   120.420  0169718969120420  Barkston Heath
 EGYE  DEP                   119.370  0169718969119370  Barkston Heath      
 EGYM  DIRECTOR              124.150  0169718977124150  Marham              
 EGYM  TWR                   122.100  0169718977122100  Marham              
+EHAM  TWR                   119.220  0164676072119220  Schiphol
 EHBD  INFO                  122.150  0169726668122150  Budel               
 EHBK  BEEK GND              121.820  0169726675121820  Maastricht          
 EHBK  BEEK APP              120.200  0169726675120200  Maastricht          
@@ -10123,3 +10124,5 @@ YZAN  CTAF                  127.600  0189906578127600  Zanthus
 ZZZZ                        910.000  0190909090910000  Echo-Box
 ZZZZ                        123.450  0190909090123450  Air2Air
 ZZZZ                        122.750  0190909090122750  Air2Air
+
+
