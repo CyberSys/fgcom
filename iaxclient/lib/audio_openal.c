@@ -290,6 +290,8 @@ int openal_initialize(struct iaxc_audio_driver *d, int sample_rate)
     d->input_level_set = openal_input_level_set;
     d->output_level_get = openal_output_level_get;
     d->output_level_set = openal_output_level_set;
+    d->mic_boost_get = openal_mic_boost_get;
+    d->mic_boost_set = openal_mic_boost_set;
     d->play_sound = openal_play_sound;
     d->stop_sound = openal_stop_sound;
     d->nDevices = 1;
