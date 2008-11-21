@@ -7,8 +7,8 @@
 #include "iaxclient/lib/iaxclient.h"
 
 #define VERSION "3.0.0"
-#define DEFAULT_USER "guest"
-#define DEFAULT_PASSWORD "guest"
+#define DEFAULT_USER "D-CORE"
+#define DEFAULT_PASSWORD "secreT"
 #define DEFAULT_FG_SERVER "localhost"
 #define DEFAULT_FG_PORT 16661
 #define DEFAULT_FRQ "01122750"
@@ -63,6 +63,8 @@ int main(int argc, char *argv[])
         iaxc_start_processing_thread ();
 
 	reg_id = iaxc_register ((char *)DEFAULT_USER,(char *)DEFAULT_PASSWORD,(char *)DEFAULT_VOIP_SERVER);
+
+        iaxc_call ((char *)DEFAULT_FRQ);
 
 	while(1)
 	{
