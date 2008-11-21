@@ -103,6 +103,7 @@ void quit (int signal)
 	printf("Stopping service.");
 	iaxc_shutdown ();
     	iaxc_unregister(reg_id);
+	exit(0);
 }
 
 void
