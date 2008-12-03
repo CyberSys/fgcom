@@ -68,7 +68,8 @@ int main(int argc, char *argv[])
 
 	while(1)
 	{
-		sleep(100000);
+		sleep(5);
+		iaxc_send_text("Huhu");
 	}
 }
 

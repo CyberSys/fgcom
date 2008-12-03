@@ -66,6 +66,6 @@ clean:
 	cd iaxclient/lib && make clean
 	rm -f *.o fgcom3 *~
 
-fgcom3.o: Makefile fgcom3.c
+fgcom3.o: iaxclient fgcom3.c
 	$(CXX) $(CXXFLAGS) -c fgcom3.c
 
