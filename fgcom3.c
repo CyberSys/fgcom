@@ -11,7 +11,7 @@
 #define DEFAULT_PASSWORD "secreT"
 #define DEFAULT_FG_SERVER "localhost"
 #define DEFAULT_FG_PORT 16661
-#define DEFAULT_FRQ "01122750"
+#define DEFAULT_FRQ "01123450"
 #define DEFAULT_VOIP_SERVER "fgcom1.parasitstudio.de"
 #define DEFAULT_IAX_CODEC IAXC_FORMAT_ULAW
 #define DEFAULT_IAX_AUDIO AUDIO_INTERNAL
@@ -46,6 +46,8 @@ static const char *map[] = {
 /* Main program */
 int main(int argc, char *argv[])
 {
+	char dest[30];
+
         /* catch signals */
         signal (SIGINT, quit);
         signal (SIGQUIT, quit);
@@ -63,13 +65,16 @@ int main(int argc, char *argv[])
         iaxc_start_processing_thread ();
 
 	reg_id = iaxc_register ((char *)DEFAULT_USER,(char *)DEFAULT_PASSWORD,(char *)DEFAULT_VOIP_SERVER);
+	printf("registered %d\n",reg_id);
 
-        iaxc_call ((char *)DEFAULT_FRQ);
+	sprintf(dest,"%s:%s@%s/%s",(char *)DEFAULT_USER,(char *)DEFAULT_PASSWORD,(char *)DEFAULT_VOIP_SERVER,(char *)DEFAULT_FRQ);
+        iaxc_call (dest);
 
 	while(1)
 	{
 		sleep(5);
-		iaxc_send_text("Huhu");
+		iaxc_send_text((char *)"Huhu");
+		printf("Sending text message\n");
 	}
 }
 
