@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 	while(1)
 	{
 		sleep(5);
-		iaxc_send_text((char *)"FGMP:Huhu");
+		iaxc_send_text((char *)"FGCOM:Hi there!");
 		printf("Sending text message\n");
 	}
 }
