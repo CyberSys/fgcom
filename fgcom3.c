@@ -47,6 +47,19 @@ static const char *map[] = {
 int main(int argc, char *argv[])
 {
 	char dest[30];
+	char text[256];
+
+	char callsign[20];
+	char model[80];
+	float lon;
+	float lat;
+	int alt;
+
+	strcpy(callsign,"D-CORE");
+	strcpy(model,"Aircraft/Dragonfly/Models/Dragonfly.xml");
+	lon=52.475449;
+	lat=13.415937;
+	alt=123;
 
         /* catch signals */
         signal (SIGINT, quit);
@@ -64,17 +77,20 @@ int main(int argc, char *argv[])
 	iaxc_set_event_callback (iaxc_callback);
         iaxc_start_processing_thread ();
 
-	reg_id = iaxc_register ((char *)DEFAULT_USER,(char *)DEFAULT_PASSWORD,(char *)DEFAULT_VOIP_SERVER);
-	printf("registered %d\n",reg_id);
+//	reg_id = iaxc_register ((char *)DEFAULT_USER,(char *)DEFAULT_PASSWORD,(char *)DEFAULT_VOIP_SERVER);
+//	printf("registered %d\n",reg_id);
 
-	sprintf(dest,"%s:%s@%s/%s",(char *)DEFAULT_USER,(char *)DEFAULT_PASSWORD,(char *)DEFAULT_VOIP_SERVER,(char *)DEFAULT_FRQ);
+	//sprintf(dest,"%s:%s@%s/%s",(char *)DEFAULT_USER,(char *)DEFAULT_PASSWORD,(char *)DEFAULT_VOIP_SERVER,(char *)DEFAULT_FRQ);
+	sprintf(dest,"%s/%s",(char *)DEFAULT_VOIP_SERVER,(char *)DEFAULT_FRQ);
         iaxc_call (dest);
+	iaxc_millisleep(1000);
 
 	while(1)
 	{
+		sprintf(text,"FGCOM:%s:%s:%f:%f:%d:%s","ADD",(char *)DEFAULT_USER,lon,lat,alt,model);
+		printf("Send: [%s]\n",text);
+		iaxc_send_text(text);
 		sleep(5);
-		iaxc_send_text((char *)"FGCOM:Hi there!");
-		printf("Sending text message\n");
 	}
 }
 
