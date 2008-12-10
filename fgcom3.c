@@ -11,7 +11,7 @@
 #define DEFAULT_PASSWORD "secreT"
 #define DEFAULT_FG_SERVER "localhost"
 #define DEFAULT_FG_PORT 16661
-#define DEFAULT_FRQ "01123450"
+#define DEFAULT_FRQ "02123450"
 #define DEFAULT_VOIP_SERVER "fgcom1.parasitstudio.de"
 #define DEFAULT_IAX_CODEC IAXC_FORMAT_ULAW
 #define DEFAULT_IAX_AUDIO AUDIO_INTERNAL
@@ -124,7 +124,13 @@ int iaxc_callback (iaxc_event e)
 
 void quit (int signal)
 {
+	char text[256];
+
 	printf("Stopping service.");
+	sprintf(text,"FGCOM:%s:%s","DEL",(char *)DEFAULT_USER);
+	printf("Send: [%s]\n",text);
+	iaxc_send_text(text);
+	iaxc_millisleep(1000);
 	iaxc_shutdown ();
     	iaxc_unregister(reg_id);
 	exit(0);
