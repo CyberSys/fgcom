@@ -30,19 +30,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /usr/local/bin/cmake
+CMAKE_COMMAND = /usr/bin/cmake
 
 # The command to remove a file.
-RM = /usr/local/bin/cmake -E remove -f
+RM = /usr/bin/cmake -E remove -f
 
 # The program to use to edit the cache.
-CMAKE_EDIT_COMMAND = /usr/local/bin/ccmake
+CMAKE_EDIT_COMMAND = /usr/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/charles/Projets/Logiciel/iax-fgcom-client
+CMAKE_SOURCE_DIR = /usr/local/src/fgcom3/iax-fgcom-client
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/charles/Projets/Logiciel/iax-fgcom-client
+CMAKE_BINARY_DIR = /usr/local/src/fgcom3/iax-fgcom-client
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -50,7 +50,7 @@ CMAKE_BINARY_DIR = /home/charles/Projets/Logiciel/iax-fgcom-client
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client/spandsp && /usr/local/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	cd /usr/local/src/fgcom3/iax-fgcom-client/spandsp && /usr/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -60,7 +60,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client/spandsp && /usr/local/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	cd /usr/local/src/fgcom3/iax-fgcom-client/spandsp && /usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -69,14 +69,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(CMAKE_COMMAND) -E cmake_progress_start /home/charles/Projets/Logiciel/iax-fgcom-client/CMakeFiles /home/charles/Projets/Logiciel/iax-fgcom-client/spandsp/CMakeFiles/progress.make
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 spandsp/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/charles/Projets/Logiciel/iax-fgcom-client/CMakeFiles 0
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(CMAKE_COMMAND) -E cmake_progress_start /usr/local/src/fgcom3/iax-fgcom-client/CMakeFiles /usr/local/src/fgcom3/iax-fgcom-client/spandsp/CMakeFiles/progress.make
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 spandsp/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /usr/local/src/fgcom3/iax-fgcom-client/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 spandsp/clean
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 spandsp/clean
 .PHONY : clean
 
 # The main clean target
@@ -85,22 +85,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 spandsp/preinstall
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 spandsp/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 spandsp/preinstall
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 spandsp/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 spandsp/CMakeFiles/spandsp.dir/rule:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 spandsp/CMakeFiles/spandsp.dir/rule
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 spandsp/CMakeFiles/spandsp.dir/rule
 .PHONY : spandsp/CMakeFiles/spandsp.dir/rule
 
 # Convenience name for target.
@@ -109,12 +109,12 @@ spandsp: spandsp/CMakeFiles/spandsp.dir/rule
 
 # fast build rule for target.
 spandsp/fast:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f spandsp/CMakeFiles/spandsp.dir/build.make spandsp/CMakeFiles/spandsp.dir/build
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f spandsp/CMakeFiles/spandsp.dir/build.make spandsp/CMakeFiles/spandsp.dir/build
 .PHONY : spandsp/fast
 
 # Convenience name for target.
 spandsp/CMakeFiles/spandsp-dynamic.dir/rule:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 spandsp/CMakeFiles/spandsp-dynamic.dir/rule
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 spandsp/CMakeFiles/spandsp-dynamic.dir/rule
 .PHONY : spandsp/CMakeFiles/spandsp-dynamic.dir/rule
 
 # Convenience name for target.
@@ -123,7 +123,7 @@ spandsp-dynamic: spandsp/CMakeFiles/spandsp-dynamic.dir/rule
 
 # fast build rule for target.
 spandsp-dynamic/fast:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f spandsp/CMakeFiles/spandsp-dynamic.dir/build.make spandsp/CMakeFiles/spandsp-dynamic.dir/build
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f spandsp/CMakeFiles/spandsp-dynamic.dir/build.make spandsp/CMakeFiles/spandsp-dynamic.dir/build
 .PHONY : spandsp-dynamic/fast
 
 plc.o: plc.c.o
@@ -131,8 +131,8 @@ plc.o: plc.c.o
 
 # target to build an object file
 plc.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f spandsp/CMakeFiles/spandsp.dir/build.make spandsp/CMakeFiles/spandsp.dir/plc.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f spandsp/CMakeFiles/spandsp-dynamic.dir/build.make spandsp/CMakeFiles/spandsp-dynamic.dir/plc.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f spandsp/CMakeFiles/spandsp.dir/build.make spandsp/CMakeFiles/spandsp.dir/plc.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f spandsp/CMakeFiles/spandsp-dynamic.dir/build.make spandsp/CMakeFiles/spandsp-dynamic.dir/plc.c.o
 .PHONY : plc.c.o
 
 plc.i: plc.c.i
@@ -140,8 +140,8 @@ plc.i: plc.c.i
 
 # target to preprocess a source file
 plc.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f spandsp/CMakeFiles/spandsp.dir/build.make spandsp/CMakeFiles/spandsp.dir/plc.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f spandsp/CMakeFiles/spandsp-dynamic.dir/build.make spandsp/CMakeFiles/spandsp-dynamic.dir/plc.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f spandsp/CMakeFiles/spandsp.dir/build.make spandsp/CMakeFiles/spandsp.dir/plc.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f spandsp/CMakeFiles/spandsp-dynamic.dir/build.make spandsp/CMakeFiles/spandsp-dynamic.dir/plc.c.i
 .PHONY : plc.c.i
 
 plc.s: plc.c.s
@@ -149,8 +149,8 @@ plc.s: plc.c.s
 
 # target to generate assembly for a file
 plc.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f spandsp/CMakeFiles/spandsp.dir/build.make spandsp/CMakeFiles/spandsp.dir/plc.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f spandsp/CMakeFiles/spandsp-dynamic.dir/build.make spandsp/CMakeFiles/spandsp-dynamic.dir/plc.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f spandsp/CMakeFiles/spandsp.dir/build.make spandsp/CMakeFiles/spandsp.dir/plc.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f spandsp/CMakeFiles/spandsp-dynamic.dir/build.make spandsp/CMakeFiles/spandsp-dynamic.dir/plc.c.s
 .PHONY : plc.c.s
 
 # Help Target
@@ -177,6 +177,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

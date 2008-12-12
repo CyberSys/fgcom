@@ -1,4 +1,4 @@
-# Install script for directory: /home/charles/Projets/Logiciel/iax-fgcom-client
+# Install script for directory: /usr/local/src/fgcom3/iax-fgcom-client
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -29,17 +29,17 @@ ENDIF(NOT CMAKE_INSTALL_COMPONENT)
 
 # Install shared libraries without execute permission?
 IF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
-  SET(CMAKE_INSTALL_SO_NO_EXE "0")
+  SET(CMAKE_INSTALL_SO_NO_EXE "1")
 ENDIF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 
 IF(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  INCLUDE("/home/charles/Projets/Logiciel/iax-fgcom-client/libiax2/cmake_install.cmake")
-  INCLUDE("/home/charles/Projets/Logiciel/iax-fgcom-client/gsm/src/cmake_install.cmake")
-  INCLUDE("/home/charles/Projets/Logiciel/iax-fgcom-client/libspeex/cmake_install.cmake")
-  INCLUDE("/home/charles/Projets/Logiciel/iax-fgcom-client/spandsp/cmake_install.cmake")
-  INCLUDE("/home/charles/Projets/Logiciel/iax-fgcom-client/portmixer/cmake_install.cmake")
-  INCLUDE("/home/charles/Projets/Logiciel/iax-fgcom-client/lib/cmake_install.cmake")
+  INCLUDE("/usr/local/src/fgcom3/iax-fgcom-client/libiax2/cmake_install.cmake")
+  INCLUDE("/usr/local/src/fgcom3/iax-fgcom-client/gsm/src/cmake_install.cmake")
+  INCLUDE("/usr/local/src/fgcom3/iax-fgcom-client/libspeex/cmake_install.cmake")
+  INCLUDE("/usr/local/src/fgcom3/iax-fgcom-client/spandsp/cmake_install.cmake")
+  INCLUDE("/usr/local/src/fgcom3/iax-fgcom-client/portmixer/cmake_install.cmake")
+  INCLUDE("/usr/local/src/fgcom3/iax-fgcom-client/lib/cmake_install.cmake")
 
 ENDIF(NOT CMAKE_INSTALL_LOCAL_ONLY)
 
@@ -49,7 +49,7 @@ ELSE(CMAKE_INSTALL_COMPONENT)
   SET(CMAKE_INSTALL_MANIFEST "install_manifest.txt")
 ENDIF(CMAKE_INSTALL_COMPONENT)
 
-FILE(WRITE "/home/charles/Projets/Logiciel/iax-fgcom-client/${CMAKE_INSTALL_MANIFEST}" "")
+FILE(WRITE "/usr/local/src/fgcom3/iax-fgcom-client/${CMAKE_INSTALL_MANIFEST}" "")
 FOREACH(file ${CMAKE_INSTALL_MANIFEST_FILES})
-  FILE(APPEND "/home/charles/Projets/Logiciel/iax-fgcom-client/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
+  FILE(APPEND "/usr/local/src/fgcom3/iax-fgcom-client/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
 ENDFOREACH(file)

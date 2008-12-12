@@ -30,19 +30,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /usr/local/bin/cmake
+CMAKE_COMMAND = /usr/bin/cmake
 
 # The command to remove a file.
-RM = /usr/local/bin/cmake -E remove -f
+RM = /usr/bin/cmake -E remove -f
 
 # The program to use to edit the cache.
-CMAKE_EDIT_COMMAND = /usr/local/bin/ccmake
+CMAKE_EDIT_COMMAND = /usr/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/charles/Projets/Logiciel/iax-fgcom-client
+CMAKE_SOURCE_DIR = /usr/local/src/fgcom3/iax-fgcom-client
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/charles/Projets/Logiciel/iax-fgcom-client
+CMAKE_BINARY_DIR = /usr/local/src/fgcom3/iax-fgcom-client
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -50,7 +50,7 @@ CMAKE_BINARY_DIR = /home/charles/Projets/Logiciel/iax-fgcom-client
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client/libiax2 && /usr/local/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	cd /usr/local/src/fgcom3/iax-fgcom-client/libiax2 && /usr/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -60,7 +60,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client/libiax2 && /usr/local/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	cd /usr/local/src/fgcom3/iax-fgcom-client/libiax2 && /usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -69,14 +69,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(CMAKE_COMMAND) -E cmake_progress_start /home/charles/Projets/Logiciel/iax-fgcom-client/CMakeFiles /home/charles/Projets/Logiciel/iax-fgcom-client/libiax2/CMakeFiles/progress.make
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libiax2/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/charles/Projets/Logiciel/iax-fgcom-client/CMakeFiles 0
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(CMAKE_COMMAND) -E cmake_progress_start /usr/local/src/fgcom3/iax-fgcom-client/CMakeFiles /usr/local/src/fgcom3/iax-fgcom-client/libiax2/CMakeFiles/progress.make
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libiax2/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /usr/local/src/fgcom3/iax-fgcom-client/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libiax2/clean
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libiax2/clean
 .PHONY : clean
 
 # The main clean target
@@ -85,22 +85,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libiax2/preinstall
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libiax2/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libiax2/preinstall
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libiax2/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 libiax2/CMakeFiles/iax2.dir/rule:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libiax2/CMakeFiles/iax2.dir/rule
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libiax2/CMakeFiles/iax2.dir/rule
 .PHONY : libiax2/CMakeFiles/iax2.dir/rule
 
 # Convenience name for target.
@@ -109,12 +109,12 @@ iax2: libiax2/CMakeFiles/iax2.dir/rule
 
 # fast build rule for target.
 iax2/fast:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/build
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/build
 .PHONY : iax2/fast
 
 # Convenience name for target.
 libiax2/CMakeFiles/iax2-dynamic.dir/rule:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libiax2/CMakeFiles/iax2-dynamic.dir/rule
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libiax2/CMakeFiles/iax2-dynamic.dir/rule
 .PHONY : libiax2/CMakeFiles/iax2-dynamic.dir/rule
 
 # Convenience name for target.
@@ -123,7 +123,7 @@ iax2-dynamic: libiax2/CMakeFiles/iax2-dynamic.dir/rule
 
 # fast build rule for target.
 iax2-dynamic/fast:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/build
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/build
 .PHONY : iax2-dynamic/fast
 
 iax.o: iax.c.o
@@ -131,8 +131,8 @@ iax.o: iax.c.o
 
 # target to build an object file
 iax.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/iax.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/iax.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/iax.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/iax.c.o
 .PHONY : iax.c.o
 
 iax.i: iax.c.i
@@ -140,8 +140,8 @@ iax.i: iax.c.i
 
 # target to preprocess a source file
 iax.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/iax.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/iax.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/iax.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/iax.c.i
 .PHONY : iax.c.i
 
 iax.s: iax.c.s
@@ -149,8 +149,8 @@ iax.s: iax.c.s
 
 # target to generate assembly for a file
 iax.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/iax.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/iax.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/iax.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/iax.c.s
 .PHONY : iax.c.s
 
 iax2-parser.o: iax2-parser.c.o
@@ -158,8 +158,8 @@ iax2-parser.o: iax2-parser.c.o
 
 # target to build an object file
 iax2-parser.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/iax2-parser.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/iax2-parser.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/iax2-parser.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/iax2-parser.c.o
 .PHONY : iax2-parser.c.o
 
 iax2-parser.i: iax2-parser.c.i
@@ -167,8 +167,8 @@ iax2-parser.i: iax2-parser.c.i
 
 # target to preprocess a source file
 iax2-parser.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/iax2-parser.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/iax2-parser.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/iax2-parser.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/iax2-parser.c.i
 .PHONY : iax2-parser.c.i
 
 iax2-parser.s: iax2-parser.c.s
@@ -176,8 +176,8 @@ iax2-parser.s: iax2-parser.c.s
 
 # target to generate assembly for a file
 iax2-parser.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/iax2-parser.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/iax2-parser.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/iax2-parser.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/iax2-parser.c.s
 .PHONY : iax2-parser.c.s
 
 jitterbuf.o: jitterbuf.c.o
@@ -185,8 +185,8 @@ jitterbuf.o: jitterbuf.c.o
 
 # target to build an object file
 jitterbuf.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/jitterbuf.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/jitterbuf.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/jitterbuf.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/jitterbuf.c.o
 .PHONY : jitterbuf.c.o
 
 jitterbuf.i: jitterbuf.c.i
@@ -194,8 +194,8 @@ jitterbuf.i: jitterbuf.c.i
 
 # target to preprocess a source file
 jitterbuf.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/jitterbuf.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/jitterbuf.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/jitterbuf.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/jitterbuf.c.i
 .PHONY : jitterbuf.c.i
 
 jitterbuf.s: jitterbuf.c.s
@@ -203,8 +203,8 @@ jitterbuf.s: jitterbuf.c.s
 
 # target to generate assembly for a file
 jitterbuf.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/jitterbuf.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/jitterbuf.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/jitterbuf.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/jitterbuf.c.s
 .PHONY : jitterbuf.c.s
 
 md5.o: md5.c.o
@@ -212,8 +212,8 @@ md5.o: md5.c.o
 
 # target to build an object file
 md5.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/md5.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/md5.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/md5.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/md5.c.o
 .PHONY : md5.c.o
 
 md5.i: md5.c.i
@@ -221,8 +221,8 @@ md5.i: md5.c.i
 
 # target to preprocess a source file
 md5.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/md5.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/md5.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/md5.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/md5.c.i
 .PHONY : md5.c.i
 
 md5.s: md5.c.s
@@ -230,8 +230,8 @@ md5.s: md5.c.s
 
 # target to generate assembly for a file
 md5.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/md5.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/md5.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/md5.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/md5.c.s
 .PHONY : md5.c.s
 
 options.o: options.c.o
@@ -239,8 +239,8 @@ options.o: options.c.o
 
 # target to build an object file
 options.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/options.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/options.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/options.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/options.c.o
 .PHONY : options.c.o
 
 options.i: options.c.i
@@ -248,8 +248,8 @@ options.i: options.c.i
 
 # target to preprocess a source file
 options.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/options.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/options.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/options.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/options.c.i
 .PHONY : options.c.i
 
 options.s: options.c.s
@@ -257,8 +257,8 @@ options.s: options.c.s
 
 # target to generate assembly for a file
 options.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/options.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/options.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2.dir/build.make libiax2/CMakeFiles/iax2.dir/options.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libiax2/CMakeFiles/iax2-dynamic.dir/build.make libiax2/CMakeFiles/iax2-dynamic.dir/options.c.s
 .PHONY : options.c.s
 
 # Help Target
@@ -297,6 +297,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

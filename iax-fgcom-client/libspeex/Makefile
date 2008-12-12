@@ -30,19 +30,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /usr/local/bin/cmake
+CMAKE_COMMAND = /usr/bin/cmake
 
 # The command to remove a file.
-RM = /usr/local/bin/cmake -E remove -f
+RM = /usr/bin/cmake -E remove -f
 
 # The program to use to edit the cache.
-CMAKE_EDIT_COMMAND = /usr/local/bin/ccmake
+CMAKE_EDIT_COMMAND = /usr/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/charles/Projets/Logiciel/iax-fgcom-client
+CMAKE_SOURCE_DIR = /usr/local/src/fgcom3/iax-fgcom-client
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/charles/Projets/Logiciel/iax-fgcom-client
+CMAKE_BINARY_DIR = /usr/local/src/fgcom3/iax-fgcom-client
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -50,7 +50,7 @@ CMAKE_BINARY_DIR = /home/charles/Projets/Logiciel/iax-fgcom-client
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client/libspeex && /usr/local/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	cd /usr/local/src/fgcom3/iax-fgcom-client/libspeex && /usr/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -60,7 +60,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client/libspeex && /usr/local/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	cd /usr/local/src/fgcom3/iax-fgcom-client/libspeex && /usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -69,14 +69,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(CMAKE_COMMAND) -E cmake_progress_start /home/charles/Projets/Logiciel/iax-fgcom-client/CMakeFiles /home/charles/Projets/Logiciel/iax-fgcom-client/libspeex/CMakeFiles/progress.make
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libspeex/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/charles/Projets/Logiciel/iax-fgcom-client/CMakeFiles 0
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(CMAKE_COMMAND) -E cmake_progress_start /usr/local/src/fgcom3/iax-fgcom-client/CMakeFiles /usr/local/src/fgcom3/iax-fgcom-client/libspeex/CMakeFiles/progress.make
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libspeex/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /usr/local/src/fgcom3/iax-fgcom-client/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libspeex/clean
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libspeex/clean
 .PHONY : clean
 
 # The main clean target
@@ -85,22 +85,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libspeex/preinstall
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libspeex/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libspeex/preinstall
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libspeex/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 libspeex/CMakeFiles/speex.dir/rule:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libspeex/CMakeFiles/speex.dir/rule
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libspeex/CMakeFiles/speex.dir/rule
 .PHONY : libspeex/CMakeFiles/speex.dir/rule
 
 # Convenience name for target.
@@ -109,12 +109,12 @@ speex: libspeex/CMakeFiles/speex.dir/rule
 
 # fast build rule for target.
 speex/fast:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/build
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/build
 .PHONY : speex/fast
 
 # Convenience name for target.
 libspeex/CMakeFiles/speex-dynamic.dir/rule:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libspeex/CMakeFiles/speex-dynamic.dir/rule
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libspeex/CMakeFiles/speex-dynamic.dir/rule
 .PHONY : libspeex/CMakeFiles/speex-dynamic.dir/rule
 
 # Convenience name for target.
@@ -123,12 +123,12 @@ speex-dynamic: libspeex/CMakeFiles/speex-dynamic.dir/rule
 
 # fast build rule for target.
 speex-dynamic/fast:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/build
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/build
 .PHONY : speex-dynamic/fast
 
 # Convenience name for target.
 libspeex/CMakeFiles/testdenoise.dir/rule:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libspeex/CMakeFiles/testdenoise.dir/rule
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libspeex/CMakeFiles/testdenoise.dir/rule
 .PHONY : libspeex/CMakeFiles/testdenoise.dir/rule
 
 # Convenience name for target.
@@ -137,12 +137,12 @@ testdenoise: libspeex/CMakeFiles/testdenoise.dir/rule
 
 # fast build rule for target.
 testdenoise/fast:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testdenoise.dir/build.make libspeex/CMakeFiles/testdenoise.dir/build
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testdenoise.dir/build.make libspeex/CMakeFiles/testdenoise.dir/build
 .PHONY : testdenoise/fast
 
 # Convenience name for target.
 libspeex/CMakeFiles/testecho.dir/rule:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libspeex/CMakeFiles/testecho.dir/rule
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libspeex/CMakeFiles/testecho.dir/rule
 .PHONY : libspeex/CMakeFiles/testecho.dir/rule
 
 # Convenience name for target.
@@ -151,12 +151,12 @@ testecho: libspeex/CMakeFiles/testecho.dir/rule
 
 # fast build rule for target.
 testecho/fast:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testecho.dir/build.make libspeex/CMakeFiles/testecho.dir/build
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testecho.dir/build.make libspeex/CMakeFiles/testecho.dir/build
 .PHONY : testecho/fast
 
 # Convenience name for target.
 libspeex/CMakeFiles/testenc.dir/rule:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libspeex/CMakeFiles/testenc.dir/rule
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libspeex/CMakeFiles/testenc.dir/rule
 .PHONY : libspeex/CMakeFiles/testenc.dir/rule
 
 # Convenience name for target.
@@ -165,12 +165,12 @@ testenc: libspeex/CMakeFiles/testenc.dir/rule
 
 # fast build rule for target.
 testenc/fast:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testenc.dir/build.make libspeex/CMakeFiles/testenc.dir/build
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testenc.dir/build.make libspeex/CMakeFiles/testenc.dir/build
 .PHONY : testenc/fast
 
 # Convenience name for target.
 libspeex/CMakeFiles/testenc_uwb.dir/rule:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libspeex/CMakeFiles/testenc_uwb.dir/rule
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libspeex/CMakeFiles/testenc_uwb.dir/rule
 .PHONY : libspeex/CMakeFiles/testenc_uwb.dir/rule
 
 # Convenience name for target.
@@ -179,12 +179,12 @@ testenc_uwb: libspeex/CMakeFiles/testenc_uwb.dir/rule
 
 # fast build rule for target.
 testenc_uwb/fast:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testenc_uwb.dir/build.make libspeex/CMakeFiles/testenc_uwb.dir/build
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testenc_uwb.dir/build.make libspeex/CMakeFiles/testenc_uwb.dir/build
 .PHONY : testenc_uwb/fast
 
 # Convenience name for target.
 libspeex/CMakeFiles/testenc_wb.dir/rule:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libspeex/CMakeFiles/testenc_wb.dir/rule
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libspeex/CMakeFiles/testenc_wb.dir/rule
 .PHONY : libspeex/CMakeFiles/testenc_wb.dir/rule
 
 # Convenience name for target.
@@ -193,12 +193,12 @@ testenc_wb: libspeex/CMakeFiles/testenc_wb.dir/rule
 
 # fast build rule for target.
 testenc_wb/fast:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testenc_wb.dir/build.make libspeex/CMakeFiles/testenc_wb.dir/build
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testenc_wb.dir/build.make libspeex/CMakeFiles/testenc_wb.dir/build
 .PHONY : testenc_wb/fast
 
 # Convenience name for target.
 libspeex/CMakeFiles/testjitter.dir/rule:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libspeex/CMakeFiles/testjitter.dir/rule
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 libspeex/CMakeFiles/testjitter.dir/rule
 .PHONY : libspeex/CMakeFiles/testjitter.dir/rule
 
 # Convenience name for target.
@@ -207,7 +207,7 @@ testjitter: libspeex/CMakeFiles/testjitter.dir/rule
 
 # fast build rule for target.
 testjitter/fast:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testjitter.dir/build.make libspeex/CMakeFiles/testjitter.dir/build
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testjitter.dir/build.make libspeex/CMakeFiles/testjitter.dir/build
 .PHONY : testjitter/fast
 
 bits.o: bits.c.o
@@ -215,8 +215,8 @@ bits.o: bits.c.o
 
 # target to build an object file
 bits.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/bits.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/bits.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/bits.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/bits.c.o
 .PHONY : bits.c.o
 
 bits.i: bits.c.i
@@ -224,8 +224,8 @@ bits.i: bits.c.i
 
 # target to preprocess a source file
 bits.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/bits.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/bits.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/bits.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/bits.c.i
 .PHONY : bits.c.i
 
 bits.s: bits.c.s
@@ -233,8 +233,8 @@ bits.s: bits.c.s
 
 # target to generate assembly for a file
 bits.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/bits.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/bits.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/bits.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/bits.c.s
 .PHONY : bits.c.s
 
 buffer.o: buffer.c.o
@@ -242,8 +242,8 @@ buffer.o: buffer.c.o
 
 # target to build an object file
 buffer.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/buffer.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/buffer.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/buffer.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/buffer.c.o
 .PHONY : buffer.c.o
 
 buffer.i: buffer.c.i
@@ -251,8 +251,8 @@ buffer.i: buffer.c.i
 
 # target to preprocess a source file
 buffer.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/buffer.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/buffer.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/buffer.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/buffer.c.i
 .PHONY : buffer.c.i
 
 buffer.s: buffer.c.s
@@ -260,8 +260,8 @@ buffer.s: buffer.c.s
 
 # target to generate assembly for a file
 buffer.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/buffer.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/buffer.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/buffer.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/buffer.c.s
 .PHONY : buffer.c.s
 
 cb_search.o: cb_search.c.o
@@ -269,8 +269,8 @@ cb_search.o: cb_search.c.o
 
 # target to build an object file
 cb_search.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/cb_search.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/cb_search.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/cb_search.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/cb_search.c.o
 .PHONY : cb_search.c.o
 
 cb_search.i: cb_search.c.i
@@ -278,8 +278,8 @@ cb_search.i: cb_search.c.i
 
 # target to preprocess a source file
 cb_search.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/cb_search.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/cb_search.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/cb_search.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/cb_search.c.i
 .PHONY : cb_search.c.i
 
 cb_search.s: cb_search.c.s
@@ -287,8 +287,8 @@ cb_search.s: cb_search.c.s
 
 # target to generate assembly for a file
 cb_search.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/cb_search.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/cb_search.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/cb_search.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/cb_search.c.s
 .PHONY : cb_search.c.s
 
 exc_10_16_table.o: exc_10_16_table.c.o
@@ -296,8 +296,8 @@ exc_10_16_table.o: exc_10_16_table.c.o
 
 # target to build an object file
 exc_10_16_table.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_10_16_table.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_10_16_table.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_10_16_table.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_10_16_table.c.o
 .PHONY : exc_10_16_table.c.o
 
 exc_10_16_table.i: exc_10_16_table.c.i
@@ -305,8 +305,8 @@ exc_10_16_table.i: exc_10_16_table.c.i
 
 # target to preprocess a source file
 exc_10_16_table.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_10_16_table.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_10_16_table.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_10_16_table.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_10_16_table.c.i
 .PHONY : exc_10_16_table.c.i
 
 exc_10_16_table.s: exc_10_16_table.c.s
@@ -314,8 +314,8 @@ exc_10_16_table.s: exc_10_16_table.c.s
 
 # target to generate assembly for a file
 exc_10_16_table.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_10_16_table.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_10_16_table.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_10_16_table.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_10_16_table.c.s
 .PHONY : exc_10_16_table.c.s
 
 exc_10_32_table.o: exc_10_32_table.c.o
@@ -323,8 +323,8 @@ exc_10_32_table.o: exc_10_32_table.c.o
 
 # target to build an object file
 exc_10_32_table.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_10_32_table.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_10_32_table.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_10_32_table.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_10_32_table.c.o
 .PHONY : exc_10_32_table.c.o
 
 exc_10_32_table.i: exc_10_32_table.c.i
@@ -332,8 +332,8 @@ exc_10_32_table.i: exc_10_32_table.c.i
 
 # target to preprocess a source file
 exc_10_32_table.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_10_32_table.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_10_32_table.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_10_32_table.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_10_32_table.c.i
 .PHONY : exc_10_32_table.c.i
 
 exc_10_32_table.s: exc_10_32_table.c.s
@@ -341,8 +341,8 @@ exc_10_32_table.s: exc_10_32_table.c.s
 
 # target to generate assembly for a file
 exc_10_32_table.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_10_32_table.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_10_32_table.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_10_32_table.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_10_32_table.c.s
 .PHONY : exc_10_32_table.c.s
 
 exc_20_32_table.o: exc_20_32_table.c.o
@@ -350,8 +350,8 @@ exc_20_32_table.o: exc_20_32_table.c.o
 
 # target to build an object file
 exc_20_32_table.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_20_32_table.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_20_32_table.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_20_32_table.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_20_32_table.c.o
 .PHONY : exc_20_32_table.c.o
 
 exc_20_32_table.i: exc_20_32_table.c.i
@@ -359,8 +359,8 @@ exc_20_32_table.i: exc_20_32_table.c.i
 
 # target to preprocess a source file
 exc_20_32_table.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_20_32_table.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_20_32_table.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_20_32_table.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_20_32_table.c.i
 .PHONY : exc_20_32_table.c.i
 
 exc_20_32_table.s: exc_20_32_table.c.s
@@ -368,8 +368,8 @@ exc_20_32_table.s: exc_20_32_table.c.s
 
 # target to generate assembly for a file
 exc_20_32_table.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_20_32_table.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_20_32_table.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_20_32_table.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_20_32_table.c.s
 .PHONY : exc_20_32_table.c.s
 
 exc_5_256_table.o: exc_5_256_table.c.o
@@ -377,8 +377,8 @@ exc_5_256_table.o: exc_5_256_table.c.o
 
 # target to build an object file
 exc_5_256_table.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_5_256_table.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_5_256_table.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_5_256_table.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_5_256_table.c.o
 .PHONY : exc_5_256_table.c.o
 
 exc_5_256_table.i: exc_5_256_table.c.i
@@ -386,8 +386,8 @@ exc_5_256_table.i: exc_5_256_table.c.i
 
 # target to preprocess a source file
 exc_5_256_table.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_5_256_table.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_5_256_table.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_5_256_table.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_5_256_table.c.i
 .PHONY : exc_5_256_table.c.i
 
 exc_5_256_table.s: exc_5_256_table.c.s
@@ -395,8 +395,8 @@ exc_5_256_table.s: exc_5_256_table.c.s
 
 # target to generate assembly for a file
 exc_5_256_table.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_5_256_table.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_5_256_table.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_5_256_table.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_5_256_table.c.s
 .PHONY : exc_5_256_table.c.s
 
 exc_5_64_table.o: exc_5_64_table.c.o
@@ -404,8 +404,8 @@ exc_5_64_table.o: exc_5_64_table.c.o
 
 # target to build an object file
 exc_5_64_table.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_5_64_table.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_5_64_table.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_5_64_table.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_5_64_table.c.o
 .PHONY : exc_5_64_table.c.o
 
 exc_5_64_table.i: exc_5_64_table.c.i
@@ -413,8 +413,8 @@ exc_5_64_table.i: exc_5_64_table.c.i
 
 # target to preprocess a source file
 exc_5_64_table.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_5_64_table.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_5_64_table.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_5_64_table.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_5_64_table.c.i
 .PHONY : exc_5_64_table.c.i
 
 exc_5_64_table.s: exc_5_64_table.c.s
@@ -422,8 +422,8 @@ exc_5_64_table.s: exc_5_64_table.c.s
 
 # target to generate assembly for a file
 exc_5_64_table.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_5_64_table.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_5_64_table.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_5_64_table.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_5_64_table.c.s
 .PHONY : exc_5_64_table.c.s
 
 exc_8_128_table.o: exc_8_128_table.c.o
@@ -431,8 +431,8 @@ exc_8_128_table.o: exc_8_128_table.c.o
 
 # target to build an object file
 exc_8_128_table.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_8_128_table.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_8_128_table.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_8_128_table.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_8_128_table.c.o
 .PHONY : exc_8_128_table.c.o
 
 exc_8_128_table.i: exc_8_128_table.c.i
@@ -440,8 +440,8 @@ exc_8_128_table.i: exc_8_128_table.c.i
 
 # target to preprocess a source file
 exc_8_128_table.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_8_128_table.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_8_128_table.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_8_128_table.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_8_128_table.c.i
 .PHONY : exc_8_128_table.c.i
 
 exc_8_128_table.s: exc_8_128_table.c.s
@@ -449,8 +449,8 @@ exc_8_128_table.s: exc_8_128_table.c.s
 
 # target to generate assembly for a file
 exc_8_128_table.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_8_128_table.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_8_128_table.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/exc_8_128_table.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/exc_8_128_table.c.s
 .PHONY : exc_8_128_table.c.s
 
 fftwrap.o: fftwrap.c.o
@@ -458,8 +458,8 @@ fftwrap.o: fftwrap.c.o
 
 # target to build an object file
 fftwrap.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/fftwrap.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/fftwrap.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/fftwrap.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/fftwrap.c.o
 .PHONY : fftwrap.c.o
 
 fftwrap.i: fftwrap.c.i
@@ -467,8 +467,8 @@ fftwrap.i: fftwrap.c.i
 
 # target to preprocess a source file
 fftwrap.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/fftwrap.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/fftwrap.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/fftwrap.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/fftwrap.c.i
 .PHONY : fftwrap.c.i
 
 fftwrap.s: fftwrap.c.s
@@ -476,8 +476,8 @@ fftwrap.s: fftwrap.c.s
 
 # target to generate assembly for a file
 fftwrap.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/fftwrap.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/fftwrap.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/fftwrap.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/fftwrap.c.s
 .PHONY : fftwrap.c.s
 
 filterbank.o: filterbank.c.o
@@ -485,8 +485,8 @@ filterbank.o: filterbank.c.o
 
 # target to build an object file
 filterbank.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/filterbank.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/filterbank.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/filterbank.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/filterbank.c.o
 .PHONY : filterbank.c.o
 
 filterbank.i: filterbank.c.i
@@ -494,8 +494,8 @@ filterbank.i: filterbank.c.i
 
 # target to preprocess a source file
 filterbank.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/filterbank.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/filterbank.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/filterbank.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/filterbank.c.i
 .PHONY : filterbank.c.i
 
 filterbank.s: filterbank.c.s
@@ -503,8 +503,8 @@ filterbank.s: filterbank.c.s
 
 # target to generate assembly for a file
 filterbank.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/filterbank.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/filterbank.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/filterbank.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/filterbank.c.s
 .PHONY : filterbank.c.s
 
 filters.o: filters.c.o
@@ -512,8 +512,8 @@ filters.o: filters.c.o
 
 # target to build an object file
 filters.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/filters.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/filters.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/filters.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/filters.c.o
 .PHONY : filters.c.o
 
 filters.i: filters.c.i
@@ -521,8 +521,8 @@ filters.i: filters.c.i
 
 # target to preprocess a source file
 filters.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/filters.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/filters.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/filters.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/filters.c.i
 .PHONY : filters.c.i
 
 filters.s: filters.c.s
@@ -530,8 +530,8 @@ filters.s: filters.c.s
 
 # target to generate assembly for a file
 filters.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/filters.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/filters.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/filters.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/filters.c.s
 .PHONY : filters.c.s
 
 gain_table.o: gain_table.c.o
@@ -539,8 +539,8 @@ gain_table.o: gain_table.c.o
 
 # target to build an object file
 gain_table.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/gain_table.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/gain_table.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/gain_table.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/gain_table.c.o
 .PHONY : gain_table.c.o
 
 gain_table.i: gain_table.c.i
@@ -548,8 +548,8 @@ gain_table.i: gain_table.c.i
 
 # target to preprocess a source file
 gain_table.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/gain_table.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/gain_table.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/gain_table.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/gain_table.c.i
 .PHONY : gain_table.c.i
 
 gain_table.s: gain_table.c.s
@@ -557,8 +557,8 @@ gain_table.s: gain_table.c.s
 
 # target to generate assembly for a file
 gain_table.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/gain_table.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/gain_table.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/gain_table.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/gain_table.c.s
 .PHONY : gain_table.c.s
 
 gain_table_lbr.o: gain_table_lbr.c.o
@@ -566,8 +566,8 @@ gain_table_lbr.o: gain_table_lbr.c.o
 
 # target to build an object file
 gain_table_lbr.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/gain_table_lbr.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/gain_table_lbr.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/gain_table_lbr.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/gain_table_lbr.c.o
 .PHONY : gain_table_lbr.c.o
 
 gain_table_lbr.i: gain_table_lbr.c.i
@@ -575,8 +575,8 @@ gain_table_lbr.i: gain_table_lbr.c.i
 
 # target to preprocess a source file
 gain_table_lbr.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/gain_table_lbr.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/gain_table_lbr.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/gain_table_lbr.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/gain_table_lbr.c.i
 .PHONY : gain_table_lbr.c.i
 
 gain_table_lbr.s: gain_table_lbr.c.s
@@ -584,8 +584,8 @@ gain_table_lbr.s: gain_table_lbr.c.s
 
 # target to generate assembly for a file
 gain_table_lbr.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/gain_table_lbr.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/gain_table_lbr.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/gain_table_lbr.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/gain_table_lbr.c.s
 .PHONY : gain_table_lbr.c.s
 
 hexc_10_32_table.o: hexc_10_32_table.c.o
@@ -593,8 +593,8 @@ hexc_10_32_table.o: hexc_10_32_table.c.o
 
 # target to build an object file
 hexc_10_32_table.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/hexc_10_32_table.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/hexc_10_32_table.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/hexc_10_32_table.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/hexc_10_32_table.c.o
 .PHONY : hexc_10_32_table.c.o
 
 hexc_10_32_table.i: hexc_10_32_table.c.i
@@ -602,8 +602,8 @@ hexc_10_32_table.i: hexc_10_32_table.c.i
 
 # target to preprocess a source file
 hexc_10_32_table.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/hexc_10_32_table.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/hexc_10_32_table.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/hexc_10_32_table.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/hexc_10_32_table.c.i
 .PHONY : hexc_10_32_table.c.i
 
 hexc_10_32_table.s: hexc_10_32_table.c.s
@@ -611,8 +611,8 @@ hexc_10_32_table.s: hexc_10_32_table.c.s
 
 # target to generate assembly for a file
 hexc_10_32_table.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/hexc_10_32_table.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/hexc_10_32_table.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/hexc_10_32_table.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/hexc_10_32_table.c.s
 .PHONY : hexc_10_32_table.c.s
 
 hexc_table.o: hexc_table.c.o
@@ -620,8 +620,8 @@ hexc_table.o: hexc_table.c.o
 
 # target to build an object file
 hexc_table.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/hexc_table.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/hexc_table.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/hexc_table.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/hexc_table.c.o
 .PHONY : hexc_table.c.o
 
 hexc_table.i: hexc_table.c.i
@@ -629,8 +629,8 @@ hexc_table.i: hexc_table.c.i
 
 # target to preprocess a source file
 hexc_table.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/hexc_table.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/hexc_table.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/hexc_table.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/hexc_table.c.i
 .PHONY : hexc_table.c.i
 
 hexc_table.s: hexc_table.c.s
@@ -638,8 +638,8 @@ hexc_table.s: hexc_table.c.s
 
 # target to generate assembly for a file
 hexc_table.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/hexc_table.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/hexc_table.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/hexc_table.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/hexc_table.c.s
 .PHONY : hexc_table.c.s
 
 high_lsp_tables.o: high_lsp_tables.c.o
@@ -647,8 +647,8 @@ high_lsp_tables.o: high_lsp_tables.c.o
 
 # target to build an object file
 high_lsp_tables.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/high_lsp_tables.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/high_lsp_tables.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/high_lsp_tables.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/high_lsp_tables.c.o
 .PHONY : high_lsp_tables.c.o
 
 high_lsp_tables.i: high_lsp_tables.c.i
@@ -656,8 +656,8 @@ high_lsp_tables.i: high_lsp_tables.c.i
 
 # target to preprocess a source file
 high_lsp_tables.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/high_lsp_tables.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/high_lsp_tables.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/high_lsp_tables.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/high_lsp_tables.c.i
 .PHONY : high_lsp_tables.c.i
 
 high_lsp_tables.s: high_lsp_tables.c.s
@@ -665,8 +665,8 @@ high_lsp_tables.s: high_lsp_tables.c.s
 
 # target to generate assembly for a file
 high_lsp_tables.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/high_lsp_tables.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/high_lsp_tables.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/high_lsp_tables.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/high_lsp_tables.c.s
 .PHONY : high_lsp_tables.c.s
 
 jitter.o: jitter.c.o
@@ -674,8 +674,8 @@ jitter.o: jitter.c.o
 
 # target to build an object file
 jitter.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/jitter.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/jitter.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/jitter.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/jitter.c.o
 .PHONY : jitter.c.o
 
 jitter.i: jitter.c.i
@@ -683,8 +683,8 @@ jitter.i: jitter.c.i
 
 # target to preprocess a source file
 jitter.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/jitter.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/jitter.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/jitter.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/jitter.c.i
 .PHONY : jitter.c.i
 
 jitter.s: jitter.c.s
@@ -692,8 +692,8 @@ jitter.s: jitter.c.s
 
 # target to generate assembly for a file
 jitter.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/jitter.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/jitter.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/jitter.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/jitter.c.s
 .PHONY : jitter.c.s
 
 lpc.o: lpc.c.o
@@ -701,8 +701,8 @@ lpc.o: lpc.c.o
 
 # target to build an object file
 lpc.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/lpc.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/lpc.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/lpc.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/lpc.c.o
 .PHONY : lpc.c.o
 
 lpc.i: lpc.c.i
@@ -710,8 +710,8 @@ lpc.i: lpc.c.i
 
 # target to preprocess a source file
 lpc.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/lpc.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/lpc.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/lpc.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/lpc.c.i
 .PHONY : lpc.c.i
 
 lpc.s: lpc.c.s
@@ -719,8 +719,8 @@ lpc.s: lpc.c.s
 
 # target to generate assembly for a file
 lpc.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/lpc.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/lpc.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/lpc.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/lpc.c.s
 .PHONY : lpc.c.s
 
 lsp.o: lsp.c.o
@@ -728,8 +728,8 @@ lsp.o: lsp.c.o
 
 # target to build an object file
 lsp.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/lsp.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/lsp.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/lsp.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/lsp.c.o
 .PHONY : lsp.c.o
 
 lsp.i: lsp.c.i
@@ -737,8 +737,8 @@ lsp.i: lsp.c.i
 
 # target to preprocess a source file
 lsp.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/lsp.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/lsp.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/lsp.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/lsp.c.i
 .PHONY : lsp.c.i
 
 lsp.s: lsp.c.s
@@ -746,8 +746,8 @@ lsp.s: lsp.c.s
 
 # target to generate assembly for a file
 lsp.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/lsp.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/lsp.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/lsp.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/lsp.c.s
 .PHONY : lsp.c.s
 
 lsp_tables_nb.o: lsp_tables_nb.c.o
@@ -755,8 +755,8 @@ lsp_tables_nb.o: lsp_tables_nb.c.o
 
 # target to build an object file
 lsp_tables_nb.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/lsp_tables_nb.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/lsp_tables_nb.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/lsp_tables_nb.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/lsp_tables_nb.c.o
 .PHONY : lsp_tables_nb.c.o
 
 lsp_tables_nb.i: lsp_tables_nb.c.i
@@ -764,8 +764,8 @@ lsp_tables_nb.i: lsp_tables_nb.c.i
 
 # target to preprocess a source file
 lsp_tables_nb.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/lsp_tables_nb.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/lsp_tables_nb.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/lsp_tables_nb.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/lsp_tables_nb.c.i
 .PHONY : lsp_tables_nb.c.i
 
 lsp_tables_nb.s: lsp_tables_nb.c.s
@@ -773,8 +773,8 @@ lsp_tables_nb.s: lsp_tables_nb.c.s
 
 # target to generate assembly for a file
 lsp_tables_nb.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/lsp_tables_nb.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/lsp_tables_nb.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/lsp_tables_nb.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/lsp_tables_nb.c.s
 .PHONY : lsp_tables_nb.c.s
 
 ltp.o: ltp.c.o
@@ -782,8 +782,8 @@ ltp.o: ltp.c.o
 
 # target to build an object file
 ltp.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/ltp.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/ltp.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/ltp.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/ltp.c.o
 .PHONY : ltp.c.o
 
 ltp.i: ltp.c.i
@@ -791,8 +791,8 @@ ltp.i: ltp.c.i
 
 # target to preprocess a source file
 ltp.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/ltp.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/ltp.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/ltp.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/ltp.c.i
 .PHONY : ltp.c.i
 
 ltp.s: ltp.c.s
@@ -800,8 +800,8 @@ ltp.s: ltp.c.s
 
 # target to generate assembly for a file
 ltp.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/ltp.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/ltp.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/ltp.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/ltp.c.s
 .PHONY : ltp.c.s
 
 mdf.o: mdf.c.o
@@ -809,8 +809,8 @@ mdf.o: mdf.c.o
 
 # target to build an object file
 mdf.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/mdf.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/mdf.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/mdf.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/mdf.c.o
 .PHONY : mdf.c.o
 
 mdf.i: mdf.c.i
@@ -818,8 +818,8 @@ mdf.i: mdf.c.i
 
 # target to preprocess a source file
 mdf.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/mdf.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/mdf.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/mdf.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/mdf.c.i
 .PHONY : mdf.c.i
 
 mdf.s: mdf.c.s
@@ -827,8 +827,8 @@ mdf.s: mdf.c.s
 
 # target to generate assembly for a file
 mdf.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/mdf.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/mdf.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/mdf.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/mdf.c.s
 .PHONY : mdf.c.s
 
 modes.o: modes.c.o
@@ -836,8 +836,8 @@ modes.o: modes.c.o
 
 # target to build an object file
 modes.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/modes.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/modes.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/modes.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/modes.c.o
 .PHONY : modes.c.o
 
 modes.i: modes.c.i
@@ -845,8 +845,8 @@ modes.i: modes.c.i
 
 # target to preprocess a source file
 modes.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/modes.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/modes.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/modes.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/modes.c.i
 .PHONY : modes.c.i
 
 modes.s: modes.c.s
@@ -854,8 +854,8 @@ modes.s: modes.c.s
 
 # target to generate assembly for a file
 modes.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/modes.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/modes.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/modes.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/modes.c.s
 .PHONY : modes.c.s
 
 modes_wb.o: modes_wb.c.o
@@ -863,8 +863,8 @@ modes_wb.o: modes_wb.c.o
 
 # target to build an object file
 modes_wb.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/modes_wb.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/modes_wb.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/modes_wb.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/modes_wb.c.o
 .PHONY : modes_wb.c.o
 
 modes_wb.i: modes_wb.c.i
@@ -872,8 +872,8 @@ modes_wb.i: modes_wb.c.i
 
 # target to preprocess a source file
 modes_wb.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/modes_wb.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/modes_wb.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/modes_wb.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/modes_wb.c.i
 .PHONY : modes_wb.c.i
 
 modes_wb.s: modes_wb.c.s
@@ -881,8 +881,8 @@ modes_wb.s: modes_wb.c.s
 
 # target to generate assembly for a file
 modes_wb.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/modes_wb.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/modes_wb.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/modes_wb.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/modes_wb.c.s
 .PHONY : modes_wb.c.s
 
 nb_celp.o: nb_celp.c.o
@@ -890,8 +890,8 @@ nb_celp.o: nb_celp.c.o
 
 # target to build an object file
 nb_celp.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/nb_celp.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/nb_celp.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/nb_celp.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/nb_celp.c.o
 .PHONY : nb_celp.c.o
 
 nb_celp.i: nb_celp.c.i
@@ -899,8 +899,8 @@ nb_celp.i: nb_celp.c.i
 
 # target to preprocess a source file
 nb_celp.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/nb_celp.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/nb_celp.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/nb_celp.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/nb_celp.c.i
 .PHONY : nb_celp.c.i
 
 nb_celp.s: nb_celp.c.s
@@ -908,8 +908,8 @@ nb_celp.s: nb_celp.c.s
 
 # target to generate assembly for a file
 nb_celp.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/nb_celp.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/nb_celp.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/nb_celp.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/nb_celp.c.s
 .PHONY : nb_celp.c.s
 
 preprocess.o: preprocess.c.o
@@ -917,8 +917,8 @@ preprocess.o: preprocess.c.o
 
 # target to build an object file
 preprocess.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/preprocess.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/preprocess.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/preprocess.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/preprocess.c.o
 .PHONY : preprocess.c.o
 
 preprocess.i: preprocess.c.i
@@ -926,8 +926,8 @@ preprocess.i: preprocess.c.i
 
 # target to preprocess a source file
 preprocess.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/preprocess.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/preprocess.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/preprocess.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/preprocess.c.i
 .PHONY : preprocess.c.i
 
 preprocess.s: preprocess.c.s
@@ -935,8 +935,8 @@ preprocess.s: preprocess.c.s
 
 # target to generate assembly for a file
 preprocess.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/preprocess.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/preprocess.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/preprocess.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/preprocess.c.s
 .PHONY : preprocess.c.s
 
 quant_lsp.o: quant_lsp.c.o
@@ -944,8 +944,8 @@ quant_lsp.o: quant_lsp.c.o
 
 # target to build an object file
 quant_lsp.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/quant_lsp.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/quant_lsp.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/quant_lsp.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/quant_lsp.c.o
 .PHONY : quant_lsp.c.o
 
 quant_lsp.i: quant_lsp.c.i
@@ -953,8 +953,8 @@ quant_lsp.i: quant_lsp.c.i
 
 # target to preprocess a source file
 quant_lsp.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/quant_lsp.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/quant_lsp.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/quant_lsp.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/quant_lsp.c.i
 .PHONY : quant_lsp.c.i
 
 quant_lsp.s: quant_lsp.c.s
@@ -962,8 +962,8 @@ quant_lsp.s: quant_lsp.c.s
 
 # target to generate assembly for a file
 quant_lsp.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/quant_lsp.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/quant_lsp.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/quant_lsp.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/quant_lsp.c.s
 .PHONY : quant_lsp.c.s
 
 resample.o: resample.c.o
@@ -971,8 +971,8 @@ resample.o: resample.c.o
 
 # target to build an object file
 resample.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/resample.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/resample.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/resample.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/resample.c.o
 .PHONY : resample.c.o
 
 resample.i: resample.c.i
@@ -980,8 +980,8 @@ resample.i: resample.c.i
 
 # target to preprocess a source file
 resample.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/resample.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/resample.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/resample.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/resample.c.i
 .PHONY : resample.c.i
 
 resample.s: resample.c.s
@@ -989,8 +989,8 @@ resample.s: resample.c.s
 
 # target to generate assembly for a file
 resample.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/resample.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/resample.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/resample.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/resample.c.s
 .PHONY : resample.c.s
 
 sb_celp.o: sb_celp.c.o
@@ -998,8 +998,8 @@ sb_celp.o: sb_celp.c.o
 
 # target to build an object file
 sb_celp.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/sb_celp.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/sb_celp.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/sb_celp.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/sb_celp.c.o
 .PHONY : sb_celp.c.o
 
 sb_celp.i: sb_celp.c.i
@@ -1007,8 +1007,8 @@ sb_celp.i: sb_celp.c.i
 
 # target to preprocess a source file
 sb_celp.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/sb_celp.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/sb_celp.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/sb_celp.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/sb_celp.c.i
 .PHONY : sb_celp.c.i
 
 sb_celp.s: sb_celp.c.s
@@ -1016,8 +1016,8 @@ sb_celp.s: sb_celp.c.s
 
 # target to generate assembly for a file
 sb_celp.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/sb_celp.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/sb_celp.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/sb_celp.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/sb_celp.c.s
 .PHONY : sb_celp.c.s
 
 scal.o: scal.c.o
@@ -1025,8 +1025,8 @@ scal.o: scal.c.o
 
 # target to build an object file
 scal.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/scal.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/scal.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/scal.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/scal.c.o
 .PHONY : scal.c.o
 
 scal.i: scal.c.i
@@ -1034,8 +1034,8 @@ scal.i: scal.c.i
 
 # target to preprocess a source file
 scal.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/scal.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/scal.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/scal.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/scal.c.i
 .PHONY : scal.c.i
 
 scal.s: scal.c.s
@@ -1043,8 +1043,8 @@ scal.s: scal.c.s
 
 # target to generate assembly for a file
 scal.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/scal.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/scal.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/scal.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/scal.c.s
 .PHONY : scal.c.s
 
 smallft.o: smallft.c.o
@@ -1052,8 +1052,8 @@ smallft.o: smallft.c.o
 
 # target to build an object file
 smallft.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/smallft.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/smallft.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/smallft.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/smallft.c.o
 .PHONY : smallft.c.o
 
 smallft.i: smallft.c.i
@@ -1061,8 +1061,8 @@ smallft.i: smallft.c.i
 
 # target to preprocess a source file
 smallft.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/smallft.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/smallft.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/smallft.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/smallft.c.i
 .PHONY : smallft.c.i
 
 smallft.s: smallft.c.s
@@ -1070,8 +1070,8 @@ smallft.s: smallft.c.s
 
 # target to generate assembly for a file
 smallft.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/smallft.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/smallft.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/smallft.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/smallft.c.s
 .PHONY : smallft.c.s
 
 speex.o: speex.c.o
@@ -1079,8 +1079,8 @@ speex.o: speex.c.o
 
 # target to build an object file
 speex.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/speex.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/speex.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/speex.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/speex.c.o
 .PHONY : speex.c.o
 
 speex.i: speex.c.i
@@ -1088,8 +1088,8 @@ speex.i: speex.c.i
 
 # target to preprocess a source file
 speex.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/speex.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/speex.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/speex.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/speex.c.i
 .PHONY : speex.c.i
 
 speex.s: speex.c.s
@@ -1097,8 +1097,8 @@ speex.s: speex.c.s
 
 # target to generate assembly for a file
 speex.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/speex.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/speex.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/speex.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/speex.c.s
 .PHONY : speex.c.s
 
 speex_callbacks.o: speex_callbacks.c.o
@@ -1106,8 +1106,8 @@ speex_callbacks.o: speex_callbacks.c.o
 
 # target to build an object file
 speex_callbacks.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/speex_callbacks.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/speex_callbacks.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/speex_callbacks.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/speex_callbacks.c.o
 .PHONY : speex_callbacks.c.o
 
 speex_callbacks.i: speex_callbacks.c.i
@@ -1115,8 +1115,8 @@ speex_callbacks.i: speex_callbacks.c.i
 
 # target to preprocess a source file
 speex_callbacks.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/speex_callbacks.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/speex_callbacks.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/speex_callbacks.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/speex_callbacks.c.i
 .PHONY : speex_callbacks.c.i
 
 speex_callbacks.s: speex_callbacks.c.s
@@ -1124,8 +1124,8 @@ speex_callbacks.s: speex_callbacks.c.s
 
 # target to generate assembly for a file
 speex_callbacks.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/speex_callbacks.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/speex_callbacks.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/speex_callbacks.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/speex_callbacks.c.s
 .PHONY : speex_callbacks.c.s
 
 speex_header.o: speex_header.c.o
@@ -1133,8 +1133,8 @@ speex_header.o: speex_header.c.o
 
 # target to build an object file
 speex_header.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/speex_header.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/speex_header.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/speex_header.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/speex_header.c.o
 .PHONY : speex_header.c.o
 
 speex_header.i: speex_header.c.i
@@ -1142,8 +1142,8 @@ speex_header.i: speex_header.c.i
 
 # target to preprocess a source file
 speex_header.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/speex_header.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/speex_header.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/speex_header.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/speex_header.c.i
 .PHONY : speex_header.c.i
 
 speex_header.s: speex_header.c.s
@@ -1151,8 +1151,8 @@ speex_header.s: speex_header.c.s
 
 # target to generate assembly for a file
 speex_header.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/speex_header.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/speex_header.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/speex_header.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/speex_header.c.s
 .PHONY : speex_header.c.s
 
 stereo.o: stereo.c.o
@@ -1160,8 +1160,8 @@ stereo.o: stereo.c.o
 
 # target to build an object file
 stereo.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/stereo.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/stereo.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/stereo.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/stereo.c.o
 .PHONY : stereo.c.o
 
 stereo.i: stereo.c.i
@@ -1169,8 +1169,8 @@ stereo.i: stereo.c.i
 
 # target to preprocess a source file
 stereo.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/stereo.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/stereo.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/stereo.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/stereo.c.i
 .PHONY : stereo.c.i
 
 stereo.s: stereo.c.s
@@ -1178,8 +1178,8 @@ stereo.s: stereo.c.s
 
 # target to generate assembly for a file
 stereo.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/stereo.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/stereo.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/stereo.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/stereo.c.s
 .PHONY : stereo.c.s
 
 testdenoise.o: testdenoise.c.o
@@ -1187,7 +1187,7 @@ testdenoise.o: testdenoise.c.o
 
 # target to build an object file
 testdenoise.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testdenoise.dir/build.make libspeex/CMakeFiles/testdenoise.dir/testdenoise.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testdenoise.dir/build.make libspeex/CMakeFiles/testdenoise.dir/testdenoise.c.o
 .PHONY : testdenoise.c.o
 
 testdenoise.i: testdenoise.c.i
@@ -1195,7 +1195,7 @@ testdenoise.i: testdenoise.c.i
 
 # target to preprocess a source file
 testdenoise.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testdenoise.dir/build.make libspeex/CMakeFiles/testdenoise.dir/testdenoise.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testdenoise.dir/build.make libspeex/CMakeFiles/testdenoise.dir/testdenoise.c.i
 .PHONY : testdenoise.c.i
 
 testdenoise.s: testdenoise.c.s
@@ -1203,7 +1203,7 @@ testdenoise.s: testdenoise.c.s
 
 # target to generate assembly for a file
 testdenoise.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testdenoise.dir/build.make libspeex/CMakeFiles/testdenoise.dir/testdenoise.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testdenoise.dir/build.make libspeex/CMakeFiles/testdenoise.dir/testdenoise.c.s
 .PHONY : testdenoise.c.s
 
 testecho.o: testecho.c.o
@@ -1211,7 +1211,7 @@ testecho.o: testecho.c.o
 
 # target to build an object file
 testecho.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testecho.dir/build.make libspeex/CMakeFiles/testecho.dir/testecho.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testecho.dir/build.make libspeex/CMakeFiles/testecho.dir/testecho.c.o
 .PHONY : testecho.c.o
 
 testecho.i: testecho.c.i
@@ -1219,7 +1219,7 @@ testecho.i: testecho.c.i
 
 # target to preprocess a source file
 testecho.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testecho.dir/build.make libspeex/CMakeFiles/testecho.dir/testecho.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testecho.dir/build.make libspeex/CMakeFiles/testecho.dir/testecho.c.i
 .PHONY : testecho.c.i
 
 testecho.s: testecho.c.s
@@ -1227,7 +1227,7 @@ testecho.s: testecho.c.s
 
 # target to generate assembly for a file
 testecho.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testecho.dir/build.make libspeex/CMakeFiles/testecho.dir/testecho.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testecho.dir/build.make libspeex/CMakeFiles/testecho.dir/testecho.c.s
 .PHONY : testecho.c.s
 
 testenc.o: testenc.c.o
@@ -1235,7 +1235,7 @@ testenc.o: testenc.c.o
 
 # target to build an object file
 testenc.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testenc.dir/build.make libspeex/CMakeFiles/testenc.dir/testenc.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testenc.dir/build.make libspeex/CMakeFiles/testenc.dir/testenc.c.o
 .PHONY : testenc.c.o
 
 testenc.i: testenc.c.i
@@ -1243,7 +1243,7 @@ testenc.i: testenc.c.i
 
 # target to preprocess a source file
 testenc.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testenc.dir/build.make libspeex/CMakeFiles/testenc.dir/testenc.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testenc.dir/build.make libspeex/CMakeFiles/testenc.dir/testenc.c.i
 .PHONY : testenc.c.i
 
 testenc.s: testenc.c.s
@@ -1251,7 +1251,7 @@ testenc.s: testenc.c.s
 
 # target to generate assembly for a file
 testenc.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testenc.dir/build.make libspeex/CMakeFiles/testenc.dir/testenc.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testenc.dir/build.make libspeex/CMakeFiles/testenc.dir/testenc.c.s
 .PHONY : testenc.c.s
 
 testenc_uwb.o: testenc_uwb.c.o
@@ -1259,7 +1259,7 @@ testenc_uwb.o: testenc_uwb.c.o
 
 # target to build an object file
 testenc_uwb.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testenc_uwb.dir/build.make libspeex/CMakeFiles/testenc_uwb.dir/testenc_uwb.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testenc_uwb.dir/build.make libspeex/CMakeFiles/testenc_uwb.dir/testenc_uwb.c.o
 .PHONY : testenc_uwb.c.o
 
 testenc_uwb.i: testenc_uwb.c.i
@@ -1267,7 +1267,7 @@ testenc_uwb.i: testenc_uwb.c.i
 
 # target to preprocess a source file
 testenc_uwb.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testenc_uwb.dir/build.make libspeex/CMakeFiles/testenc_uwb.dir/testenc_uwb.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testenc_uwb.dir/build.make libspeex/CMakeFiles/testenc_uwb.dir/testenc_uwb.c.i
 .PHONY : testenc_uwb.c.i
 
 testenc_uwb.s: testenc_uwb.c.s
@@ -1275,7 +1275,7 @@ testenc_uwb.s: testenc_uwb.c.s
 
 # target to generate assembly for a file
 testenc_uwb.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testenc_uwb.dir/build.make libspeex/CMakeFiles/testenc_uwb.dir/testenc_uwb.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testenc_uwb.dir/build.make libspeex/CMakeFiles/testenc_uwb.dir/testenc_uwb.c.s
 .PHONY : testenc_uwb.c.s
 
 testenc_wb.o: testenc_wb.c.o
@@ -1283,7 +1283,7 @@ testenc_wb.o: testenc_wb.c.o
 
 # target to build an object file
 testenc_wb.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testenc_wb.dir/build.make libspeex/CMakeFiles/testenc_wb.dir/testenc_wb.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testenc_wb.dir/build.make libspeex/CMakeFiles/testenc_wb.dir/testenc_wb.c.o
 .PHONY : testenc_wb.c.o
 
 testenc_wb.i: testenc_wb.c.i
@@ -1291,7 +1291,7 @@ testenc_wb.i: testenc_wb.c.i
 
 # target to preprocess a source file
 testenc_wb.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testenc_wb.dir/build.make libspeex/CMakeFiles/testenc_wb.dir/testenc_wb.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testenc_wb.dir/build.make libspeex/CMakeFiles/testenc_wb.dir/testenc_wb.c.i
 .PHONY : testenc_wb.c.i
 
 testenc_wb.s: testenc_wb.c.s
@@ -1299,7 +1299,7 @@ testenc_wb.s: testenc_wb.c.s
 
 # target to generate assembly for a file
 testenc_wb.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testenc_wb.dir/build.make libspeex/CMakeFiles/testenc_wb.dir/testenc_wb.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testenc_wb.dir/build.make libspeex/CMakeFiles/testenc_wb.dir/testenc_wb.c.s
 .PHONY : testenc_wb.c.s
 
 testjitter.o: testjitter.c.o
@@ -1307,7 +1307,7 @@ testjitter.o: testjitter.c.o
 
 # target to build an object file
 testjitter.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testjitter.dir/build.make libspeex/CMakeFiles/testjitter.dir/testjitter.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testjitter.dir/build.make libspeex/CMakeFiles/testjitter.dir/testjitter.c.o
 .PHONY : testjitter.c.o
 
 testjitter.i: testjitter.c.i
@@ -1315,7 +1315,7 @@ testjitter.i: testjitter.c.i
 
 # target to preprocess a source file
 testjitter.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testjitter.dir/build.make libspeex/CMakeFiles/testjitter.dir/testjitter.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testjitter.dir/build.make libspeex/CMakeFiles/testjitter.dir/testjitter.c.i
 .PHONY : testjitter.c.i
 
 testjitter.s: testjitter.c.s
@@ -1323,7 +1323,7 @@ testjitter.s: testjitter.c.s
 
 # target to generate assembly for a file
 testjitter.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testjitter.dir/build.make libspeex/CMakeFiles/testjitter.dir/testjitter.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/testjitter.dir/build.make libspeex/CMakeFiles/testjitter.dir/testjitter.c.s
 .PHONY : testjitter.c.s
 
 vbr.o: vbr.c.o
@@ -1331,8 +1331,8 @@ vbr.o: vbr.c.o
 
 # target to build an object file
 vbr.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/vbr.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/vbr.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/vbr.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/vbr.c.o
 .PHONY : vbr.c.o
 
 vbr.i: vbr.c.i
@@ -1340,8 +1340,8 @@ vbr.i: vbr.c.i
 
 # target to preprocess a source file
 vbr.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/vbr.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/vbr.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/vbr.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/vbr.c.i
 .PHONY : vbr.c.i
 
 vbr.s: vbr.c.s
@@ -1349,8 +1349,8 @@ vbr.s: vbr.c.s
 
 # target to generate assembly for a file
 vbr.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/vbr.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/vbr.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/vbr.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/vbr.c.s
 .PHONY : vbr.c.s
 
 vq.o: vq.c.o
@@ -1358,8 +1358,8 @@ vq.o: vq.c.o
 
 # target to build an object file
 vq.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/vq.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/vq.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/vq.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/vq.c.o
 .PHONY : vq.c.o
 
 vq.i: vq.c.i
@@ -1367,8 +1367,8 @@ vq.i: vq.c.i
 
 # target to preprocess a source file
 vq.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/vq.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/vq.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/vq.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/vq.c.i
 .PHONY : vq.c.i
 
 vq.s: vq.c.s
@@ -1376,8 +1376,8 @@ vq.s: vq.c.s
 
 # target to generate assembly for a file
 vq.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/vq.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/vq.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/vq.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/vq.c.s
 .PHONY : vq.c.s
 
 window.o: window.c.o
@@ -1385,8 +1385,8 @@ window.o: window.c.o
 
 # target to build an object file
 window.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/window.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/window.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/window.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/window.c.o
 .PHONY : window.c.o
 
 window.i: window.c.i
@@ -1394,8 +1394,8 @@ window.i: window.c.i
 
 # target to preprocess a source file
 window.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/window.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/window.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/window.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/window.c.i
 .PHONY : window.c.i
 
 window.s: window.c.s
@@ -1403,8 +1403,8 @@ window.s: window.c.s
 
 # target to generate assembly for a file
 window.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/window.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/window.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex.dir/build.make libspeex/CMakeFiles/speex.dir/window.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f libspeex/CMakeFiles/speex-dynamic.dir/build.make libspeex/CMakeFiles/speex-dynamic.dir/window.c.s
 .PHONY : window.c.s
 
 # Help Target
@@ -1569,6 +1569,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

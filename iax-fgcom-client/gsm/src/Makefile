@@ -30,19 +30,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /usr/local/bin/cmake
+CMAKE_COMMAND = /usr/bin/cmake
 
 # The command to remove a file.
-RM = /usr/local/bin/cmake -E remove -f
+RM = /usr/bin/cmake -E remove -f
 
 # The program to use to edit the cache.
-CMAKE_EDIT_COMMAND = /usr/local/bin/ccmake
+CMAKE_EDIT_COMMAND = /usr/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/charles/Projets/Logiciel/iax-fgcom-client
+CMAKE_SOURCE_DIR = /usr/local/src/fgcom3/iax-fgcom-client
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/charles/Projets/Logiciel/iax-fgcom-client
+CMAKE_BINARY_DIR = /usr/local/src/fgcom3/iax-fgcom-client
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -50,7 +50,7 @@ CMAKE_BINARY_DIR = /home/charles/Projets/Logiciel/iax-fgcom-client
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client/gsm/src && /usr/local/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	cd /usr/local/src/fgcom3/iax-fgcom-client/gsm/src && /usr/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -60,7 +60,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client/gsm/src && /usr/local/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	cd /usr/local/src/fgcom3/iax-fgcom-client/gsm/src && /usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -69,14 +69,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(CMAKE_COMMAND) -E cmake_progress_start /home/charles/Projets/Logiciel/iax-fgcom-client/CMakeFiles /home/charles/Projets/Logiciel/iax-fgcom-client/gsm/src/CMakeFiles/progress.make
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 gsm/src/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/charles/Projets/Logiciel/iax-fgcom-client/CMakeFiles 0
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(CMAKE_COMMAND) -E cmake_progress_start /usr/local/src/fgcom3/iax-fgcom-client/CMakeFiles /usr/local/src/fgcom3/iax-fgcom-client/gsm/src/CMakeFiles/progress.make
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 gsm/src/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /usr/local/src/fgcom3/iax-fgcom-client/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 gsm/src/clean
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 gsm/src/clean
 .PHONY : clean
 
 # The main clean target
@@ -85,22 +85,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 gsm/src/preinstall
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 gsm/src/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 gsm/src/preinstall
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 gsm/src/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 gsm/src/CMakeFiles/gsm.dir/rule:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 gsm/src/CMakeFiles/gsm.dir/rule
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 gsm/src/CMakeFiles/gsm.dir/rule
 .PHONY : gsm/src/CMakeFiles/gsm.dir/rule
 
 # Convenience name for target.
@@ -109,12 +109,12 @@ gsm: gsm/src/CMakeFiles/gsm.dir/rule
 
 # fast build rule for target.
 gsm/fast:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/build
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/build
 .PHONY : gsm/fast
 
 # Convenience name for target.
 gsm/src/CMakeFiles/gsm-dynamic.dir/rule:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 gsm/src/CMakeFiles/gsm-dynamic.dir/rule
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 gsm/src/CMakeFiles/gsm-dynamic.dir/rule
 .PHONY : gsm/src/CMakeFiles/gsm-dynamic.dir/rule
 
 # Convenience name for target.
@@ -123,7 +123,7 @@ gsm-dynamic: gsm/src/CMakeFiles/gsm-dynamic.dir/rule
 
 # fast build rule for target.
 gsm-dynamic/fast:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/build
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/build
 .PHONY : gsm-dynamic/fast
 
 add.o: add.c.o
@@ -131,8 +131,8 @@ add.o: add.c.o
 
 # target to build an object file
 add.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/add.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/add.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/add.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/add.c.o
 .PHONY : add.c.o
 
 add.i: add.c.i
@@ -140,8 +140,8 @@ add.i: add.c.i
 
 # target to preprocess a source file
 add.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/add.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/add.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/add.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/add.c.i
 .PHONY : add.c.i
 
 add.s: add.c.s
@@ -149,8 +149,8 @@ add.s: add.c.s
 
 # target to generate assembly for a file
 add.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/add.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/add.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/add.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/add.c.s
 .PHONY : add.c.s
 
 code.o: code.c.o
@@ -158,8 +158,8 @@ code.o: code.c.o
 
 # target to build an object file
 code.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/code.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/code.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/code.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/code.c.o
 .PHONY : code.c.o
 
 code.i: code.c.i
@@ -167,8 +167,8 @@ code.i: code.c.i
 
 # target to preprocess a source file
 code.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/code.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/code.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/code.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/code.c.i
 .PHONY : code.c.i
 
 code.s: code.c.s
@@ -176,8 +176,8 @@ code.s: code.c.s
 
 # target to generate assembly for a file
 code.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/code.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/code.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/code.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/code.c.s
 .PHONY : code.c.s
 
 debug.o: debug.c.o
@@ -185,8 +185,8 @@ debug.o: debug.c.o
 
 # target to build an object file
 debug.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/debug.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/debug.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/debug.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/debug.c.o
 .PHONY : debug.c.o
 
 debug.i: debug.c.i
@@ -194,8 +194,8 @@ debug.i: debug.c.i
 
 # target to preprocess a source file
 debug.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/debug.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/debug.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/debug.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/debug.c.i
 .PHONY : debug.c.i
 
 debug.s: debug.c.s
@@ -203,8 +203,8 @@ debug.s: debug.c.s
 
 # target to generate assembly for a file
 debug.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/debug.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/debug.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/debug.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/debug.c.s
 .PHONY : debug.c.s
 
 decode.o: decode.c.o
@@ -212,8 +212,8 @@ decode.o: decode.c.o
 
 # target to build an object file
 decode.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/decode.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/decode.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/decode.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/decode.c.o
 .PHONY : decode.c.o
 
 decode.i: decode.c.i
@@ -221,8 +221,8 @@ decode.i: decode.c.i
 
 # target to preprocess a source file
 decode.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/decode.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/decode.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/decode.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/decode.c.i
 .PHONY : decode.c.i
 
 decode.s: decode.c.s
@@ -230,8 +230,8 @@ decode.s: decode.c.s
 
 # target to generate assembly for a file
 decode.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/decode.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/decode.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/decode.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/decode.c.s
 .PHONY : decode.c.s
 
 gsm_create.o: gsm_create.c.o
@@ -239,8 +239,8 @@ gsm_create.o: gsm_create.c.o
 
 # target to build an object file
 gsm_create.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_create.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_create.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_create.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_create.c.o
 .PHONY : gsm_create.c.o
 
 gsm_create.i: gsm_create.c.i
@@ -248,8 +248,8 @@ gsm_create.i: gsm_create.c.i
 
 # target to preprocess a source file
 gsm_create.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_create.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_create.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_create.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_create.c.i
 .PHONY : gsm_create.c.i
 
 gsm_create.s: gsm_create.c.s
@@ -257,8 +257,8 @@ gsm_create.s: gsm_create.c.s
 
 # target to generate assembly for a file
 gsm_create.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_create.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_create.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_create.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_create.c.s
 .PHONY : gsm_create.c.s
 
 gsm_decode.o: gsm_decode.c.o
@@ -266,8 +266,8 @@ gsm_decode.o: gsm_decode.c.o
 
 # target to build an object file
 gsm_decode.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_decode.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_decode.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_decode.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_decode.c.o
 .PHONY : gsm_decode.c.o
 
 gsm_decode.i: gsm_decode.c.i
@@ -275,8 +275,8 @@ gsm_decode.i: gsm_decode.c.i
 
 # target to preprocess a source file
 gsm_decode.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_decode.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_decode.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_decode.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_decode.c.i
 .PHONY : gsm_decode.c.i
 
 gsm_decode.s: gsm_decode.c.s
@@ -284,8 +284,8 @@ gsm_decode.s: gsm_decode.c.s
 
 # target to generate assembly for a file
 gsm_decode.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_decode.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_decode.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_decode.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_decode.c.s
 .PHONY : gsm_decode.c.s
 
 gsm_destroy.o: gsm_destroy.c.o
@@ -293,8 +293,8 @@ gsm_destroy.o: gsm_destroy.c.o
 
 # target to build an object file
 gsm_destroy.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_destroy.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_destroy.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_destroy.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_destroy.c.o
 .PHONY : gsm_destroy.c.o
 
 gsm_destroy.i: gsm_destroy.c.i
@@ -302,8 +302,8 @@ gsm_destroy.i: gsm_destroy.c.i
 
 # target to preprocess a source file
 gsm_destroy.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_destroy.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_destroy.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_destroy.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_destroy.c.i
 .PHONY : gsm_destroy.c.i
 
 gsm_destroy.s: gsm_destroy.c.s
@@ -311,8 +311,8 @@ gsm_destroy.s: gsm_destroy.c.s
 
 # target to generate assembly for a file
 gsm_destroy.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_destroy.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_destroy.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_destroy.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_destroy.c.s
 .PHONY : gsm_destroy.c.s
 
 gsm_encode.o: gsm_encode.c.o
@@ -320,8 +320,8 @@ gsm_encode.o: gsm_encode.c.o
 
 # target to build an object file
 gsm_encode.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_encode.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_encode.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_encode.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_encode.c.o
 .PHONY : gsm_encode.c.o
 
 gsm_encode.i: gsm_encode.c.i
@@ -329,8 +329,8 @@ gsm_encode.i: gsm_encode.c.i
 
 # target to preprocess a source file
 gsm_encode.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_encode.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_encode.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_encode.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_encode.c.i
 .PHONY : gsm_encode.c.i
 
 gsm_encode.s: gsm_encode.c.s
@@ -338,8 +338,8 @@ gsm_encode.s: gsm_encode.c.s
 
 # target to generate assembly for a file
 gsm_encode.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_encode.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_encode.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_encode.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_encode.c.s
 .PHONY : gsm_encode.c.s
 
 gsm_explode.o: gsm_explode.c.o
@@ -347,8 +347,8 @@ gsm_explode.o: gsm_explode.c.o
 
 # target to build an object file
 gsm_explode.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_explode.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_explode.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_explode.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_explode.c.o
 .PHONY : gsm_explode.c.o
 
 gsm_explode.i: gsm_explode.c.i
@@ -356,8 +356,8 @@ gsm_explode.i: gsm_explode.c.i
 
 # target to preprocess a source file
 gsm_explode.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_explode.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_explode.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_explode.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_explode.c.i
 .PHONY : gsm_explode.c.i
 
 gsm_explode.s: gsm_explode.c.s
@@ -365,8 +365,8 @@ gsm_explode.s: gsm_explode.c.s
 
 # target to generate assembly for a file
 gsm_explode.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_explode.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_explode.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_explode.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_explode.c.s
 .PHONY : gsm_explode.c.s
 
 gsm_implode.o: gsm_implode.c.o
@@ -374,8 +374,8 @@ gsm_implode.o: gsm_implode.c.o
 
 # target to build an object file
 gsm_implode.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_implode.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_implode.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_implode.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_implode.c.o
 .PHONY : gsm_implode.c.o
 
 gsm_implode.i: gsm_implode.c.i
@@ -383,8 +383,8 @@ gsm_implode.i: gsm_implode.c.i
 
 # target to preprocess a source file
 gsm_implode.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_implode.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_implode.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_implode.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_implode.c.i
 .PHONY : gsm_implode.c.i
 
 gsm_implode.s: gsm_implode.c.s
@@ -392,8 +392,8 @@ gsm_implode.s: gsm_implode.c.s
 
 # target to generate assembly for a file
 gsm_implode.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_implode.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_implode.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_implode.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_implode.c.s
 .PHONY : gsm_implode.c.s
 
 gsm_option.o: gsm_option.c.o
@@ -401,8 +401,8 @@ gsm_option.o: gsm_option.c.o
 
 # target to build an object file
 gsm_option.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_option.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_option.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_option.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_option.c.o
 .PHONY : gsm_option.c.o
 
 gsm_option.i: gsm_option.c.i
@@ -410,8 +410,8 @@ gsm_option.i: gsm_option.c.i
 
 # target to preprocess a source file
 gsm_option.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_option.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_option.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_option.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_option.c.i
 .PHONY : gsm_option.c.i
 
 gsm_option.s: gsm_option.c.s
@@ -419,8 +419,8 @@ gsm_option.s: gsm_option.c.s
 
 # target to generate assembly for a file
 gsm_option.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_option.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_option.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_option.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_option.c.s
 .PHONY : gsm_option.c.s
 
 gsm_print.o: gsm_print.c.o
@@ -428,8 +428,8 @@ gsm_print.o: gsm_print.c.o
 
 # target to build an object file
 gsm_print.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_print.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_print.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_print.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_print.c.o
 .PHONY : gsm_print.c.o
 
 gsm_print.i: gsm_print.c.i
@@ -437,8 +437,8 @@ gsm_print.i: gsm_print.c.i
 
 # target to preprocess a source file
 gsm_print.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_print.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_print.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_print.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_print.c.i
 .PHONY : gsm_print.c.i
 
 gsm_print.s: gsm_print.c.s
@@ -446,8 +446,8 @@ gsm_print.s: gsm_print.c.s
 
 # target to generate assembly for a file
 gsm_print.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_print.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_print.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/gsm_print.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/gsm_print.c.s
 .PHONY : gsm_print.c.s
 
 long_term.o: long_term.c.o
@@ -455,8 +455,8 @@ long_term.o: long_term.c.o
 
 # target to build an object file
 long_term.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/long_term.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/long_term.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/long_term.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/long_term.c.o
 .PHONY : long_term.c.o
 
 long_term.i: long_term.c.i
@@ -464,8 +464,8 @@ long_term.i: long_term.c.i
 
 # target to preprocess a source file
 long_term.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/long_term.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/long_term.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/long_term.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/long_term.c.i
 .PHONY : long_term.c.i
 
 long_term.s: long_term.c.s
@@ -473,8 +473,8 @@ long_term.s: long_term.c.s
 
 # target to generate assembly for a file
 long_term.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/long_term.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/long_term.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/long_term.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/long_term.c.s
 .PHONY : long_term.c.s
 
 lpc.o: lpc.c.o
@@ -482,8 +482,8 @@ lpc.o: lpc.c.o
 
 # target to build an object file
 lpc.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/lpc.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/lpc.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/lpc.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/lpc.c.o
 .PHONY : lpc.c.o
 
 lpc.i: lpc.c.i
@@ -491,8 +491,8 @@ lpc.i: lpc.c.i
 
 # target to preprocess a source file
 lpc.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/lpc.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/lpc.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/lpc.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/lpc.c.i
 .PHONY : lpc.c.i
 
 lpc.s: lpc.c.s
@@ -500,8 +500,8 @@ lpc.s: lpc.c.s
 
 # target to generate assembly for a file
 lpc.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/lpc.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/lpc.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/lpc.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/lpc.c.s
 .PHONY : lpc.c.s
 
 preprocess.o: preprocess.c.o
@@ -509,8 +509,8 @@ preprocess.o: preprocess.c.o
 
 # target to build an object file
 preprocess.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/preprocess.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/preprocess.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/preprocess.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/preprocess.c.o
 .PHONY : preprocess.c.o
 
 preprocess.i: preprocess.c.i
@@ -518,8 +518,8 @@ preprocess.i: preprocess.c.i
 
 # target to preprocess a source file
 preprocess.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/preprocess.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/preprocess.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/preprocess.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/preprocess.c.i
 .PHONY : preprocess.c.i
 
 preprocess.s: preprocess.c.s
@@ -527,8 +527,8 @@ preprocess.s: preprocess.c.s
 
 # target to generate assembly for a file
 preprocess.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/preprocess.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/preprocess.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/preprocess.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/preprocess.c.s
 .PHONY : preprocess.c.s
 
 rpe.o: rpe.c.o
@@ -536,8 +536,8 @@ rpe.o: rpe.c.o
 
 # target to build an object file
 rpe.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/rpe.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/rpe.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/rpe.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/rpe.c.o
 .PHONY : rpe.c.o
 
 rpe.i: rpe.c.i
@@ -545,8 +545,8 @@ rpe.i: rpe.c.i
 
 # target to preprocess a source file
 rpe.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/rpe.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/rpe.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/rpe.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/rpe.c.i
 .PHONY : rpe.c.i
 
 rpe.s: rpe.c.s
@@ -554,8 +554,8 @@ rpe.s: rpe.c.s
 
 # target to generate assembly for a file
 rpe.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/rpe.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/rpe.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/rpe.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/rpe.c.s
 .PHONY : rpe.c.s
 
 short_term.o: short_term.c.o
@@ -563,8 +563,8 @@ short_term.o: short_term.c.o
 
 # target to build an object file
 short_term.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/short_term.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/short_term.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/short_term.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/short_term.c.o
 .PHONY : short_term.c.o
 
 short_term.i: short_term.c.i
@@ -572,8 +572,8 @@ short_term.i: short_term.c.i
 
 # target to preprocess a source file
 short_term.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/short_term.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/short_term.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/short_term.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/short_term.c.i
 .PHONY : short_term.c.i
 
 short_term.s: short_term.c.s
@@ -581,8 +581,8 @@ short_term.s: short_term.c.s
 
 # target to generate assembly for a file
 short_term.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/short_term.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/short_term.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/short_term.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/short_term.c.s
 .PHONY : short_term.c.s
 
 table.o: table.c.o
@@ -590,8 +590,8 @@ table.o: table.c.o
 
 # target to build an object file
 table.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/table.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/table.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/table.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/table.c.o
 .PHONY : table.c.o
 
 table.i: table.c.i
@@ -599,8 +599,8 @@ table.i: table.c.i
 
 # target to preprocess a source file
 table.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/table.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/table.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/table.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/table.c.i
 .PHONY : table.c.i
 
 table.s: table.c.s
@@ -608,8 +608,8 @@ table.s: table.c.s
 
 # target to generate assembly for a file
 table.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/table.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/table.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm.dir/build.make gsm/src/CMakeFiles/gsm.dir/table.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f gsm/src/CMakeFiles/gsm-dynamic.dir/build.make gsm/src/CMakeFiles/gsm-dynamic.dir/table.c.s
 .PHONY : table.c.s
 
 # Help Target
@@ -687,6 +687,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

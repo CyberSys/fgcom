@@ -7,7 +7,7 @@
 #
 # Minimum requested version of 'cmake'.
 #
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6.1)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.6.0)
 #
 # We set here the project name.
 #

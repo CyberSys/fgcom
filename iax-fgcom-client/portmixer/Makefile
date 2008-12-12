@@ -30,19 +30,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /usr/local/bin/cmake
+CMAKE_COMMAND = /usr/bin/cmake
 
 # The command to remove a file.
-RM = /usr/local/bin/cmake -E remove -f
+RM = /usr/bin/cmake -E remove -f
 
 # The program to use to edit the cache.
-CMAKE_EDIT_COMMAND = /usr/local/bin/ccmake
+CMAKE_EDIT_COMMAND = /usr/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/charles/Projets/Logiciel/iax-fgcom-client
+CMAKE_SOURCE_DIR = /usr/local/src/fgcom3/iax-fgcom-client
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/charles/Projets/Logiciel/iax-fgcom-client
+CMAKE_BINARY_DIR = /usr/local/src/fgcom3/iax-fgcom-client
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -50,7 +50,7 @@ CMAKE_BINARY_DIR = /home/charles/Projets/Logiciel/iax-fgcom-client
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client/portmixer && /usr/local/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	cd /usr/local/src/fgcom3/iax-fgcom-client/portmixer && /usr/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -60,7 +60,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client/portmixer && /usr/local/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	cd /usr/local/src/fgcom3/iax-fgcom-client/portmixer && /usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -69,14 +69,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(CMAKE_COMMAND) -E cmake_progress_start /home/charles/Projets/Logiciel/iax-fgcom-client/CMakeFiles /home/charles/Projets/Logiciel/iax-fgcom-client/portmixer/CMakeFiles/progress.make
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 portmixer/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/charles/Projets/Logiciel/iax-fgcom-client/CMakeFiles 0
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(CMAKE_COMMAND) -E cmake_progress_start /usr/local/src/fgcom3/iax-fgcom-client/CMakeFiles /usr/local/src/fgcom3/iax-fgcom-client/portmixer/CMakeFiles/progress.make
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 portmixer/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /usr/local/src/fgcom3/iax-fgcom-client/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 portmixer/clean
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 portmixer/clean
 .PHONY : clean
 
 # The main clean target
@@ -85,22 +85,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 portmixer/preinstall
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 portmixer/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 portmixer/preinstall
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 portmixer/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 portmixer/CMakeFiles/portmixer.dir/rule:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 portmixer/CMakeFiles/portmixer.dir/rule
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 portmixer/CMakeFiles/portmixer.dir/rule
 .PHONY : portmixer/CMakeFiles/portmixer.dir/rule
 
 # Convenience name for target.
@@ -109,12 +109,12 @@ portmixer: portmixer/CMakeFiles/portmixer.dir/rule
 
 # fast build rule for target.
 portmixer/fast:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f portmixer/CMakeFiles/portmixer.dir/build.make portmixer/CMakeFiles/portmixer.dir/build
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f portmixer/CMakeFiles/portmixer.dir/build.make portmixer/CMakeFiles/portmixer.dir/build
 .PHONY : portmixer/fast
 
 # Convenience name for target.
 portmixer/CMakeFiles/portmixer-dynamic.dir/rule:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 portmixer/CMakeFiles/portmixer-dynamic.dir/rule
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 portmixer/CMakeFiles/portmixer-dynamic.dir/rule
 .PHONY : portmixer/CMakeFiles/portmixer-dynamic.dir/rule
 
 # Convenience name for target.
@@ -123,7 +123,7 @@ portmixer-dynamic: portmixer/CMakeFiles/portmixer-dynamic.dir/rule
 
 # fast build rule for target.
 portmixer-dynamic/fast:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f portmixer/CMakeFiles/portmixer-dynamic.dir/build.make portmixer/CMakeFiles/portmixer-dynamic.dir/build
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f portmixer/CMakeFiles/portmixer-dynamic.dir/build.make portmixer/CMakeFiles/portmixer-dynamic.dir/build
 .PHONY : portmixer-dynamic/fast
 
 px_unix_oss/px_unix_oss.o: px_unix_oss/px_unix_oss.c.o
@@ -131,8 +131,8 @@ px_unix_oss/px_unix_oss.o: px_unix_oss/px_unix_oss.c.o
 
 # target to build an object file
 px_unix_oss/px_unix_oss.c.o:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f portmixer/CMakeFiles/portmixer.dir/build.make portmixer/CMakeFiles/portmixer.dir/px_unix_oss/px_unix_oss.c.o
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f portmixer/CMakeFiles/portmixer-dynamic.dir/build.make portmixer/CMakeFiles/portmixer-dynamic.dir/px_unix_oss/px_unix_oss.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f portmixer/CMakeFiles/portmixer.dir/build.make portmixer/CMakeFiles/portmixer.dir/px_unix_oss/px_unix_oss.c.o
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f portmixer/CMakeFiles/portmixer-dynamic.dir/build.make portmixer/CMakeFiles/portmixer-dynamic.dir/px_unix_oss/px_unix_oss.c.o
 .PHONY : px_unix_oss/px_unix_oss.c.o
 
 px_unix_oss/px_unix_oss.i: px_unix_oss/px_unix_oss.c.i
@@ -140,8 +140,8 @@ px_unix_oss/px_unix_oss.i: px_unix_oss/px_unix_oss.c.i
 
 # target to preprocess a source file
 px_unix_oss/px_unix_oss.c.i:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f portmixer/CMakeFiles/portmixer.dir/build.make portmixer/CMakeFiles/portmixer.dir/px_unix_oss/px_unix_oss.c.i
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f portmixer/CMakeFiles/portmixer-dynamic.dir/build.make portmixer/CMakeFiles/portmixer-dynamic.dir/px_unix_oss/px_unix_oss.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f portmixer/CMakeFiles/portmixer.dir/build.make portmixer/CMakeFiles/portmixer.dir/px_unix_oss/px_unix_oss.c.i
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f portmixer/CMakeFiles/portmixer-dynamic.dir/build.make portmixer/CMakeFiles/portmixer-dynamic.dir/px_unix_oss/px_unix_oss.c.i
 .PHONY : px_unix_oss/px_unix_oss.c.i
 
 px_unix_oss/px_unix_oss.s: px_unix_oss/px_unix_oss.c.s
@@ -149,8 +149,8 @@ px_unix_oss/px_unix_oss.s: px_unix_oss/px_unix_oss.c.s
 
 # target to generate assembly for a file
 px_unix_oss/px_unix_oss.c.s:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f portmixer/CMakeFiles/portmixer.dir/build.make portmixer/CMakeFiles/portmixer.dir/px_unix_oss/px_unix_oss.c.s
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(MAKE) -f portmixer/CMakeFiles/portmixer-dynamic.dir/build.make portmixer/CMakeFiles/portmixer-dynamic.dir/px_unix_oss/px_unix_oss.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f portmixer/CMakeFiles/portmixer.dir/build.make portmixer/CMakeFiles/portmixer.dir/px_unix_oss/px_unix_oss.c.s
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f portmixer/CMakeFiles/portmixer-dynamic.dir/build.make portmixer/CMakeFiles/portmixer-dynamic.dir/px_unix_oss/px_unix_oss.c.s
 .PHONY : px_unix_oss/px_unix_oss.c.s
 
 # Help Target
@@ -177,6 +177,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/charles/Projets/Logiciel/iax-fgcom-client && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /usr/local/src/fgcom3/iax-fgcom-client && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

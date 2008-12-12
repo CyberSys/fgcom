@@ -85,9 +85,13 @@ int main(int argc, char *argv[])
         iaxc_call (dest);
 	iaxc_millisleep(1000);
 
+	sprintf(text,"FGCOM:%s:%s:%f:%f:%d:%s","ADD",(char *)DEFAULT_USER,lon,lat,alt,model);
+		printf("Send: [%s]\n",text);
+		iaxc_send_text(text);
+
 	while(1)
 	{
-		sprintf(text,"FGCOM:%s:%s:%f:%f:%d:%s","ADD",(char *)DEFAULT_USER,lon,lat,alt,model);
+		sprintf(text,"FGCOM:%s:%s:%f:%f:%d:%s","UPDATE",(char *)DEFAULT_USER,lon,lat,alt,model);
 		printf("Send: [%s]\n",text);
 		iaxc_send_text(text);
 		sleep(5);
