@@ -8,7 +8,7 @@
 # This is just a helper variable which ease library name modification
 # in case we want to change the output file name.
 #
-SET(IAXCLIENT_NAME "iaxfgcom")
+SET(IAXCLIENT_NAME "iaxclient")
 #
 # Set path to utility modules (used for finding other libraries).
 #

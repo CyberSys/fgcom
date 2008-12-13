@@ -30,19 +30,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /usr/bin/cmake
+CMAKE_COMMAND = /usr/local/bin/cmake
 
 # The command to remove a file.
-RM = /usr/bin/cmake -E remove -f
+RM = /usr/local/bin/cmake -E remove -f
 
 # The program to use to edit the cache.
-CMAKE_EDIT_COMMAND = /usr/bin/ccmake
+CMAKE_EDIT_COMMAND = /usr/local/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /usr/local/src/fgcom3/iax-fgcom-client
+CMAKE_SOURCE_DIR = /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /usr/local/src/fgcom3/iax-fgcom-client
+CMAKE_BINARY_DIR = /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -50,7 +50,7 @@ CMAKE_BINARY_DIR = /usr/local/src/fgcom3/iax-fgcom-client
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	cd /usr/local/src/fgcom3/iax-fgcom-client/lib && /usr/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client/lib && /usr/local/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -60,7 +60,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	cd /usr/local/src/fgcom3/iax-fgcom-client/lib && /usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client/lib && /usr/local/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -69,14 +69,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(CMAKE_COMMAND) -E cmake_progress_start /usr/local/src/fgcom3/iax-fgcom-client/CMakeFiles /usr/local/src/fgcom3/iax-fgcom-client/lib/CMakeFiles/progress.make
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 lib/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /usr/local/src/fgcom3/iax-fgcom-client/CMakeFiles 0
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(CMAKE_COMMAND) -E cmake_progress_start /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client/CMakeFiles /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client/lib/CMakeFiles/progress.make
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 lib/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 lib/clean
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 lib/clean
 .PHONY : clean
 
 # The main clean target
@@ -85,22 +85,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 lib/preinstall
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 lib/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 lib/preinstall
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 lib/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 lib/CMakeFiles/iaxfgcom.dir/rule:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 lib/CMakeFiles/iaxfgcom.dir/rule
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 lib/CMakeFiles/iaxfgcom.dir/rule
 .PHONY : lib/CMakeFiles/iaxfgcom.dir/rule
 
 # Convenience name for target.
@@ -109,12 +109,12 @@ iaxfgcom: lib/CMakeFiles/iaxfgcom.dir/rule
 
 # fast build rule for target.
 iaxfgcom/fast:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/build
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/build
 .PHONY : iaxfgcom/fast
 
 # Convenience name for target.
 lib/CMakeFiles/iaxfgcom-dynamic.dir/rule:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 lib/CMakeFiles/iaxfgcom-dynamic.dir/rule
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f CMakeFiles/Makefile2 lib/CMakeFiles/iaxfgcom-dynamic.dir/rule
 .PHONY : lib/CMakeFiles/iaxfgcom-dynamic.dir/rule
 
 # Convenience name for target.
@@ -123,7 +123,7 @@ iaxfgcom-dynamic: lib/CMakeFiles/iaxfgcom-dynamic.dir/rule
 
 # fast build rule for target.
 iaxfgcom-dynamic/fast:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/build
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/build
 .PHONY : iaxfgcom-dynamic/fast
 
 audio_alsa.o: audio_alsa.c.o
@@ -131,8 +131,8 @@ audio_alsa.o: audio_alsa.c.o
 
 # target to build an object file
 audio_alsa.c.o:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/audio_alsa.c.o
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/audio_alsa.c.o
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/audio_alsa.c.o
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/audio_alsa.c.o
 .PHONY : audio_alsa.c.o
 
 audio_alsa.i: audio_alsa.c.i
@@ -140,8 +140,8 @@ audio_alsa.i: audio_alsa.c.i
 
 # target to preprocess a source file
 audio_alsa.c.i:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/audio_alsa.c.i
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/audio_alsa.c.i
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/audio_alsa.c.i
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/audio_alsa.c.i
 .PHONY : audio_alsa.c.i
 
 audio_alsa.s: audio_alsa.c.s
@@ -149,8 +149,8 @@ audio_alsa.s: audio_alsa.c.s
 
 # target to generate assembly for a file
 audio_alsa.c.s:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/audio_alsa.c.s
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/audio_alsa.c.s
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/audio_alsa.c.s
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/audio_alsa.c.s
 .PHONY : audio_alsa.c.s
 
 audio_encode.o: audio_encode.c.o
@@ -158,8 +158,8 @@ audio_encode.o: audio_encode.c.o
 
 # target to build an object file
 audio_encode.c.o:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/audio_encode.c.o
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/audio_encode.c.o
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/audio_encode.c.o
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/audio_encode.c.o
 .PHONY : audio_encode.c.o
 
 audio_encode.i: audio_encode.c.i
@@ -167,8 +167,8 @@ audio_encode.i: audio_encode.c.i
 
 # target to preprocess a source file
 audio_encode.c.i:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/audio_encode.c.i
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/audio_encode.c.i
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/audio_encode.c.i
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/audio_encode.c.i
 .PHONY : audio_encode.c.i
 
 audio_encode.s: audio_encode.c.s
@@ -176,8 +176,8 @@ audio_encode.s: audio_encode.c.s
 
 # target to generate assembly for a file
 audio_encode.c.s:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/audio_encode.c.s
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/audio_encode.c.s
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/audio_encode.c.s
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/audio_encode.c.s
 .PHONY : audio_encode.c.s
 
 audio_portaudio.o: audio_portaudio.c.o
@@ -185,8 +185,8 @@ audio_portaudio.o: audio_portaudio.c.o
 
 # target to build an object file
 audio_portaudio.c.o:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/audio_portaudio.c.o
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/audio_portaudio.c.o
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/audio_portaudio.c.o
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/audio_portaudio.c.o
 .PHONY : audio_portaudio.c.o
 
 audio_portaudio.i: audio_portaudio.c.i
@@ -194,8 +194,8 @@ audio_portaudio.i: audio_portaudio.c.i
 
 # target to preprocess a source file
 audio_portaudio.c.i:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/audio_portaudio.c.i
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/audio_portaudio.c.i
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/audio_portaudio.c.i
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/audio_portaudio.c.i
 .PHONY : audio_portaudio.c.i
 
 audio_portaudio.s: audio_portaudio.c.s
@@ -203,8 +203,8 @@ audio_portaudio.s: audio_portaudio.c.s
 
 # target to generate assembly for a file
 audio_portaudio.c.s:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/audio_portaudio.c.s
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/audio_portaudio.c.s
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/audio_portaudio.c.s
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/audio_portaudio.c.s
 .PHONY : audio_portaudio.c.s
 
 codec_alaw.o: codec_alaw.c.o
@@ -212,8 +212,8 @@ codec_alaw.o: codec_alaw.c.o
 
 # target to build an object file
 codec_alaw.c.o:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/codec_alaw.c.o
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/codec_alaw.c.o
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/codec_alaw.c.o
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/codec_alaw.c.o
 .PHONY : codec_alaw.c.o
 
 codec_alaw.i: codec_alaw.c.i
@@ -221,8 +221,8 @@ codec_alaw.i: codec_alaw.c.i
 
 # target to preprocess a source file
 codec_alaw.c.i:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/codec_alaw.c.i
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/codec_alaw.c.i
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/codec_alaw.c.i
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/codec_alaw.c.i
 .PHONY : codec_alaw.c.i
 
 codec_alaw.s: codec_alaw.c.s
@@ -230,8 +230,8 @@ codec_alaw.s: codec_alaw.c.s
 
 # target to generate assembly for a file
 codec_alaw.c.s:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/codec_alaw.c.s
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/codec_alaw.c.s
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/codec_alaw.c.s
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/codec_alaw.c.s
 .PHONY : codec_alaw.c.s
 
 codec_gsm.o: codec_gsm.c.o
@@ -239,8 +239,8 @@ codec_gsm.o: codec_gsm.c.o
 
 # target to build an object file
 codec_gsm.c.o:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/codec_gsm.c.o
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/codec_gsm.c.o
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/codec_gsm.c.o
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/codec_gsm.c.o
 .PHONY : codec_gsm.c.o
 
 codec_gsm.i: codec_gsm.c.i
@@ -248,8 +248,8 @@ codec_gsm.i: codec_gsm.c.i
 
 # target to preprocess a source file
 codec_gsm.c.i:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/codec_gsm.c.i
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/codec_gsm.c.i
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/codec_gsm.c.i
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/codec_gsm.c.i
 .PHONY : codec_gsm.c.i
 
 codec_gsm.s: codec_gsm.c.s
@@ -257,8 +257,8 @@ codec_gsm.s: codec_gsm.c.s
 
 # target to generate assembly for a file
 codec_gsm.c.s:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/codec_gsm.c.s
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/codec_gsm.c.s
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/codec_gsm.c.s
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/codec_gsm.c.s
 .PHONY : codec_gsm.c.s
 
 codec_speex.o: codec_speex.c.o
@@ -266,8 +266,8 @@ codec_speex.o: codec_speex.c.o
 
 # target to build an object file
 codec_speex.c.o:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/codec_speex.c.o
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/codec_speex.c.o
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/codec_speex.c.o
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/codec_speex.c.o
 .PHONY : codec_speex.c.o
 
 codec_speex.i: codec_speex.c.i
@@ -275,8 +275,8 @@ codec_speex.i: codec_speex.c.i
 
 # target to preprocess a source file
 codec_speex.c.i:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/codec_speex.c.i
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/codec_speex.c.i
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/codec_speex.c.i
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/codec_speex.c.i
 .PHONY : codec_speex.c.i
 
 codec_speex.s: codec_speex.c.s
@@ -284,8 +284,8 @@ codec_speex.s: codec_speex.c.s
 
 # target to generate assembly for a file
 codec_speex.c.s:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/codec_speex.c.s
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/codec_speex.c.s
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/codec_speex.c.s
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/codec_speex.c.s
 .PHONY : codec_speex.c.s
 
 codec_ulaw.o: codec_ulaw.c.o
@@ -293,8 +293,8 @@ codec_ulaw.o: codec_ulaw.c.o
 
 # target to build an object file
 codec_ulaw.c.o:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/codec_ulaw.c.o
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/codec_ulaw.c.o
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/codec_ulaw.c.o
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/codec_ulaw.c.o
 .PHONY : codec_ulaw.c.o
 
 codec_ulaw.i: codec_ulaw.c.i
@@ -302,8 +302,8 @@ codec_ulaw.i: codec_ulaw.c.i
 
 # target to preprocess a source file
 codec_ulaw.c.i:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/codec_ulaw.c.i
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/codec_ulaw.c.i
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/codec_ulaw.c.i
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/codec_ulaw.c.i
 .PHONY : codec_ulaw.c.i
 
 codec_ulaw.s: codec_ulaw.c.s
@@ -311,8 +311,8 @@ codec_ulaw.s: codec_ulaw.c.s
 
 # target to generate assembly for a file
 codec_ulaw.c.s:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/codec_ulaw.c.s
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/codec_ulaw.c.s
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/codec_ulaw.c.s
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/codec_ulaw.c.s
 .PHONY : codec_ulaw.c.s
 
 iaxclient_lib.o: iaxclient_lib.c.o
@@ -320,8 +320,8 @@ iaxclient_lib.o: iaxclient_lib.c.o
 
 # target to build an object file
 iaxclient_lib.c.o:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/iaxclient_lib.c.o
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/iaxclient_lib.c.o
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/iaxclient_lib.c.o
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/iaxclient_lib.c.o
 .PHONY : iaxclient_lib.c.o
 
 iaxclient_lib.i: iaxclient_lib.c.i
@@ -329,8 +329,8 @@ iaxclient_lib.i: iaxclient_lib.c.i
 
 # target to preprocess a source file
 iaxclient_lib.c.i:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/iaxclient_lib.c.i
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/iaxclient_lib.c.i
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/iaxclient_lib.c.i
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/iaxclient_lib.c.i
 .PHONY : iaxclient_lib.c.i
 
 iaxclient_lib.s: iaxclient_lib.c.s
@@ -338,8 +338,8 @@ iaxclient_lib.s: iaxclient_lib.c.s
 
 # target to generate assembly for a file
 iaxclient_lib.c.s:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/iaxclient_lib.c.s
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/iaxclient_lib.c.s
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/iaxclient_lib.c.s
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/iaxclient_lib.c.s
 .PHONY : iaxclient_lib.c.s
 
 ringbuffer.o: ringbuffer.c.o
@@ -347,8 +347,8 @@ ringbuffer.o: ringbuffer.c.o
 
 # target to build an object file
 ringbuffer.c.o:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/ringbuffer.c.o
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/ringbuffer.c.o
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/ringbuffer.c.o
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/ringbuffer.c.o
 .PHONY : ringbuffer.c.o
 
 ringbuffer.i: ringbuffer.c.i
@@ -356,8 +356,8 @@ ringbuffer.i: ringbuffer.c.i
 
 # target to preprocess a source file
 ringbuffer.c.i:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/ringbuffer.c.i
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/ringbuffer.c.i
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/ringbuffer.c.i
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/ringbuffer.c.i
 .PHONY : ringbuffer.c.i
 
 ringbuffer.s: ringbuffer.c.s
@@ -365,8 +365,8 @@ ringbuffer.s: ringbuffer.c.s
 
 # target to generate assembly for a file
 ringbuffer.c.s:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/ringbuffer.c.s
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/ringbuffer.c.s
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/ringbuffer.c.s
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/ringbuffer.c.s
 .PHONY : ringbuffer.c.s
 
 unixfuncs.o: unixfuncs.c.o
@@ -374,8 +374,8 @@ unixfuncs.o: unixfuncs.c.o
 
 # target to build an object file
 unixfuncs.c.o:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/unixfuncs.c.o
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/unixfuncs.c.o
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/unixfuncs.c.o
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/unixfuncs.c.o
 .PHONY : unixfuncs.c.o
 
 unixfuncs.i: unixfuncs.c.i
@@ -383,8 +383,8 @@ unixfuncs.i: unixfuncs.c.i
 
 # target to preprocess a source file
 unixfuncs.c.i:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/unixfuncs.c.i
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/unixfuncs.c.i
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/unixfuncs.c.i
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/unixfuncs.c.i
 .PHONY : unixfuncs.c.i
 
 unixfuncs.s: unixfuncs.c.s
@@ -392,8 +392,8 @@ unixfuncs.s: unixfuncs.c.s
 
 # target to generate assembly for a file
 unixfuncs.c.s:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/unixfuncs.c.s
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/unixfuncs.c.s
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom.dir/build.make lib/CMakeFiles/iaxfgcom.dir/unixfuncs.c.s
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(MAKE) -f lib/CMakeFiles/iaxfgcom-dynamic.dir/build.make lib/CMakeFiles/iaxfgcom-dynamic.dir/unixfuncs.c.s
 .PHONY : unixfuncs.c.s
 
 # Help Target
@@ -447,6 +447,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /usr/local/src/fgcom3/iax-fgcom-client && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/charles/Projets/Logiciel/fgcom3/iax-fgcom-client && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 
