@@ -1,5 +1,5 @@
 
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/spandsp)
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/spandsp)
 
 SET(SPANDSP_SRC plc.c)
 
@@ -11,7 +11,7 @@ SET_TARGET_PROPERTIES(spandsp-dynamic PROPERTIES OUTPUT_NAME "spandsp")
 
 MESSAGE(STATUS)
 MESSAGE(STATUS "------------------------------------------------------------")
-MESSAGE(STATUS "libspandsp source dir	: ${PROJECT_SOURCE_DIR}/spandsp")
+MESSAGE(STATUS "libspandsp source dir	: ${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/spandsp")
 IF(CMAKE_BUILD_TYPE STREQUAL "debug")
 	MESSAGE(STATUS "Src files			: ${SPANDSP_SRC}")
 ENDIF(CMAKE_BUILD_TYPE STREQUAL "debug")

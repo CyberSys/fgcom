@@ -12,7 +12,7 @@ SET(IAXCLIENT_NAME "iaxclient")
 #
 # Set path to utility modules (used for finding other libraries).
 #
-SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake_modules/")
+# SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake_modules/")
 #
 # Check for the presence of PortAudio on that system.
 #
@@ -29,13 +29,13 @@ SET(SPEEX_EC 1)
 # Create the 'iax-fgcom-client/include/config.h' file which contains all
 # pre-built definitions.
 #
-CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/include/config.h.cmake ${PROJECT_SOURCE_DIR}/include/config.h)
+CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/include/config.h.cmake ${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/include/config.h)
 #
 # Defines the 'EXTERNAL_INCLUDES' variable that contains all include pathes.
 #
-SET(EXTERNAL_INCLUDES ${PROJECT_SOURCE_DIR}/include
-${PROJECT_SOURCE_DIR}/spandsp ${PROJECT_SOURCE_DIR}/portmixer/px_common
-${PROJECT_SOURCE_DIR}/libiax2 ${PROJECT_SOURCE_DIR}/libspeex ${PROJECT_SOURCE_DIR}/gsm/inc)
+SET(EXTERNAL_INCLUDES ${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/include
+${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/spandsp ${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/portmixer/px_common
+${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/libiax2 ${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/libspeex ${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/gsm/inc)
 #
 # Set the include pathes.
 #
@@ -47,7 +47,7 @@ SET(IAX_FGCOM_HEADER_FILES audio_alsa.h audio_portaudio.h iaxclient.h ringbuffer
 #
 # We tell here the pathes to other libraries we need.
 #
-LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/gsm/src ${PROJECT_SOURCE_DIR}/libiax2 ${PROJECT_SOURCE_DIR}/libspeex ${PROJECT_SOURCE_DIR}/gsm/src ${PROJECT_SOURCE_DIR}/portmixer ${PROJECT_SOURCE_DIR}/spandsp)
+LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/gsm/src ${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/libiax2 ${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/libspeex ${PROJECT_SOURCE_DIR}/gsm/src ${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/portmixer ${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/spandsp)
 # Defines a variable that contains all the source files, including header
 # files.
 #
@@ -68,7 +68,7 @@ SET_TARGET_PROPERTIES(${IAXCLIENT_NAME}-dynamic PROPERTIES OUTPUT_NAME "${IAXCLI
 #
 MESSAGE(STATUS)
 MESSAGE(STATUS "------------------------------------------------------------")
-MESSAGE(STATUS "IAX-FGCOM client source dir	: ${PROJECT_NAME}/lib")
+MESSAGE(STATUS "IAX-FGCOM client source dir	: ${PROJECT_NAME}/${IAX_CLIENT_DIR}/lib")
 IF(SPAN_EC)
 	MESSAGE(STATUS "Span echo			: yes")
 	MESSAGE(STATUS "Speex echo			: no")

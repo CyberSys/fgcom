@@ -21,12 +21,12 @@ SET_TARGET_PROPERTIES(iax2-dynamic PROPERTIES OUTPUT_NAME "iax2")
 #
 # We indicate requested include directories.
 #
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/libiax2 ${PROJECT_SOURCE_DIR}/gsm/inc)
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/include ${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/libiax2 ${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/gsm/inc)
 #
 # To build the 'miniphone' application, we need to indicate the directory
 # where we can find the 'libiax2.a' library.
 #
-LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/libiax2)
+LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/libiax2)
 #
 # We add a new target to build the miniphone application.
 #
@@ -35,6 +35,6 @@ LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/libiax2)
 # We can display some informational messages.
 #
 MESSAGE(STATUS "------------------------------------------------------------")
-MESSAGE(STATUS "IAX2 library source dir	: ${PROJECT_SOURCE_DIR}/libiax2")
+MESSAGE(STATUS "IAX2 library source dir	: ${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/libiax2")
 
 

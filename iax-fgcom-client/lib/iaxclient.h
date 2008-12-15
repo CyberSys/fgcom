@@ -71,6 +71,14 @@ typedef int socklen_t;
 			struct sockaddr *, socklen_t *);
 #endif
 
+/* Define audio type constants */
+#define AUDIO_INTERNAL 0
+#define AUDIO_INTERNAL_PA 1
+#define AUDIO_INTERNAL_FILE 2
+#define AUDIO_INTERNAL_ALSA 3
+#define AUDIO_INTERNAL_OPENAL 4
+#define AUDIO_EXTERNAL 99
+
 #define IAXC_AUDIO_FORMAT_MASK  ((1<<16)-1)
 #define IAXC_VIDEO_FORMAT_MASK  (((1<<25)-1) & ~IAXC_AUDIO_FORMAT_MASK)
 

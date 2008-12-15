@@ -1,6 +1,6 @@
 
 
-SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake_modules")
+# SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/cmake_modules")
 
 FIND_PACKAGE(PORTAUDIO REQUIRED)
 
@@ -23,7 +23,7 @@ SET_TARGET_PROPERTIES(portmixer-dynamic PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 SET_TARGET_PROPERTIES(portmixer-dynamic PROPERTIES OUTPUT_NAME "portmixer")
 
 MESSAGE(STATUS "------------------------------------------------------------")
-MESSAGE(STATUS "portmixer source dir		: ${PROJECT_SOURCE_DIR}/portmixer")
+MESSAGE(STATUS "portmixer source dir		: ${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/portmixer")
 IF(CMAKE_BUILD_TYPE STREQUAL "debug")
 	MESSAGE(STATUS "Src files			: ${PORTMIXER_SRC}")
 ENDIF(CMAKE_BUILD_TYPE STREQUAL "debug")

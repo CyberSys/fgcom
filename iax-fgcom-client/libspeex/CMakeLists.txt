@@ -8,14 +8,9 @@
 #
 SET(SPEEX_NAME "speex")
 #
-# We set path to cmake modules that we use to find dependencies.
-#
-SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake_modules")
-#
 # Since Speex uses some fast Fourier transform (FFT), math lib is required.
 #
 FIND_PACKAGE(LIBMATH REQUIRED)
-
 #
 # Default behaviour is to use the Small FT.
 #
@@ -30,7 +25,7 @@ ENDIF(NOT USE_KISS_FFT)
 # The file 'config.h.cmake' is processed to produce the file 'config.h' which will be included in various
 # source file. Such file defines some #define directives in order to modify behaviour.
 #
-CONFIGURE_FILE (${PROJECT_SOURCE_DIR}/libspeex/config.h.cmake ${PROJECT_SOURCE_DIR}/libspeex/config.h)
+CONFIGURE_FILE (${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/libspeex/config.h.cmake ${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/libspeex/config.h)
 #
 # Depending on what kind of FFT is selected, we do not include same source files.
 #
@@ -42,7 +37,7 @@ ENDIF(USE_SMALLFT)
 #
 # We set the include directories.
 #
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/libspeex ${PROJECT_SOURCE_DIR}/libspeex/speex)
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/libspeex ${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/libspeex/speex)
 # 
 # Here, we specify the libraries to be produced.
 #
@@ -66,12 +61,12 @@ ADD_EXECUTABLE(testenc_wb testenc_wb.c)
 #
 SET(EXE_LIST testdenoise testjitter testecho testenc testenc_uwb testenc_wb)
 FOREACH(EXE ${EXE_LIST})
-	TARGET_LINK_LIBRARIES(${EXE} ${PROJECT_SOURCE_DIR}/libspeex/libspeex.a ${LIBMATH_LIBRARY})
+	TARGET_LINK_LIBRARIES(${EXE} ${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/libspeex/libspeex.a ${LIBMATH_LIBRARY})
 ENDFOREACH(EXE)
 
 MESSAGE(STATUS)
 MESSAGE(STATUS "------------------------------------------------------------")
-MESSAGE(STATUS "Speex source dir		: ${PROJECT_SOURCE_DIR}/libspeex")
+MESSAGE(STATUS "Speex source dir		: ${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/libspeex")
 IF(USE_SMALLFT)
 	MESSAGE(STATUS "Use Small FT			: yes")
 ELSE(USE_SMALLFT)

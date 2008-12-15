@@ -22,6 +22,14 @@ SET(${PROJECT_NAME}_MAJOR_VERSION 0)
 SET(${PROJECT_NAME}_MINOR_VERSION 0)
 SET(${PROJECT_NAME}_PATCH_VERSION 1)
 #
+# Set IAX Fgcom subdirectory variable which contains all used libraries.
+#
+SET(IAX_CLIENT_DIR "iax-fgcom-client")
+#
+# Set path to some helper.
+#
+SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/cmake_modules/")
+#
 # By default, we build the release version.
 #
 IF(NOT CMAKE_BUILD_TYPE)
@@ -52,12 +60,13 @@ MESSAGE(STATUS "To change build, type 'cmake -DCMAKE_BUILD_TYPE=[debug|release] 
 #
 # Here, we set other sub-directories to compile.
 #
-ADD_SUBDIRECTORY(libiax2)
-ADD_SUBDIRECTORY(gsm/src)
-ADD_SUBDIRECTORY(libspeex)
-ADD_SUBDIRECTORY(spandsp)
-ADD_SUBDIRECTORY(portmixer)
-ADD_SUBDIRECTORY(lib)
+ADD_SUBDIRECTORY(${IAX_CLIENT_DIR}/libiax2)
+ADD_SUBDIRECTORY(${IAX_CLIENT_DIR}/gsm/src)
+ADD_SUBDIRECTORY(${IAX_CLIENT_DIR}/libspeex)
+ADD_SUBDIRECTORY(${IAX_CLIENT_DIR}/spandsp)
+ADD_SUBDIRECTORY(${IAX_CLIENT_DIR}/portmixer)
+ADD_SUBDIRECTORY(${IAX_CLIENT_DIR}/lib)
+ADD_SUBDIRECTORY(src)
 MESSAGE(STATUS "------------------------------------------------------------")
 #
 # End of file.
