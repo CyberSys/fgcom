@@ -24,10 +24,7 @@ extern "C" {
 /* This is the internal include file for IAXCLIENT -- externally
  * accessible APIs should be declared in iaxclient.h */
 
-#ifdef HAVE_CONFIG_H
 #include "config.h"
-#endif
-
 #include <stdio.h>
 #include <string.h>
 

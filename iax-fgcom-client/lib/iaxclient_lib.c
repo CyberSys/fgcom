@@ -38,6 +38,9 @@
 #include "iax-client.h"
 #include "jitterbuf.h"
 
+#include <stdarg.h>
+
+/*
 #if STDC_HEADERS
 # include <stdarg.h>
 #else
@@ -45,6 +48,7 @@
 #  include <varargs.h>
 # endif
 #endif
+*/
 
 #ifdef AUDIO_ALSA
 #include "audio_alsa.h"
@@ -114,16 +118,22 @@ static iaxc_recvfrom_t iaxc_recvfrom = (iaxc_recvfrom_t)recvfrom;
 
 
 static THREAD main_proc_thread;
+#if 0
 static THREAD video_proc_thread;
+#endif
+
 #if defined(WIN32) || defined(_WIN32_WCE)
 static THREADID main_proc_thread_id;
+#if 0
 static THREADID video_proc_thread_id;
+#endif
 #endif
 
 /* 0 running, 1 should quit, -1 not running */
 static int main_proc_thread_flag = -1;
+#if 0
 static int video_proc_thread_flag = -1;
-
+#endif
 static iaxc_event_callback_t iaxc_event_callback = NULL;
 
 // Internal queue of events, waiting to be posted once the library
@@ -254,7 +264,7 @@ void iaxci_post_event(iaxc_event e)
 		int rv;
 
 		rv = iaxc_event_callback(e);
-
+#if 0
 		if ( e.type == IAXC_EVENT_VIDEO )
 		{
 			/* We can free the frame data once it is off the
@@ -262,7 +272,9 @@ void iaxci_post_event(iaxc_event e)
 			 */
 			free(e.ev.video.data);
 		}
-		else if ( e.type == IAXC_EVENT_AUDIO )
+		else
+#endif 
+		if ( e.type == IAXC_EVENT_AUDIO )
 		{
 			free(e.ev.audio.data);
 		}
@@ -529,6 +541,7 @@ EXPORT void iaxc_set_preferred_source_udp_port(int port)
 	source_udp_port = port;
 }
 
+#if 0
 /* For "slow" systems. See iax.c code */
 EXPORT int iaxc_video_bypass_jitter(int mode)
 {
@@ -542,6 +555,7 @@ EXPORT int iaxc_video_bypass_jitter(int mode)
 	 */
 	return iax_video_bypass_jitter(calls[selected_call].session,mode);
 }
+#endif
 
 EXPORT int iaxc_get_bind_port()
 {
@@ -634,11 +648,13 @@ EXPORT int iaxc_initialize(int num_calls)
 		IAXC_FORMAT_SPEEX;
 	audio_format_preferred = IAXC_FORMAT_SPEEX;
 
+#if 0
 	if ( video_initialize() )
 	{
 		iaxci_usermsg(IAXC_ERROR,
 				"iaxc_initialize: cannot initialize video!\n");
 	}
+#endif
 
 	return 0;
 }
@@ -650,8 +666,9 @@ EXPORT void iaxc_shutdown()
 	get_iaxc_lock();
 
 	audio_driver.destroy(&audio_driver);
+#if 0
 	video_destroy();
-	
+#endif
 	/* destroy enocders and decoders for all existing calls */
 	if ( calls ) 
 	{
@@ -662,10 +679,12 @@ EXPORT void iaxc_shutdown()
 				calls[i].encoder->destroy(calls[i].encoder);
 			if ( calls[i].decoder )
 				calls[i].decoder->destroy(calls[i].decoder);
+#if 0
 			if ( calls[i].vencoder )
 				calls[i].vdecoder->destroy(calls[i].vencoder);
 			if ( calls[i].vdecoder )
 				calls[i].vencoder->destroy(calls[i].vdecoder);
+#endif
                 }
 		free(calls);
 		calls = NULL;
@@ -777,6 +796,7 @@ static THREADFUNCDECL(main_proc_thread_func)
 	return ret;
 }
 
+#if 0
 #define VIDEO_STATS_INTERVAL 1000 // In ms
 static struct timeval video_stats_start;
 
@@ -832,6 +852,7 @@ static THREADFUNCDECL(video_proc_thread_func)
 
 	return 0;
 }
+#endif
 
 EXPORT int iaxc_start_processing_thread()
 {
@@ -841,11 +862,13 @@ EXPORT int iaxc_start_processing_thread()
 				main_proc_thread_id) == THREADCREATE_ERROR)
 		return -1;
 
+#if 0
 	video_proc_thread_flag = 0;
 
 	if ( THREADCREATE(video_proc_thread_func, NULL, video_proc_thread,
 				video_proc_thread_id) == THREADCREATE_ERROR)
 		return -1;
+#endif
 
 	return 0;
 }
@@ -857,12 +880,13 @@ EXPORT int iaxc_stop_processing_thread()
 		main_proc_thread_flag = 1;
 		THREADJOIN(main_proc_thread);
 	}
-
+#if 0
 	if ( video_proc_thread_flag >= 0 )
 	{
 		video_proc_thread_flag = 1;
 		THREADJOIN(video_proc_thread);
 	}
+#endif
 
 	return 0;
 }
@@ -1134,6 +1158,7 @@ static void handle_audio_event(struct iax_event *e, int callNo)
 	} while ( total_consumed < e->datalen );
 }
 
+#if 0
 static void handle_video_event(struct iax_event *e, int callNo)
 {
 	struct iaxc_call *call;
@@ -1166,6 +1191,7 @@ static void handle_video_event(struct iax_event *e, int callNo)
 		}
 	}
 }
+#endif
 
 static void iaxc_handle_network_event(struct iax_event *e, int callNo)
 {
@@ -1221,6 +1247,7 @@ static void iaxc_handle_network_event(struct iax_event *e, int callNo)
 				     callNo);
 		}
 		break;
+#if 0
 	case IAX_EVENT_VIDEO:
 		// Mihai: why do we need to lower priority here?
 		// TODO: investigate
@@ -1228,6 +1255,7 @@ static void iaxc_handle_network_event(struct iax_event *e, int callNo)
 		handle_video_event(e, callNo);
 		//iaxci_prioboostbegin();
 		break;
+#endif
 	case IAX_EVENT_TEXT:
 		handle_text_event(e, callNo);
 		break;
@@ -1321,6 +1349,7 @@ static void codec_destroy( int callNo )
 		calls[callNo].decoder->destroy( calls[callNo].decoder );
 		calls[callNo].decoder = NULL;
 	}
+#if 0
 	if ( calls[callNo].vdecoder )
 	{
 		calls[callNo].vdecoder->destroy(calls[callNo].vdecoder);
@@ -1331,6 +1360,7 @@ static void codec_destroy( int callNo )
 		calls[callNo].vencoder->destroy(calls[callNo].vencoder);
 		calls[callNo].vencoder = NULL;
 	}
+#endif
 }
 
 EXPORT int iaxc_call(const char * num)
@@ -1395,14 +1425,21 @@ EXPORT int iaxc_call(const char * num)
 	iaxc_note_activity(callNo);
 	calls[callNo].last_ping = calls[callNo].last_activity;
 
+#if 0
 	iaxc_video_format_get_cap(&video_format_preferred, &video_format_capability);
+#endif
 
 	iaxci_usermsg(IAXC_NOTICE, "Originating an %s call",
 			video_format_preferred ? "audio+video" : "audio only");
+#if 0
 	iax_call(calls[callNo].session, calls[callNo].callerid_number,
 			calls[callNo].callerid_name, num, NULL, 0,
 			audio_format_preferred | video_format_preferred,
 			audio_format_capability | video_format_capability);
+#endif
+	iax_call(calls[callNo].session, calls[callNo].callerid_number,
+			 calls[callNo].callerid_name, num, NULL, 0,
+			 audio_format_preferred, audio_format_capability);
 
 	// does state stuff also
 	iaxc_select_call(callNo);
@@ -1571,8 +1608,8 @@ static int iaxc_choose_codec(int formats)
 		IAXC_FORMAT_SPEEX,
 		IAXC_FORMAT_LPC10,
 		IAXC_FORMAT_G729A,
-		IAXC_FORMAT_G723_1,
-
+		IAXC_FORMAT_G723_1
+#if 0
 		/* To negotiate video codec */
 		IAXC_FORMAT_JPEG,
 		IAXC_FORMAT_PNG,
@@ -1582,6 +1619,7 @@ static int iaxc_choose_codec(int formats)
 		IAXC_FORMAT_MPEG4,
 		IAXC_FORMAT_H264,
 		IAXC_FORMAT_THEORA,
+#endif
 	};
 	for ( i = 0; i < (int)(sizeof(codecs) / sizeof(int)); i++ )
 		if ( codecs[i] & formats )
@@ -1638,6 +1676,7 @@ static void iaxc_handle_connect(struct iax_event * e)
 		return;
 	}
 
+#if 0
 	iaxc_video_format_get_cap(&video_format_preferred,
 			&video_format_capability);
 
@@ -1682,6 +1721,9 @@ static void iaxc_handle_connect(struct iax_event * e)
 	}
 
 	calls[callno].vformat = video_format;
+	calls[callno].format = format;
+#endif
+	calls[callno].vformat = 0; /* No video capabilities. */
 	calls[callno].format = format;
 
 	if ( e->ies.called_number )

@@ -66,7 +66,8 @@ int main(int argc, char *argv[])
         signal (SIGQUIT, quit);
         signal (SIGTERM, quit);
 
-	if(iaxc_initialize (DEFAULT_IAX_AUDIO,DEFAULT_MAX_CALLS))
+	/* if(iaxc_initialize (DEFAULT_IAX_AUDIO,DEFAULT_MAX_CALLS)) */
+	if(iaxc_initialize (DEFAULT_MAX_CALLS))
 	{
 		fprintf(stderr,"cannot initialize iaxclient!");
 		exit(100);
