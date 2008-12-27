@@ -66,6 +66,8 @@ int main(int argc, char *argv[])
         signal (SIGQUIT, quit);
         signal (SIGTERM, quit);
 
+	config_parse_cmd_options(argc,argv);
+
 	/* if(iaxc_initialize (DEFAULT_IAX_AUDIO,DEFAULT_MAX_CALLS)) */
 	if(iaxc_initialize (DEFAULT_MAX_CALLS))
 	{

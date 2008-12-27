@@ -28,7 +28,7 @@ SET(IAX_CLIENT_DIR "iax-fgcom-client")
 #
 # Set path to some helper.
 #
-SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/cmake_modules/")
+SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/cmake_modules/" "${PROJECT_SOURCE_DIR}/src/cmake_modules/")
 #
 # By default, we build the release version.
 #
