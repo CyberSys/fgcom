@@ -20,7 +20,7 @@
 
 /* Prototypes */
 int iaxc_callback (iaxc_event e);
-void quit (int signal);
+void fgcom_exit (int signal);
 void event_level (double in, double out);
 void event_netstats (struct iaxc_ev_netstats stat);
 void event_register (int id, int reply, int count);
@@ -62,9 +62,9 @@ int main(int argc, char *argv[])
 	alt=123;
 
         /* catch signals */
-        signal (SIGINT, quit);
-        signal (SIGQUIT, quit);
-        signal (SIGTERM, quit);
+        signal (SIGINT, fgcom_exit);
+        signal (SIGQUIT, fgcom_exit);
+        signal (SIGTERM, fgcom_exit);
 
 	if(iaxc_initialize (DEFAULT_IAX_AUDIO,DEFAULT_MAX_CALLS))
 	{
@@ -126,7 +126,7 @@ int iaxc_callback (iaxc_event e)
   return 1;
 }
 
-void quit (int signal)
+void fgcom_exit (int signal)
 {
 	char text[256];
 
@@ -181,7 +181,7 @@ event_register (int id, int reply, int count)
       reason = "denied";
         {
   	printf("Registering denied\n");
-             quit (SIGTERM);
+             fgcom_exit (SIGTERM);
         }
       break;
     case IAXC_REGISTRATION_REPLY_TIMEOUT:

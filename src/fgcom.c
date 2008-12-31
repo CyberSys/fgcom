@@ -1,54 +1,49 @@
+/*
+ * fgcom: a real radio VoIP client for FlightGear based on iaxclient
+ *
+ * Copyrights:
+ * Copyright (C) 2006-2008 Holger Wirtz   <dcoredump@gmail.com>
+ *                                        <wirtz@parasitstudio.de>
+ * Copyright (C) 2008,2009 Holger Wirtz   <dcoredump@gmail.com>
+ *                                        <wirtz@parasitstudio.de>
+ *                         Charles Ingels <charles@maisonblv.net>
+ *
+ * This program may be modified and distributed under the
+ * terms of the GNU General Public License. You should have received
+ * a copy of the GNU General Public License along with this
+ * program; if not, write to the Free Software Foundation, Inc.
+ * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
 #include <unistd.h>
 #include <string.h>
-
 #include "iaxclient.h"
+#include "fgcom.h"
+#include "config.h"
+#include "event.h"
 
-#define VERSION "3.0.0"
-#define DEFAULT_USER "D-CORE"
-#define DEFAULT_PASSWORD "secreT"
-#define DEFAULT_FG_SERVER "localhost"
-#define DEFAULT_FG_PORT 16661
-#define DEFAULT_FRQ "02123450"
-#define DEFAULT_VOIP_SERVER "fgcom1.parasitstudio.de"
-#define DEFAULT_IAX_CODEC IAXC_FORMAT_ULAW
-#define DEFAULT_IAX_AUDIO AUDIO_INTERNAL
-#define DEFAULT_MAX_CALLS 2
-#define DEFAULT_MILLISLEEP 100
+extern struct fgcom_config config;
 
-/* Prototypes */
-int iaxc_callback (iaxc_event e);
-void quit (int signal);
-void event_level (double in, double out);
-void event_netstats (struct iaxc_ev_netstats stat);
-void event_register (int id, int reply, int count);
-void event_text (int type, char *message);
-void event_state (int state, char *remote, char *remote_name,char *local, char *local_context);
-void event_unknown (int type);
-void report (char *text);
-const char *map_state (int state);
+/****************************************************************************
+ *  public functions
+ ****************************************************************************/
 
-/* Globals */
-int reg_id=0;
-int initialized = 0;
-int connected = 0;
-static char tmp[1024];          /* report output buffer */
-static int last_state = 0;      /* previous state of the channel */
-static char states[256];        /* buffer to hold ascii states */
-static char delim = '\t';       /* output field delimiter */
-static const char *map[] = {
-  "unknown", "active", "outgoing", "ringing", "complete", "selected",
-  "busy", "transfer", NULL
-};
+void fgcom_exit(char *text, int exitcode)
+{
+	if(strlen(text)>0)
+		fprintf(stderr,"%s\n",text);
+	fgcom_quit(exitcode);
+}
 
 /* Main program */
 int main(int argc, char *argv[])
 {
 	char dest[30];
 	char text[256];
-
 	char callsign[20];
 	char model[80];
 	float lon;
@@ -62,31 +57,34 @@ int main(int argc, char *argv[])
 	alt=123;
 
         /* catch signals */
-        signal (SIGINT, quit);
-        signal (SIGQUIT, quit);
-        signal (SIGTERM, quit);
+        signal (SIGINT, fgcom_quit);
+        signal (SIGQUIT, fgcom_quit);
+        signal (SIGTERM, fgcom_quit);
 
-	config_parse_cmd_options(argc,argv);
+	config_parse_cmd_options("/home/wirtz/.fgcomrc",argc,argv);
 
-	/* if(iaxc_initialize (DEFAULT_IAX_AUDIO,DEFAULT_MAX_CALLS)) */
-	if(iaxc_initialize (DEFAULT_MAX_CALLS))
-	{
-		fprintf(stderr,"cannot initialize iaxclient!");
-		exit(100);
-	}
+	if(iaxc_initialize(DEFAULT_MAX_CALLS))
+		fgcom_exit("cannot initialize iaxclient!",100);
+	config.initialized=TRUE;
 
 	iaxc_set_callerid((char *)DEFAULT_USER,(char *)DEFAULT_FRQ);
 	iaxc_set_formats (DEFAULT_IAX_CODEC, IAXC_FORMAT_ULAW | IAXC_FORMAT_GSM | IAXC_FORMAT_SPEEX);
-	iaxc_set_event_callback (iaxc_callback);
+	iaxc_set_event_callback (fgcom_iaxc_callback);
         iaxc_start_processing_thread ();
 
-//	reg_id = iaxc_register ((char *)DEFAULT_USER,(char *)DEFAULT_PASSWORD,(char *)DEFAULT_VOIP_SERVER);
-//	printf("registered %d\n",reg_id);
+	/* Register client */
+	if(strlen(config.username)>0 && strlen(config.password))
+	{
+		config.reg_id=iaxc_register((char *)config.username,(char *)config.password,(char *)config.iax_server);
+
+		if(config.verbose==TRUE)
+			printf("Registered VoIP client with id: %d\n",config.reg_id);
+	}
 
 	//sprintf(dest,"%s:%s@%s/%s",(char *)DEFAULT_USER,(char *)DEFAULT_PASSWORD,(char *)DEFAULT_VOIP_SERVER,(char *)DEFAULT_FRQ);
 	sprintf(dest,"%s/%s",(char *)DEFAULT_VOIP_SERVER,(char *)DEFAULT_FRQ);
-        iaxc_call (dest);
-	iaxc_millisleep(1000);
+        iaxc_call(dest);
+	iaxc_millisleep(100);
 
 	sprintf(text,"FGCOM:%s:%s:%f:%f:%d:%s","ADD",(char *)DEFAULT_USER,lon,lat,alt,model);
 		printf("Send: [%s]\n",text);
@@ -101,9 +99,11 @@ int main(int argc, char *argv[])
 	}
 }
 
+/****************************************************************************
+ *  private functions
+ ****************************************************************************/
 
-
-int iaxc_callback (iaxc_event e)
+static int fgcom_iaxc_callback (iaxc_event e)
 {
   switch (e.type)
     {
@@ -129,133 +129,29 @@ int iaxc_callback (iaxc_event e)
   return 1;
 }
 
-void quit (int signal)
+static void fgcom_quit (int exitcode)
 {
 	char text[256];
 
-	printf("Stopping service.");
-	sprintf(text,"FGCOM:%s:%s","DEL",(char *)DEFAULT_USER);
-	printf("Send: [%s]\n",text);
-	iaxc_send_text(text);
-	iaxc_millisleep(1000);
-	iaxc_shutdown ();
-    	iaxc_unregister(reg_id);
-	exit(0);
+	if(config.connected>0)
+	{
+		sprintf(text,"FGCOM:%s:%s","DEL",(char *)DEFAULT_USER);
+		if(config.verbose==TRUE)
+			printf("Send: [%s]\n",text);
+		iaxc_send_text(text);
+	}
+	if(config.reg_id>0)
+	{
+		if(config.verbose==TRUE)
+			printf("Unregistering VoIP client\n");
+    		iaxc_unregister(config.reg_id);
+		iaxc_millisleep(100);
+	}
+	if(config.initialized>=0)
+	{
+		if(config.verbose==TRUE)
+			printf("Shutdown VoIP client\n");
+		iaxc_shutdown ();
+	}
+	exit(exitcode);
 }
-
-void
-event_state (int state, char *remote, char *remote_name,
-             char *local, char *local_context)
-{
-  last_state = state;
-  /* This is needed for auto-reconnect */
-  if (state == 0)
-    {
-      connected = 0;
-      /* FIXME: we should wake up the main thread somehow */
-      /* in fg mode the next incoming packet will do that anyway */
-    }
-
-  snprintf (tmp, sizeof (tmp),
-            "S%c0x%x%c%s%c%.50s%c%.50s%c%.50s%c%.50s", delim, state,
-            delim, map_state (state), delim, remote, delim, remote_name,
-            delim, local, delim, local_context);
-  report (tmp);
-}
-
-void
-event_text (int type, char *message)
-{
-  snprintf (tmp, sizeof (tmp), "T%c%d%c%.200s", delim, type, delim, message);
-  printf("%s\n",message);
-  report (tmp);
-}
-
-void
-event_register (int id, int reply, int count)
-{
-  const char *reason;
-  switch (reply)
-    {
-    case IAXC_REGISTRATION_REPLY_ACK:
-      reason = "accepted";
-      break;
-    case IAXC_REGISTRATION_REPLY_REJ:
-      reason = "denied";
-        {
-  	printf("Registering denied\n");
-             quit (SIGTERM);
-        }
-      break;
-    case IAXC_REGISTRATION_REPLY_TIMEOUT:
-      reason = "timeout";
-      break;
-    default:
-      reason = "unknown";
-    }
-  snprintf (tmp, sizeof (tmp), "R%c%d%c%s%c%d", delim, id, delim,
-            reason, delim, count);
-  report (tmp);
-}
-
-void
-event_netstats (struct iaxc_ev_netstats stat)
-{
-  struct iaxc_netstat local = stat.local;
-  struct iaxc_netstat remote = stat.remote;
-  snprintf (tmp, sizeof (tmp),
-            "N%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c%d",
-            delim, stat.callNo, delim, stat.rtt,
-            delim, local.jitter, delim, local.losspct, delim,
-            local.losscnt, delim, local.packets, delim, local.delay,
-            delim, local.dropped, delim, local.ooo, delim,
-            remote.jitter, delim, remote.losspct, delim, remote.losscnt,
-            delim, remote.packets, delim, remote.delay, delim,
-            remote.dropped, delim, remote.ooo);
-  report (tmp);
-}
-
-void
-event_level (double in, double out)
-{
-  snprintf (tmp, sizeof (tmp), "L%c%.1f%c%.1f", delim, in, delim, out);
-  report (tmp);
-}
-
-void
-event_unknown (int type)
-{
-  snprintf (tmp, sizeof (tmp), "U%c%d", delim, type);
-  report (tmp);
-}
-
-void
-report (char *text)
-{
-	printf("%s\n",text);
-      fflush (stdout);
-}
-
-const char *
-map_state (int state)
-{
-  int i, j;
-  int next = 0;
-  *states = '\0';
-  if (state == 0)
-    {
-      return "free";
-    }
-  for (i = 0, j = 1; map[i] != NULL; i++, j <<= 1)
-    {
-      if (state & j)
-        {
-          if (next)
-            strcat (states, ",");
-          strcat (states, map[i]);
-          next = 1;
-        }
-    }
-  return states;
-}
-

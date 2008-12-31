@@ -1,17 +1,40 @@
+/*
+ * fgcom: a real radio VoIP client for FlightGear based on iaxclient
+ *
+ * Copyrights:
+ * Copyright (C) 2006-2008 Holger Wirtz   <dcoredump@gmail.com>
+ *                                        <wirtz@parasitstudio.de>
+ * Copyright (C) 2008,2009 Holger Wirtz   <dcoredump@gmail.com>
+ *                                        <wirtz@parasitstudio.de>
+ *                         Charles Ingels <charles@maisonblv.net>
+ *
+ * This program may be modified and distributed under the
+ * terms of the GNU General Public License. You should have received
+ * a copy of the GNU General Public License along with this
+ * program; if not, write to the Free Software Foundation, Inc.
+ * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
+
+#ifndef _config_h
+#define _config_h
+
+#include "glib.h"
+
 /* configuration data */
 struct fgcom_config
 {
 	/* group main options */
-	gchar iax_server[256];
+	gchar *iax_server;
 	gboolean verbose;
 
 	/* group VoIP server */
-        gchar username[80];
-        gchar password[80];
-	gchar codec[80];
+        gchar *username;
+        gchar *password;
+	gint codec;
 
 	/* group FG arguments */
-	gchar fg[256];
+	gchar *fg;
 	gint fg_port;
 	gint fg_copilot_conference_id;
 
@@ -24,11 +47,21 @@ struct fgcom_config
 	gboolean mic_boost;
 	gdouble mic_level;
 	gdouble speaker_level;
-	gchar audio_in[256];
-	gchar audio_out[256];
-};
+	gchar *audio_in;
+	gchar *audio_out;
 
-int config_parse_cmd_options(int argc, char *argv[]);
+	/* program internal data */
+	int reg_id;
+	int initialized;
+	int connected;
+} config;
 
+/* public prototypes */
+gboolean config_parse_cmd_options(char *filename, int argc, char *argv[]);
+
+/* private prototypes */
 static void config_show_version(void);
 static void config_show_audio_devices(void);
+static void config_report_devices(int io);
+
+#endif
