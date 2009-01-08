@@ -21,6 +21,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include <string.h>
+#include <glib.h>
 #include "iaxclient.h"
 #include "fgcom.h"
 #include "config.h"
@@ -28,80 +29,162 @@
 
 extern struct fgcom_config config;
 
-/****************************************************************************
- *  public functions
- ****************************************************************************/
-
-void fgcom_exit(char *text, int exitcode)
-{
-	if(strlen(text)>0)
-		fprintf(stderr,"%s\n",text);
-	fgcom_quit(exitcode);
-}
-
 /* Main program */
 int main(int argc, char *argv[])
 {
-	char dest[30];
-	char text[256];
-	char callsign[20];
-	char model[80];
-	float lon;
-	float lat;
-	int alt;
-
-	strcpy(callsign,"D-CORE");
-	strcpy(model,"Aircraft/Dragonfly/Models/Dragonfly.xml");
-	lon=52.475449;
-	lat=13.415937;
-	alt=123;
+	if(config_parse_cmd_options("/home/wirtz/.fgcomrc",argc,argv)==FALSE)
+	{
+		fgcom_exit("Program stop due to option errors.",100);
+	}
 
         /* catch signals */
         signal (SIGINT, fgcom_quit);
         signal (SIGQUIT, fgcom_quit);
         signal (SIGTERM, fgcom_quit);
 
-	config_parse_cmd_options("/home/wirtz/.fgcomrc",argc,argv);
-
+	/* setup iaxclient */
 	if(iaxc_initialize(DEFAULT_MAX_CALLS))
 		fgcom_exit("cannot initialize iaxclient!",100);
 	config.initialized=TRUE;
+	iaxc_set_formats(config.codec,IAXC_FORMAT_ULAW|IAXC_FORMAT_ALAW|IAXC_FORMAT_GSM|IAXC_FORMAT_SPEEX);
+	iaxc_set_event_callback(fgcom_iaxc_callback);
+	iaxc_start_processing_thread();
 
-	iaxc_set_callerid((char *)DEFAULT_USER,(char *)DEFAULT_FRQ);
-	iaxc_set_formats (DEFAULT_IAX_CODEC, IAXC_FORMAT_ULAW | IAXC_FORMAT_GSM | IAXC_FORMAT_SPEEX);
-	iaxc_set_event_callback (fgcom_iaxc_callback);
-        iaxc_start_processing_thread ();
-
-	/* Register client */
-	if(strlen(config.username)>0 && strlen(config.password))
+	/* Registering ? */
+	if(config.reg==TRUE)
 	{
-		config.reg_id=iaxc_register((char *)config.username,(char *)config.password,(char *)config.iax_server);
-
-		if(config.verbose==TRUE)
-			printf("Registered VoIP client with id: %d\n",config.reg_id);
+		if(config.username!=NULL && config.password!=NULL)
+		{
+			/* Register client */
+			if((config.reg_id=iaxc_register((char *)config.username,(char *)config.password,(char *)config.iax_server))>0)
+			{
+				printf("Registered as %s at %s with id: %d\n",config.username,config.iax_server,config.reg_id);
+				iaxc_set_callerid((char *)config.username,"0");
+			}
+			else
+			{
+				printf("Registering as %s at %s failed: %d\n",config.username,config.iax_server,config.reg_id);
+				fgcom_exit("",125);
+			}
+		}
+		else
+			fgcom_exit("Username and password are needed for registration",150);
+	}
+	else
+	{
+		iaxc_set_callerid((char *)DEFAULT_USER,(char *)DEFAULT_FRQ);
 	}
 
-	//sprintf(dest,"%s:%s@%s/%s",(char *)DEFAULT_USER,(char *)DEFAULT_PASSWORD,(char *)DEFAULT_VOIP_SERVER,(char *)DEFAULT_FRQ);
-	sprintf(dest,"%s/%s",(char *)DEFAULT_VOIP_SERVER,(char *)DEFAULT_FRQ);
-        iaxc_call(dest);
-	iaxc_millisleep(100);
-
-	sprintf(text,"FGCOM:%s:%s:%f:%f:%d:%s","ADD",(char *)DEFAULT_USER,lon,lat,alt,model);
-		printf("Send: [%s]\n",text);
-		iaxc_send_text(text);
-
-	while(1)
+	if(config.mode<2)
 	{
-		sprintf(text,"FGCOM:%s:%s:%f:%f:%d:%s","UPDATE",(char *)DEFAULT_USER,lon,lat,alt,model);
-		printf("Send: [%s]\n",text);
-		iaxc_send_text(text);
-		sleep(5);
+		/* mode FlightGear and mode InterCom */
+		printf("TODO\n");
 	}
+	else 
+	{
+		/* mode ATC */
+		config.modelname=g_strdup("ATC");
+
+		/* consistency checks */
+		if(strlen(config.callsign)<0)
+			fgcom_exit("Callsign must be set for mode ATC\n",110);
+		if(config.atc_lat<-180.0)
+			fgcom_exit("ATC latitude must be set for mode ATC\n",110);
+		if(config.atc_lon<-180.0)
+			fgcom_exit("ATC longtitude must be set for mode ATC\n",110);
+		if(config.atc_frequency<=0.0)
+			fgcom_exit("ATC frequency must be set for mode ATC\n",110);
+
+		config.connected=fgcom_dial(config.atc_frequency);
+
+		fgcom_conference_command("ADD",config.callsign,config.atc_lon,config.atc_lat,100);
+
+		while(1)
+		{
+			sleep(5);
+			fgcom_conference_command("UPDATE",config.callsign,config.atc_lon,config.atc_lat,100);
+		}
+	}
+}
+
+/****************************************************************************
+ *  public functions
+ ****************************************************************************/
+
+void fgcom_exit(gchar *text, gint exitcode)
+{
+	if(strlen(text)>0)
+		g_fprintf(stderr,"%s\n",text);
+	fgcom_quit(exitcode);
 }
 
 /****************************************************************************
  *  private functions
  ****************************************************************************/
+
+static gboolean fgcom_dial(gdouble frequency)
+{
+	char dest[80];
+
+	if(strlen(config.iax_server)==0)
+	{
+		g_printf("Cannot connect to %d on server %s\n",frequency,config.iax_server);
+		return(FALSE);
+	}
+
+	if(config.username!=NULL && config.password!=NULL)
+	{
+		g_snprintf(dest,sizeof(dest)-1,"%s:%s@%s/%02d%-6d",config.username,config.password,config.iax_server,DEFAULT_PRESELECTION,(int)frequency*1000);
+	}
+	else
+		g_snprintf(dest,sizeof(dest)-1,"%s/%02d%-6d",config.iax_server,DEFAULT_PRESELECTION,(int)frequency*1000);
+
+	if(config.verbose==TRUE)
+		g_printf("Dialing [%s]",dest);
+
+	iaxc_call(dest);
+	iaxc_millisleep(100);
+
+	return(TRUE);
+}
+
+static gboolean fgcom_conference_command(gchar *command, ...)
+{
+	gchar text[80];
+	va_list argPtr;
+
+	va_start(argPtr,command);
+
+	if(g_strcmp0(command,"ADD")==0 || g_strcmp0(command,"UPDATE")==0)
+	{
+		gchar *callsign=va_arg(argPtr,gchar *);
+		gdouble lon=va_arg(argPtr,gdouble);
+		gdouble lat=va_arg(argPtr,gdouble);
+		gint alt=va_arg(argPtr,gint);
+
+		g_snprintf(text,sizeof(text)-1,"FGCOM:%s:%s:%f:%f:%d:%s",command,callsign,lon,lat,alt,config.modelname);
+	}
+	else if(g_strcmp0(command,"DEL")==0)
+	{
+		gchar *callsign=va_arg(argPtr,gchar *);
+
+		g_snprintf(text,sizeof(text)-1,"FGCOM:%s:%s",command,callsign);
+	}
+	else
+	{
+		g_printf("Command %s unknown!\n",command);
+		va_end(argPtr);
+		return(FALSE);
+	}
+
+	if(config.verbose==TRUE)
+		g_printf("Sending [%s]\n",text);
+	iaxc_send_text((char *)text);
+
+	va_end(argPtr);
+
+	return(TRUE);
+}
 
 static int fgcom_iaxc_callback (iaxc_event e)
 {
@@ -129,29 +212,26 @@ static int fgcom_iaxc_callback (iaxc_event e)
   return 1;
 }
 
-static void fgcom_quit (int exitcode)
+static void fgcom_quit (gint exitcode)
 {
-	char text[256];
+	gchar text[256];
 
-	if(config.connected>0)
+	if(config.connected==TRUE)
 	{
-		sprintf(text,"FGCOM:%s:%s","DEL",(char *)DEFAULT_USER);
-		if(config.verbose==TRUE)
-			printf("Send: [%s]\n",text);
-		iaxc_send_text(text);
+		fgcom_conference_command("DEL",config.callsign);
 	}
 	if(config.reg_id>0)
 	{
 		if(config.verbose==TRUE)
-			printf("Unregistering VoIP client\n");
+			g_printf("Unregistering VoIP client\n");
     		iaxc_unregister(config.reg_id);
 		iaxc_millisleep(100);
 	}
-	if(config.initialized>=0)
+	if(config.initialized==TRUE)
 	{
 		if(config.verbose==TRUE)
-			printf("Shutdown VoIP client\n");
+			g_printf("Shutdown VoIP client\n");
 		iaxc_shutdown ();
 	}
-	exit(exitcode);
+	exit((int)exitcode);
 }

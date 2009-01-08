@@ -27,6 +27,8 @@ struct fgcom_config
 	/* group main options */
 	gchar *iax_server;
 	gboolean verbose;
+	gchar *callsign;
+	gchar *modelname;
 
 	/* group VoIP server */
         gchar *username;
@@ -36,7 +38,8 @@ struct fgcom_config
 	/* group FG arguments */
 	gchar *fg;
 	gint fg_port;
-	gint fg_copilot_conference_id;
+	gint fg_intercom_id;
+	gint fg_intercom_port;
 
 	/* group ATC data */
 	gdouble atc_frequency;
@@ -51,15 +54,25 @@ struct fgcom_config
 	gchar *audio_out;
 
 	/* program internal data */
-	int reg_id;
-	int initialized;
-	int connected;
+	gint reg_id;
+	gboolean initialized;
+	gboolean connected;
+	gint mode;
+	gboolean reg;
 } config;
 
 /* public prototypes */
 gboolean config_parse_cmd_options(char *filename, int argc, char *argv[]);
 
 /* private prototypes */
+static gboolean config_cb_callsign(gchar *option_name,gchar *value,gpointer data,GError **error);
+static gboolean config_cb_atc_lon(gchar *option_name,gchar *value,gpointer data,GError **error);
+static gboolean config_cb_atc_lat(gchar *option_name,gchar *value,gpointer data,GError **error);
+static gboolean config_cb_codec(gchar *option_name,gchar *value,gpointer data,GError **error);
+static gboolean config_cb_username(gchar *option_name,gchar *value,gpointer data,GError **error);
+static gboolean config_cb_password(gchar *option_name,gchar *value,gpointer data,GError **error);
+static gboolean config_cb_mic_level(gchar *option_name,gchar *value,gpointer data,GError **error);
+static gboolean config_cb_speaker_level(gchar *option_name,gchar *value,gpointer data,GError **error);
 static void config_show_version(void);
 static void config_show_audio_devices(void);
 static void config_report_devices(int io);
