@@ -12,7 +12,7 @@ ENDIF(USE_OPENAL)
 
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/lib ${PORTAUDIO_INCLUDE_DIR} ${GLIB2_INCLUDE_DIR} ${GLIB2_CONFIG_DIR})
 
-ADD_EXECUTABLE(fgcom fgcom.c config.c event.c)
+ADD_EXECUTABLE(fgcom fgcom.c config.c event.c oggfile.c)
 
 SET(LOCAL_LIBRARIES lib/libiaxclient.a gsm/src/libgsm.a libspeex/libspeex.a spandsp/libspandsp.a portmixer/libportmixer.a libiax2/libiax2.a)
 

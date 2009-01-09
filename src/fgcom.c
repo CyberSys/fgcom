@@ -26,6 +26,7 @@
 #include "fgcom.h"
 #include "config.h"
 #include "event.h"
+#include "oggfile.h"
 
 extern struct fgcom_config config;
 
@@ -235,3 +236,53 @@ static void fgcom_quit (gint exitcode)
 	}
 	exit((int)exitcode);
 }
+
+static gboolean fgcom_send_audio(gchar *filename)
+{
+	if(filename!=NULL)
+	{
+		if(load_ogg_file(filename))
+		{
+			fgcom_exit("Failed loading ogg file.\n",333);
+                }
+        }
+	else
+		return(FALSE);
+
+	while(1)
+        {
+		struct timeval now = fgcom_get_now();
+
+		ogg_packet *op;
+
+		op=get_next_audio_op(now);
+		if(op!=NULL&&op->bytes>0)
+		{
+			iaxc_push_audio(op->packet, op->bytes,SPEEX_SAMPLING_RATE*SPEEX_FRAME_DURATION/1000);
+	}
+}
+
+static struct timeval *fgcom_get_now(void)
+{
+        struct timeval tv;
+#ifdef WIN32
+        FILETIME ft;
+        LARGE_INTEGER li;
+        __int64 t;
+        static int tzflag;
+        const __int64 EPOCHFILETIME = 116444736000000000i64;
+
+        GetSystemTimeAsFileTime(&ft);
+        li.LowPart  = ft.dwLowDateTime;
+        li.HighPart = ft.dwHighDateTime;
+        t  = li.QuadPart;       /* In 100-nanosecond intervals */
+        t -= EPOCHFILETIME;     /* Offset to the Epoch time */
+        t /= 10;                /* In microseconds */
+        tv.tv_sec  = (long)(t / 1000000);
+        tv.tv_usec = (long)(t % 1000000);
+#else
+        gettimeofday(&tv, 0);
+#endif
+        return(tv);
+}
+

@@ -30,7 +30,7 @@ static GOptionEntry main_entries[] =
   { "server", 's', 0, G_OPTION_ARG_STRING, &config.iax_server, "set the server address for VoIP", NULL },
   { "verbose", 'v', 0, G_OPTION_ARG_NONE, &config.verbose, "show more information while working", NULL },
   { "version", 'V', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, (GOptionArgFunc)config_show_version, "show version information", NULL },
-  { "callsign", 'A', 0, G_OPTION_ARG_CALLBACK, (GOptionArgFunc)config_cb_callsign,"set the callsign for ATC mode" , NULL },
+  { "callsign", 'c', 0, G_OPTION_ARG_CALLBACK, (GOptionArgFunc)config_cb_callsign,"set the callsign for ATC mode" , NULL },
   { "username", 'U', 0, G_OPTION_ARG_CALLBACK, (GOptionArgFunc)config_cb_username, "set the username for registration", NULL },
   { "password", 'P', 0, G_OPTION_ARG_CALLBACK, (GOptionArgFunc)config_cb_password, "set the password for registration", NULL },
   { "codec", 'C', 0, G_OPTION_ARG_CALLBACK, (GOptionArgFunc)config_cb_codec, "use one of the following codecs:\n\t\t\t\tspeex (default)\n\t\t\t\tgsm\n\t\t\t\tg711a\n\t\t\t\tg711u", NULL },
@@ -214,7 +214,7 @@ static gboolean config_cb_speaker_level(gchar *option_name,gchar *value,gpointer
 
 static void config_show_version(void)
 {
-	printf("(c)2008 by H. Wirtz <dcoredump@gmail.com> && C. Ingels <charles@maisonblv.net>\n");
+	printf("(c)2008,2009 by H. Wirtz <dcoredump@gmail.com> && C. Ingels <charles@maisonblv.net>\n");
 	printf("Version %3.2f build TOBEFIXED\n",VERSION);
 #ifdef __DEBUG__
 	printf("Debug version, build time %s, %s\n", __DATE__, __TIME__);
