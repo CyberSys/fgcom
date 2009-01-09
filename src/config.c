@@ -150,13 +150,13 @@ static gboolean config_cb_codec(gchar *option_name,gchar *value,gpointer data,GE
 {
 	GError *tmp_error=NULL;
 
-	if(g_strcmp0(value,"speex")==0)
+	if(g_ascii_strcasecmp(value,"speex")==0)
 		config.codec=IAXC_FORMAT_SPEEX;
-	else if(g_strcmp0(value,"gsm")==0)
+	else if(g_ascii_strcasecmp(value,"gsm")==0)
 		config.codec=IAXC_FORMAT_GSM;
-	else if(g_strcmp0(value,"g711a")==0)
+	else if(g_ascii_strcasecmp(value,"g711a")==0)
 		config.codec=IAXC_FORMAT_ALAW;
-	else if(g_strcmp0(value,"g711u")==0)
+	else if(g_ascii_strcasecmp(value,"g711u")==0)
 		config.codec=IAXC_FORMAT_ULAW;
 	else
 	{
@@ -216,6 +216,9 @@ static void config_show_version(void)
 {
 	printf("(c)2008 by H. Wirtz <dcoredump@gmail.com> && C. Ingels <charles@maisonblv.net>\n");
 	printf("Version %3.2f build TOBEFIXED\n",VERSION);
+#ifdef __DEBUG__
+	printf("Debug version, build time %s, %s\n", __DATE__, __TIME__);
+#endif
 
 	fgcom_exit("",0);
 }

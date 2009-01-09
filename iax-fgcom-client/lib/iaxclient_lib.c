@@ -31,13 +31,6 @@
 # endif
 #endif
 
-#include "iaxclient_lib.h"
-#include "audio_portaudio.h"
-#include "audio_encode.h"
-#include "video.h"
-#include "iax-client.h"
-#include "jitterbuf.h"
-
 #include <stdarg.h>
 
 /*
@@ -50,9 +43,21 @@
 #endif
 */
 
-#ifdef AUDIO_ALSA
+#include <config.h>
+
+#if defined(USE_OPENAL)
+#include "audio_openal.h"
+#elif defined(USE_PORTAUDIO)
+#include "audio_portaudio.h"
+#else
 #include "audio_alsa.h"
 #endif
+
+#include "iaxclient_lib.h"
+#include "audio_encode.h"
+#include "iax-client.h"
+#include "jitterbuf.h"
+
 
 #define IAXC_ERROR  IAXC_TEXT_TYPE_ERROR
 #define IAXC_STATUS IAXC_TEXT_TYPE_STATUS
@@ -131,9 +136,6 @@ static THREADID video_proc_thread_id;
 
 /* 0 running, 1 should quit, -1 not running */
 static int main_proc_thread_flag = -1;
-#if 0
-static int video_proc_thread_flag = -1;
-#endif
 static iaxc_event_callback_t iaxc_event_callback = NULL;
 
 // Internal queue of events, waiting to be posted once the library
@@ -264,16 +266,6 @@ void iaxci_post_event(iaxc_event e)
 		int rv;
 
 		rv = iaxc_event_callback(e);
-#if 0
-		if ( e.type == IAXC_EVENT_VIDEO )
-		{
-			/* We can free the frame data once it is off the
-			 * event queue and has been processed by the client.
-			 */
-			free(e.ev.video.data);
-		}
-		else
-#endif 
 		if ( e.type == IAXC_EVENT_AUDIO )
 		{
 			free(e.ev.audio.data);
@@ -541,22 +533,6 @@ EXPORT void iaxc_set_preferred_source_udp_port(int port)
 	source_udp_port = port;
 }
 
-#if 0
-/* For "slow" systems. See iax.c code */
-EXPORT int iaxc_video_bypass_jitter(int mode)
-{
-	/* TODO:
-	 * 1. When switching from jitter to no-jitter the buffer must be
-	 *    flushed of queued video packet and must be sent a key-frame
-	 *    to redraw the screen (partially done).
-	 * 2. When switching from no-jitter to jitter we must drop all
-	 *    enqueued events prior the mode change (must be touched
-	 *    iax_sched_del and iax_get_event).
-	 */
-	return iax_video_bypass_jitter(calls[selected_call].session,mode);
-}
-#endif
-
 EXPORT int iaxc_get_bind_port()
 {
 	return iaxci_bound_port;
@@ -621,40 +597,24 @@ EXPORT int iaxc_initialize(int num_calls)
 		strncpy(calls[i].callerid_number, DEFAULT_CALLERID_NUMBER, IAXC_EVENT_BUFSIZ);
 	}
 
-#ifndef AUDIO_ALSA
-	if ( pa_initialize(&audio_driver, 8000) )
+#if defined(USE_OPENAL)
+	if (openal_initialize(&audio_driver, 8000))
+#elif defined(USE_PORTAUDIO)
+	if (pa_initialize(&audio_driver, 8000))
+#else
+	if (alsa_initialize(&audio_driver, 8000))
+#endif
 	{
 		iaxci_usermsg(IAXC_ERROR, "failed pa_initialize");
 		return -1;
 	}
-#else
-	/* TODO: It is unknown whether this stuff for direct access to
-	 * alsa should be left in iaxclient. We're leaving it in here for
-	 * the time being, but unless it becomes clear that someone cares
-	 * about having it, it will be removed. Also note that portaudio
-	 * is capable of using alsa. This is another reason why this
-	 * direct alsa access may be unneeded.
-	 */
-	if ( alsa_initialize(&audio_driver, 8000) )
-		return -1;
-#endif
 
 	audio_format_capability =
 		IAXC_FORMAT_ULAW |
 		IAXC_FORMAT_ALAW |
-#ifdef CODEC_GSM
 		IAXC_FORMAT_GSM |
-#endif
 		IAXC_FORMAT_SPEEX;
 	audio_format_preferred = IAXC_FORMAT_SPEEX;
-
-#if 0
-	if ( video_initialize() )
-	{
-		iaxci_usermsg(IAXC_ERROR,
-				"iaxc_initialize: cannot initialize video!\n");
-	}
-#endif
 
 	return 0;
 }
@@ -666,9 +626,6 @@ EXPORT void iaxc_shutdown()
 	get_iaxc_lock();
 
 	audio_driver.destroy(&audio_driver);
-#if 0
-	video_destroy();
-#endif
 	/* destroy enocders and decoders for all existing calls */
 	if ( calls ) 
 	{
@@ -679,12 +636,6 @@ EXPORT void iaxc_shutdown()
 				calls[i].encoder->destroy(calls[i].encoder);
 			if ( calls[i].decoder )
 				calls[i].decoder->destroy(calls[i].decoder);
-#if 0
-			if ( calls[i].vencoder )
-				calls[i].vdecoder->destroy(calls[i].vencoder);
-			if ( calls[i].vdecoder )
-				calls[i].vencoder->destroy(calls[i].vdecoder);
-#endif
                 }
 		free(calls);
 		calls = NULL;
@@ -796,64 +747,6 @@ static THREADFUNCDECL(main_proc_thread_func)
 	return ret;
 }
 
-#if 0
-#define VIDEO_STATS_INTERVAL 1000 // In ms
-static struct timeval video_stats_start;
-
-static void send_video_stats()
-{
-	iaxc_event e;
-	struct timeval now;
-	long time;
-
-	// make sure there is a call to do stats on
-	if (selected_call < 0)
-		return;
-
-	gettimeofday(&now, NULL);
-	time = iaxci_msecdiff(&now, &video_stats_start);
-	if ( time > VIDEO_STATS_INTERVAL )
-	{
-		video_get_stats(&calls[selected_call], &e.ev.videostats.stats, 1);
-/*		fprintf(stderr, "Video stats: sent_slices=%ld, acc_sent_size=%ld, outbound_frames=%ld, avg_outbound_fps=%f, avg_outbound_bps=%ld, "
-		                "received_slices=%ld, acc_recv_size=%ld, inbound_frames=%ld, dropped_frames=%ld, avg_inbound_fps=%f, avg_inbound_bps=%ld\n",
-		                stats.sent_slices, stats.acc_sent_size, stats.outbound_frames, stats.avg_outbound_fps, stats.avg_outbound_bps,
-				stats.received_slices, stats.acc_recv_size, stats.inbound_frames, stats.dropped_frames, stats.avg_inbound_fps, stats.avg_inbound_bps);*/
-		e.type = IAXC_EVENT_VIDEOSTATS;
-		e.ev.videostats.callNo = selected_call;
-		iaxci_post_event(e);
-
-		video_stats_start = now;
-	}
-}
-
-static THREADFUNCDECL(video_proc_thread_func)
-{
-	struct iaxc_call *call;
-
-	gettimeofday(&video_stats_start, NULL);
-
-	while ( !video_proc_thread_flag )
-	{
-		if (selected_call >= 0)
-			call = &calls[selected_call];
-		else
-			call = NULL;
-
-		video_send_video(call, selected_call);
-
-		send_video_stats();
-
-		// Tight spinloops are bad, mmmkay?
-		iaxc_millisleep(LOOP_SLEEP);
-	}
-
-	video_proc_thread_flag = -1;
-
-	return 0;
-}
-#endif
-
 EXPORT int iaxc_start_processing_thread()
 {
 	main_proc_thread_flag = 0;
@@ -861,14 +754,6 @@ EXPORT int iaxc_start_processing_thread()
 	if ( THREADCREATE(main_proc_thread_func, NULL, main_proc_thread,
 				main_proc_thread_id) == THREADCREATE_ERROR)
 		return -1;
-
-#if 0
-	video_proc_thread_flag = 0;
-
-	if ( THREADCREATE(video_proc_thread_func, NULL, video_proc_thread,
-				video_proc_thread_id) == THREADCREATE_ERROR)
-		return -1;
-#endif
 
 	return 0;
 }
@@ -880,13 +765,6 @@ EXPORT int iaxc_stop_processing_thread()
 		main_proc_thread_flag = 1;
 		THREADJOIN(main_proc_thread);
 	}
-#if 0
-	if ( video_proc_thread_flag >= 0 )
-	{
-		video_proc_thread_flag = 1;
-		THREADJOIN(video_proc_thread);
-	}
-#endif
 
 	return 0;
 }
@@ -1158,41 +1036,6 @@ static void handle_audio_event(struct iax_event *e, int callNo)
 	} while ( total_consumed < e->datalen );
 }
 
-#if 0
-static void handle_video_event(struct iax_event *e, int callNo)
-{
-	struct iaxc_call *call;
-
-	if ( callNo < 0 )
-		return;
-
-	if ( e->datalen == 0 )
-	{
-		iaxci_usermsg(IAXC_STATUS, "Received 0-size packet. Unable to decode.");
-		return;
-	}
-
-	call = &calls[callNo];
-
-	if ( callNo != selected_call )
-	{
-		/* drop video for unselected call? */
-		return;
-	}
-
-	if ( call->vformat )
-	{
-		if ( video_recv_video(call, selected_call, e->data,
-					e->datalen, e->ts, call->vformat) < 0 )
-		{
-			iaxci_usermsg(IAXC_STATUS,
-				"Bad or incomplete video packet. Unable to decode.");
-			return;
-		}
-	}
-}
-#endif
-
 static void iaxc_handle_network_event(struct iax_event *e, int callNo)
 {
 	if ( callNo < 0 )
@@ -1247,15 +1090,6 @@ static void iaxc_handle_network_event(struct iax_event *e, int callNo)
 				     callNo);
 		}
 		break;
-#if 0
-	case IAX_EVENT_VIDEO:
-		// Mihai: why do we need to lower priority here?
-		// TODO: investigate
-		//iaxci_prioboostend();
-		handle_video_event(e, callNo);
-		//iaxci_prioboostbegin();
-		break;
-#endif
 	case IAX_EVENT_TEXT:
 		handle_text_event(e, callNo);
 		break;
@@ -1349,18 +1183,6 @@ static void codec_destroy( int callNo )
 		calls[callNo].decoder->destroy( calls[callNo].decoder );
 		calls[callNo].decoder = NULL;
 	}
-#if 0
-	if ( calls[callNo].vdecoder )
-	{
-		calls[callNo].vdecoder->destroy(calls[callNo].vdecoder);
-		calls[callNo].vdecoder = NULL;
-	}
-	if ( calls[callNo].vencoder )
-	{
-		calls[callNo].vencoder->destroy(calls[callNo].vencoder);
-		calls[callNo].vencoder = NULL;
-	}
-#endif
 }
 
 EXPORT int iaxc_call(const char * num)
@@ -1425,18 +1247,8 @@ EXPORT int iaxc_call(const char * num)
 	iaxc_note_activity(callNo);
 	calls[callNo].last_ping = calls[callNo].last_activity;
 
-#if 0
-	iaxc_video_format_get_cap(&video_format_preferred, &video_format_capability);
-#endif
-
 	iaxci_usermsg(IAXC_NOTICE, "Originating an %s call",
 			video_format_preferred ? "audio+video" : "audio only");
-#if 0
-	iax_call(calls[callNo].session, calls[callNo].callerid_number,
-			calls[callNo].callerid_name, num, NULL, 0,
-			audio_format_preferred | video_format_preferred,
-			audio_format_capability | video_format_capability);
-#endif
 	iax_call(calls[callNo].session, calls[callNo].callerid_number,
 			 calls[callNo].callerid_name, num, NULL, 0,
 			 audio_format_preferred, audio_format_capability);
@@ -1609,17 +1421,6 @@ static int iaxc_choose_codec(int formats)
 		IAXC_FORMAT_LPC10,
 		IAXC_FORMAT_G729A,
 		IAXC_FORMAT_G723_1
-#if 0
-		/* To negotiate video codec */
-		IAXC_FORMAT_JPEG,
-		IAXC_FORMAT_PNG,
-		IAXC_FORMAT_H261,
-		IAXC_FORMAT_H263,
-		IAXC_FORMAT_H263_PLUS,
-		IAXC_FORMAT_MPEG4,
-		IAXC_FORMAT_H264,
-		IAXC_FORMAT_THEORA,
-#endif
 	};
 	for ( i = 0; i < (int)(sizeof(codecs) / sizeof(int)); i++ )
 		if ( codecs[i] & formats )
@@ -1676,53 +1477,6 @@ static void iaxc_handle_connect(struct iax_event * e)
 		return;
 	}
 
-#if 0
-	iaxc_video_format_get_cap(&video_format_preferred,
-			&video_format_capability);
-
-	/* first, try _their_ preferred format */
-	video_format = video_format_capability &
-		(e->ies.format & IAXC_VIDEO_FORMAT_MASK);
-
-	if ( !video_format )
-	{
-		/* then, try our preferred format */
-		video_format = video_format_preferred &
-			(e->ies.capability & IAXC_VIDEO_FORMAT_MASK);
-	}
-
-	if ( !video_format )
-	{
-		/* finally, see if we have one in common */
-		video_format = video_format_capability &
-			(e->ies.capability & IAXC_VIDEO_FORMAT_MASK);
-
-		/* now choose amongst these, if we got one */
-		if ( video_format )
-		{
-			video_format = iaxc_choose_codec(video_format);
-		}
-	}
-
-	if ( !video_format )
-	{
-		if ( format )
-		{
-			iaxci_usermsg(IAXC_NOTICE,
-					"Notice: could not negotiate common video codec");
-			iaxci_usermsg(IAXC_NOTICE,
-					"Notice: switching to audio-only call");
-		} else
-		{
-			iax_reject(e->session,
-					"Could not negotiate common audio and video codec");
-			return;
-		}
-	}
-
-	calls[callno].vformat = video_format;
-	calls[callno].format = format;
-#endif
 	calls[callno].vformat = 0; /* No video capabilities. */
 	calls[callno].format = format;
 
@@ -1900,13 +1654,11 @@ EXPORT int iaxc_mic_boost_set( int enable )
 }
 
 #ifdef LIBVER
-
 EXPORT char* iaxc_version(char * ver)
 {
 	strncpy(ver, LIBVER, IAXC_EVENT_BUFSIZ);
 	return ver;
 }
-
 #endif
 
 EXPORT unsigned int iaxc_get_audio_prefs(void)
@@ -1929,3 +1681,27 @@ EXPORT int iaxc_set_audio_prefs(unsigned int prefs)
 	audio_prefs = prefs;
 	return 0;
 }
+
+EXPORT int iaxc_push_audio(void *data, unsigned int size, unsigned int samples)
+{
+	struct iaxc_call *call;
+
+	if ( selected_call < 0 )
+		return -1;
+
+	call = &calls[selected_call];
+
+	if ( audio_prefs & IAXC_AUDIO_PREF_SEND_DISABLE )
+		return 0;
+
+	//fprintf(stderr, "iaxc_push_audio: sending audio size %d\n", size);
+
+	if ( iax_send_voice(call->session, call->format, data, size, samples) == -1 )
+	{
+		fprintf(stderr, "iaxc_push_audio: failed to send audio frame of size %d on call %d\n", size, selected_call);
+		return -1;
+	}
+
+	return 0;
+}
+

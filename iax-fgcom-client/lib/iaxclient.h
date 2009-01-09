@@ -475,6 +475,7 @@ EXPORT int listVidCapDevices(char *buff, int buffSize);
 /*
  * Video format settings
  */
+#if 0
 EXPORT void iaxc_video_format_get_cap(int *preferred, int *allowed);
 EXPORT void iaxc_video_format_set_cap(int preferred, int allowed);
 
@@ -501,6 +502,10 @@ EXPORT int iaxc_video_bypass_jitter(int);
 EXPORT int iaxc_is_camera_working();
 
 EXPORT void iaxc_YUV420_to_RGB32(int width, int height, char *src, char *dest);
+#endif
+
+EXPORT int iaxc_push_audio(void *data, unsigned int size, unsigned int samples);
+
 
 #ifdef __cplusplus
 }

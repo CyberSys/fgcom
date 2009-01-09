@@ -14,11 +14,10 @@
  * the GNU Lesser (Library) General Public License.
  */
 
+#include "config.h"
 #include "iaxclient_lib.h"
 #include "iax-client.h"
-/* #ifdef CODEC_GSM */
 #include "codec_gsm.h"
-/* #endif */
 #include "codec_ulaw.h"
 #include "codec_alaw.h"
 #include "codec_speex.h"
@@ -227,10 +226,8 @@ static struct iaxc_audio_codec *create_codec(int format)
 {
 	switch (format & IAXC_AUDIO_FORMAT_MASK)
 	{
-#ifdef CODEC_GSM
 	case IAXC_FORMAT_GSM:
 		return codec_audio_gsm_new();
-#endif
 	case IAXC_FORMAT_ULAW:
 		return codec_audio_ulaw_new();
 	case IAXC_FORMAT_ALAW:

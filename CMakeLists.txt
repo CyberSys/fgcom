@@ -21,6 +21,7 @@ SET(${PROJECT_NAME}_TITLE "iax-fgcom-client")
 SET(${PROJECT_NAME}_MAJOR_VERSION 0)
 SET(${PROJECT_NAME}_MINOR_VERSION 0)
 SET(${PROJECT_NAME}_PATCH_VERSION 1)
+SET(LIBVER "\"${IAX_FGCOM_CLIENT_MAJOR_VERSION}.${IAX_FGCOM_CLIENT_MINOR_VERSION}.${IAX_FGCOM_CLIENT_PATCH_VERSION}\"")
 #
 # Set IAX Fgcom subdirectory variable which contains all used libraries.
 #
@@ -57,6 +58,28 @@ MESSAGE(STATUS "Target system		: ${CMAKE_SYSTEM_PROCESSOR}")
 MESSAGE(STATUS "Build type			: ${CMAKE_BUILD_TYPE}")
 MESSAGE(STATUS)
 MESSAGE(STATUS "To change build, type 'cmake -DCMAKE_BUILD_TYPE=[debug|release] .'")
+#
+# By precedence, the audio library to use is one of the following:
+#
+# 1 - OpenAL
+# 2 - PortAudio
+# 3 - Alsa
+#
+MESSAGE(STATUS)
+IF(USE_ALSA)
+	MESSAGE(STATUS "Audio library to use		:    Alsa")
+ELSEIF(USE_PORTAUDIO)
+	MESSAGE(STATUS "Audio library to use		: PortAudio")
+ELSE(USE_ALSA)
+	MESSAGE(STATUS "Audio library to use		: OpenAL")
+	SET(USE_OPENAL 1)
+ENDIF(USE_ALSA)
+
+MESSAGE(STATUS "To change audio library, type: ")
+MESSAGE(STATUS "'cmake -DUSE_PORTAUDIO=1 .'")
+MESSAGE(STATUS "'cmake -DUSE_ALSA=1 .'")
+MESSAGE(STATUS "'cmake -DUSE_OPENAL=1 .'")
+MESSAGE(STATUS "Default is: OpenAL")
 #
 # Here, we set other sub-directories to compile.
 #

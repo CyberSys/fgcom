@@ -155,7 +155,7 @@ static gboolean fgcom_conference_command(gchar *command, ...)
 
 	va_start(argPtr,command);
 
-	if(g_strcmp0(command,"ADD")==0 || g_strcmp0(command,"UPDATE")==0)
+	if(g_ascii_strcasecmp(command,"ADD")==0 || g_ascii_strcasecmp(command,"UPDATE")==0)
 	{
 		gchar *callsign=va_arg(argPtr,gchar *);
 		gdouble lon=va_arg(argPtr,gdouble);
@@ -164,7 +164,7 @@ static gboolean fgcom_conference_command(gchar *command, ...)
 
 		g_snprintf(text,sizeof(text)-1,"FGCOM:%s:%s:%f:%f:%d:%s",command,callsign,lon,lat,alt,config.modelname);
 	}
-	else if(g_strcmp0(command,"DEL")==0)
+	else if(g_ascii_strcasecmp(command,"DEL")==0)
 	{
 		gchar *callsign=va_arg(argPtr,gchar *);
 

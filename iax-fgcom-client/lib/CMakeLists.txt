@@ -16,7 +16,12 @@ SET(IAXCLIENT_NAME "iaxclient")
 #
 # Check for the presence of PortAudio on that system.
 #
+IF(USE_ALSA)
+ELSEIF(USE_PORTAUDIO)
 FIND_PACKAGE(PORTAUDIO REQUIRED)
+ELSE(USE_ALSA)
+FIND_PACKAGE(OPENAL REQUIRED)
+ENDIF(USE_ALSA)
 #
 # We indicate here that we want to use library IAX.
 #
@@ -39,7 +44,16 @@ ${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/libiax2 ${PROJECT_SOURCE_DIR}/${IAX_CLIE
 #
 # Set the include pathes.
 #
-INCLUDE_DIRECTORIES(${EXTERNAL_INCLUDES})
+INCLUDE_DIRECTORIES(${EXTERNAL_INCLUDES} ${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/lib)
+IF(USE_ALSA)
+  SET(AUDIO_LIB_SRC audio_alsa.c)
+ELSEIF(USE_PORTAUDIO)
+  SET(AUDIO_LIB_SRC audio_portaudio.c)
+  INCLUDE_DIRECTORIES(${PORTAUDIO_INCLUDE_DIR})
+ELSE(USE_ALSA)
+  SET(AUDIO_LIB_SRC audio_openal.c)
+  INCLUDE_DIRECTORIES(${OPENAL_INCLUDE_DIR})
+ENDIF(USE_ALSA)
 #
 # Defines a variable which contains all header files.
 #
@@ -51,8 +65,7 @@ LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/${IAX_CLIENT_DIR}/gsm/src ${PROJECT_SOURC
 # Defines a variable that contains all the source files, including header
 # files.
 #
-## SET(IAX_FGCOM_SRC ${IAX_FGCOM_HEADER_FILES} audio_alsa.c audio_portaudio.c iaxclient_lib.c unixfuncs.c winfuncs.c audio_encode.c codec_alaw.c codec_gsm.c codec_speex.c codec_ulaw.c ringbuffer.c)
-SET(IAX_FGCOM_SRC ${IAX_FGCOM_HEADER_FILES} audio_alsa.c audio_portaudio.c iaxclient_lib.c unixfuncs.c audio_encode.c codec_alaw.c codec_gsm.c codec_speex.c codec_ulaw.c ringbuffer.c)
+SET(IAX_FGCOM_SRC ${IAX_FGCOM_HEADER_FILES} ${AUDIO_LIB_SRC} iaxclient_lib.c unixfuncs.c audio_encode.c codec_alaw.c codec_gsm.c codec_speex.c codec_ulaw.c ringbuffer.c)
 #
 # Here, we set the target we want to build, that is we want to build the
 # 'libiax-fgcom-client.a' static library and the 'libiax-fgcom-client.so'
