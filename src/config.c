@@ -47,6 +47,7 @@ static GOptionEntry main_entries[] =
   { "audio-in", 0x0, 0, G_OPTION_ARG_STRING, &config.audio_in, "audio device for input", NULL },
   { "audio-out", 0x0, 0, G_OPTION_ARG_STRING, &config.audio_out, "audio device for output", NULL },
   { "list-audio", 0x0, G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, (GOptionArgFunc)config_show_audio_devices, "show audio devices", NULL },
+  { "play", 0x0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_STRING, &config.play_file, "play audio file instead of using mic", NULL },
   { NULL }
 };
 

@@ -59,6 +59,7 @@ struct fgcom_config
 	gboolean connected;
 	gint mode;
 	gboolean reg;
+	gchar *play_file;
 } config;
 
 /* public prototypes */

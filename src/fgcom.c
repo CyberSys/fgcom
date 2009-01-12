@@ -38,6 +38,9 @@ int main(int argc, char *argv[])
 		fgcom_exit("Program stop due to option errors.",100);
 	}
 
+	if(config.verbose==TRUE)
+		printf("fgcom starting up...\n");
+
         /* catch signals */
         signal (SIGINT, fgcom_quit);
         signal (SIGQUIT, fgcom_quit);
@@ -49,17 +52,26 @@ int main(int argc, char *argv[])
 	config.initialized=TRUE;
 	iaxc_set_formats(config.codec,IAXC_FORMAT_ULAW|IAXC_FORMAT_ALAW|IAXC_FORMAT_GSM|IAXC_FORMAT_SPEEX);
 	iaxc_set_event_callback(fgcom_iaxc_callback);
-	iaxc_start_processing_thread();
+
+	if(config.verbose==TRUE)
+		printf("iaxclient initialized\n");
+
+	iaxc_millisleep(100);
 
 	/* Registering ? */
 	if(config.reg==TRUE)
 	{
+		if(config.verbose==TRUE)
+			printf("Trying registration at %s\n",config.iax_server);
+
 		if(config.username!=NULL && config.password!=NULL)
 		{
 			/* Register client */
 			if((config.reg_id=iaxc_register((char *)config.username,(char *)config.password,(char *)config.iax_server))>0)
 			{
-				printf("Registered as %s at %s with id: %d\n",config.username,config.iax_server,config.reg_id);
+				if(config.verbose==TRUE)
+					printf("Registered as %s at %s with id: %d\n",config.username,config.iax_server,config.reg_id);
+
 				iaxc_set_callerid((char *)config.username,"0");
 			}
 			else
@@ -73,10 +85,19 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
+		if(config.verbose==TRUE)
+			printf("Setting callerid to: %s/%s\n",DEFAULT_FRQ,DEFAULT_USER);
 		iaxc_set_callerid((char *)DEFAULT_USER,(char *)DEFAULT_FRQ);
 	}
 
-	if(config.mode<2)
+	/* Start the IAX client */
+	iaxc_start_processing_thread();
+
+	if(config.mode<0)
+	{
+		fgcom_exit("Cannot detect mode, so I will stop. Normaly this should not happen and this is\nan error due to incompet4ence of my coder ;-)\n",876);
+	}
+	else if(config.mode<2)
 	{
 		/* mode FlightGear and mode InterCom */
 		printf("TODO\n");
@@ -251,38 +272,15 @@ static gboolean fgcom_send_audio(gchar *filename)
 
 	while(1)
         {
-		struct timeval now = fgcom_get_now();
-
+		GTimeVal now;
 		ogg_packet *op;
 
+		g_get_current_time(&now);
 		op=get_next_audio_op(now);
 		if(op!=NULL&&op->bytes>0)
 		{
 			iaxc_push_audio(op->packet, op->bytes,SPEEX_SAMPLING_RATE*SPEEX_FRAME_DURATION/1000);
+		}
 	}
-}
-
-static struct timeval *fgcom_get_now(void)
-{
-        struct timeval tv;
-#ifdef WIN32
-        FILETIME ft;
-        LARGE_INTEGER li;
-        __int64 t;
-        static int tzflag;
-        const __int64 EPOCHFILETIME = 116444736000000000i64;
-
-        GetSystemTimeAsFileTime(&ft);
-        li.LowPart  = ft.dwLowDateTime;
-        li.HighPart = ft.dwHighDateTime;
-        t  = li.QuadPart;       /* In 100-nanosecond intervals */
-        t -= EPOCHFILETIME;     /* Offset to the Epoch time */
-        t /= 10;                /* In microseconds */
-        tv.tv_sec  = (long)(t / 1000000);
-        tv.tv_usec = (long)(t % 1000000);
-#else
-        gettimeofday(&tv, 0);
-#endif
-        return(tv);
 }
 
