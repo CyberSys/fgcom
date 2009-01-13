@@ -29,6 +29,7 @@
 #define DEFAULT_MIC_LEVEL 0.5
 #define DEFAULT_SPEAKER_LEVEL 0.5
 
+enum { MODE_PLAY=0, MODE_FG, MODE_ATC };
 
 /* public prototypes */
 void fgcom_exit(gchar *text, gint exitcode);

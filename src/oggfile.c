@@ -121,9 +121,6 @@ read_speex_cb(OGGZ *oggz, ogg_packet *op, long serialno, void *data)
 static int
 read_cb(OGGZ *oggz, ogg_packet *op, long serialno, void *data)
 {
-	struct theora_headers *th;
-
-	const char theoraId[] = "\x80theora";
 	const char speexId[] = "Speex   ";
 
 	if ( memcmp(op->packet, speexId, strlen(speexId)) == 0 )
@@ -176,6 +173,8 @@ load_ogg_file(const char *filename)
 	oggz_run(oggz);
 
 	oggz_close(oggz);
+
+	g_printf("%s loaded\n", filename);
 
 	return 0;
 }

@@ -38,16 +38,16 @@ static GOptionEntry main_entries[] =
   { "fg-port", 'p', 0, G_OPTION_ARG_INT, &config.fg_port, "set the port number for connection to FlightGear (default 16661)", NULL },
   { "intercom-id", 'i', 0, G_OPTION_ARG_INT, &config.fg_intercom_id, "set the id for the intercom conference", NULL },
   { "intercom-port", 'I', 0, G_OPTION_ARG_INT, &config.fg_intercom_port, "set the port number for the connection to FlightGear intercom", NULL },
-  { "atc-frq", 'a', 0, G_OPTION_ARG_DOUBLE, &config.atc_frequency, "set the frequency for standalone (ATC) mode" , NULL },
-  { "atc-lon", 'O', 0, G_OPTION_ARG_CALLBACK, (GOptionArgFunc)config_cb_atc_lon, "set longtitude for standalone (ATC) mode", NULL },
-  { "atc-lat", 'A', 0, G_OPTION_ARG_CALLBACK, (GOptionArgFunc)config_cb_atc_lat, "set latitude for standalone (ATC) mode", NULL },
+  { "frq", 'a', 0, G_OPTION_ARG_DOUBLE, &config.frequency, "set the frequency for standalone (ATC) mode" , NULL },
+  { "lon", 'O', 0, G_OPTION_ARG_CALLBACK, (GOptionArgFunc)config_cb_lon, "set longtitude for standalone (ATC) mode", NULL },
+  { "lat", 'A', 0, G_OPTION_ARG_CALLBACK, (GOptionArgFunc)config_cb_lat, "set latitude for standalone (ATC) mode", NULL },
   { "mic-boost", 'm', 0, G_OPTION_ARG_NONE, &config.mic_boost, "enable mic boost", NULL },
   { "mic-level", 'L', 0, G_OPTION_ARG_CALLBACK, (GOptionArgFunc)config_cb_mic_level, "set mic level (0.0-1.0)", NULL },
   { "speaker-level", 'l', 0, G_OPTION_ARG_CALLBACK, (GOptionArgFunc)config_cb_speaker_level, "set speaker level (0.0-1.0)", NULL },
   { "audio-in", 0x0, 0, G_OPTION_ARG_STRING, &config.audio_in, "audio device for input", NULL },
   { "audio-out", 0x0, 0, G_OPTION_ARG_STRING, &config.audio_out, "audio device for output", NULL },
   { "list-audio", 0x0, G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, (GOptionArgFunc)config_show_audio_devices, "show audio devices", NULL },
-  { "play", 0x0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_STRING, &config.play_file, "play audio file instead of using mic", NULL },
+  { "play", 0x0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_CALLBACK, (GOptionArgFunc)config_play, "play audio file instead of using mic", NULL },
   { NULL }
 };
 
@@ -74,9 +74,9 @@ gboolean config_parse_cmd_options(char *filename, int argc, char *argv[])
 	config.fg_port=0;
 	config.fg_intercom_id=0;
 	config.fg_intercom_port=0;
-	config.atc_frequency=0.0;
-	config.atc_lon=-9999.99;
-	config.atc_lat=-9999.99;
+	config.frequency=0.0;
+	config.lon=-9999.99;
+	config.lat=-9999.99;
 	config.mic_boost=FALSE;
 	config.mic_level=DEFAULT_MIC_LEVEL;
 	config.speaker_level=DEFAULT_SPEAKER_LEVEL;
@@ -87,6 +87,7 @@ gboolean config_parse_cmd_options(char *filename, int argc, char *argv[])
 	config.connected=FALSE;
 	config.mode=-1;
 	config.reg=FALSE;
+	config.play_file=NULL;
 
 	/* create the cmd line options */
 	context = g_option_context_new("- real radio simulation based on VoIP");
@@ -113,14 +114,13 @@ static gboolean config_cb_callsign(gchar *option_name,gchar *value,gpointer data
 	return(TRUE);
 }
 
-static gboolean config_cb_atc_lon(gchar *option_name,gchar *value,gpointer data,GError **error)
+static gboolean config_cb_lon(gchar *option_name,gchar *value,gpointer data,GError **error)
 {
 	GError *tmp_error=NULL;
 
-	config.mode=2;	// ATC-mode
-	config.atc_lon=g_ascii_strtod(value,NULL);
+	config.lon=g_ascii_strtod(value,NULL);
 
-	if(config.atc_lon<-180.0 || config.atc_lon>180.0)
+	if(config.lon<-180.0 || config.lon>180.0)
 	{
 		tmp_error=g_error_new(G_OPTION_ERROR,G_OPTION_ERROR_BAD_VALUE,"%s must be between -180.0 and 180.0 degree\n",option_name);
 		g_propagate_error(error,tmp_error);
@@ -130,14 +130,13 @@ static gboolean config_cb_atc_lon(gchar *option_name,gchar *value,gpointer data,
 	return(TRUE);
 }
 
-static gboolean config_cb_atc_lat(gchar *option_name,gchar *value,gpointer data,GError **error)
+static gboolean config_cb_lat(gchar *option_name,gchar *value,gpointer data,GError **error)
 {
 	GError *tmp_error=NULL;
 
-	config.mode=2;	/* ATC-mode */
-	config.atc_lat=g_ascii_strtod(value,NULL);
+	config.lat=g_ascii_strtod(value,NULL);
 
-	if(config.atc_lat<-90.0 || config.atc_lat>90.0)
+	if(config.lat<-90.0 || config.lat>90.0)
 	{
 		tmp_error=g_error_new(G_OPTION_ERROR,G_OPTION_ERROR_BAD_VALUE,"%s must be between -180.0 and 180.0 degree\n",option_name);
 		g_propagate_error(error,tmp_error);
@@ -209,6 +208,16 @@ static gboolean config_cb_speaker_level(gchar *option_name,gchar *value,gpointer
 		config.speaker_level=0.0;
 	else if(config.speaker_level>1.0)
 		config.speaker_level=1.0;
+
+	return(TRUE);
+}
+
+static gboolean config_play(gchar *option_name,gchar *value,gpointer data,GError **error)
+{
+	GError *tmp_error=NULL;
+
+	config.mode=0; /* play file mode */
+	config.play_file=strdup(value);
 
 	return(TRUE);
 }

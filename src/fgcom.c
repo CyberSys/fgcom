@@ -93,39 +93,95 @@ int main(int argc, char *argv[])
 	/* Start the IAX client */
 	iaxc_start_processing_thread();
 
-	if(config.mode<0)
+	/* set audio levels */
+	if(config.mic_level>0.0)
+		iaxc_input_level_set(config.mic_level);
+	if(config.mic_level>0.0)
+		iaxc_output_level_set(config.speaker_level);
+	if(config.mic_boost==TRUE)
+		iaxc_mic_boost_set(1);
+	else
+		iaxc_mic_boost_set(0);
+
+	/* mode decission */
+	config.mode=MODE_FG;
+	if(config.frequency>0.0 || config.lon>0.0 || config.lat>0.0)
 	{
-		fgcom_exit("Cannot detect mode, so I will stop. Normaly this should not happen and this is\nan error due to incompet4ence of my coder ;-)\n",876);
+		config.mode=MODE_ATC;
+
+		if(config.play_file!=NULL)
+			config.mode=MODE_PLAY;
 	}
-	else if(config.mode<2)
+
+	switch(config.mode)
 	{
-		/* mode FlightGear and mode InterCom */
-		printf("TODO\n");
-	}
-	else 
-	{
-		/* mode ATC */
-		config.modelname=g_strdup("ATC");
+		case MODE_PLAY:
+			/* mode play file */
+			if(config.verbose==TRUE)
+				printf("Mode: Play\n");
 
-		/* consistency checks */
-		if(strlen(config.callsign)<0)
-			fgcom_exit("Callsign must be set for mode ATC\n",110);
-		if(config.atc_lat<-180.0)
-			fgcom_exit("ATC latitude must be set for mode ATC\n",110);
-		if(config.atc_lon<-180.0)
-			fgcom_exit("ATC longtitude must be set for mode ATC\n",110);
-		if(config.atc_frequency<=0.0)
-			fgcom_exit("ATC frequency must be set for mode ATC\n",110);
+			config.modelname=g_strdup("LIGHTHOUSE");
 
-		config.connected=fgcom_dial(config.atc_frequency);
+			/* change audio settings */ /* is this needed??? */
+			/* iaxc_mic_boost_set(0);
+			iaxc_input_level_set(0.0); */
 
-		fgcom_conference_command("ADD",config.callsign,config.atc_lon,config.atc_lat,100);
+			/* consistency checks */
+			if(config.callsign==NULL)
+				fgcom_exit("callsign must be set for mode Play\n",110);
+			if(config.lat<-180.0)
+				fgcom_exit("latitude must be set for mode Play\n",110);
+			if(config.lon<-180.0)
+				fgcom_exit("longtitude must be set for mode Play\n",110);
+			if(config.frequency<=0.0)
+				fgcom_exit("frequency must be set for mode Play\n",110);
+			config.connected=fgcom_dial(config.frequency);
 
-		while(1)
-		{
-			sleep(5);
-			fgcom_conference_command("UPDATE",config.callsign,config.atc_lon,config.atc_lat,100);
-		}
+			fgcom_conference_command("ADD",config.callsign,config.lon,config.lat,100);
+
+			while(1)
+			{
+				fgcom_send_audio((char *)config.play_file);
+				fgcom_conference_command("UPDATE",config.callsign,config.lon,config.lat,100);
+			}
+
+			break;
+		case MODE_FG:
+			/* mode FlightGear and mode InterCom */
+			if(config.verbose==TRUE)
+				printf("Mode: FlightGear\n");
+			break;
+		case MODE_ATC:
+			/* mode ATC */
+			if(config.verbose==TRUE)
+				printf("Mode: ATC\n");
+
+			config.modelname=g_strdup("ATC");
+
+			/* consistency checks */
+			if(config.callsign==NULL)
+				fgcom_exit("callsign must be set for mode ATC\n",110);
+			if(config.lat<-180.0)
+				fgcom_exit("latitude must be set for mode ATC\n",110);
+			if(config.lon<-180.0)
+				fgcom_exit("longtitude must be set for mode ATC\n",110);
+			if(config.frequency<=0.0)
+				fgcom_exit("frequency must be set for mode ATC\n",110);
+
+			config.connected=fgcom_dial(config.frequency);
+
+			fgcom_conference_command("ADD",config.callsign,config.lon,config.lat,100);
+
+			while(1)
+			{
+				sleep(5);
+				fgcom_conference_command("UPDATE",config.callsign,config.lon,config.lat,100);
+			}
+			break;
+		default:
+			fgcom_exit("Cannot detect mode! Please check your commandline options or configuration file and read the manual.\n",876);
+			break;
+
 	}
 }
 
@@ -253,6 +309,7 @@ static void fgcom_quit (gint exitcode)
 	{
 		if(config.verbose==TRUE)
 			g_printf("Shutdown VoIP client\n");
+		iaxc_stop_processing_thread();
 		iaxc_shutdown ();
 	}
 	exit((int)exitcode);

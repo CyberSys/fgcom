@@ -42,9 +42,9 @@ struct fgcom_config
 	gint fg_intercom_port;
 
 	/* group ATC data */
-	gdouble atc_frequency;
-	gdouble atc_lon;
-	gdouble atc_lat;
+	gdouble frequency;
+	gdouble lon;
+	gdouble lat;
 
 	/* group audio parameters */
 	gboolean mic_boost;
@@ -67,13 +67,14 @@ gboolean config_parse_cmd_options(char *filename, int argc, char *argv[]);
 
 /* private prototypes */
 static gboolean config_cb_callsign(gchar *option_name,gchar *value,gpointer data,GError **error);
-static gboolean config_cb_atc_lon(gchar *option_name,gchar *value,gpointer data,GError **error);
-static gboolean config_cb_atc_lat(gchar *option_name,gchar *value,gpointer data,GError **error);
+static gboolean config_cb_lon(gchar *option_name,gchar *value,gpointer data,GError **error);
+static gboolean config_cb_lat(gchar *option_name,gchar *value,gpointer data,GError **error);
 static gboolean config_cb_codec(gchar *option_name,gchar *value,gpointer data,GError **error);
 static gboolean config_cb_username(gchar *option_name,gchar *value,gpointer data,GError **error);
 static gboolean config_cb_password(gchar *option_name,gchar *value,gpointer data,GError **error);
 static gboolean config_cb_mic_level(gchar *option_name,gchar *value,gpointer data,GError **error);
 static gboolean config_cb_speaker_level(gchar *option_name,gchar *value,gpointer data,GError **error);
+static gboolean config_play(gchar *option_name,gchar *value,gpointer data,GError **error);
 static void config_show_version(void);
 static void config_show_audio_devices(void);
 static void config_report_devices(int io);
