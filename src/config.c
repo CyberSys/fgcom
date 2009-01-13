@@ -88,6 +88,7 @@ gboolean config_parse_cmd_options(char *filename, int argc, char *argv[])
 	config.mode=-1;
 	config.reg=FALSE;
 	config.play_file=NULL;
+	config.update_session_thread=NULL;
 
 	/* create the cmd line options */
 	context = g_option_context_new("- real radio simulation based on VoIP");

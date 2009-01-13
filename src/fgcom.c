@@ -135,14 +135,28 @@ int main(int argc, char *argv[])
 				fgcom_exit("longtitude must be set for mode Play\n",110);
 			if(config.frequency<=0.0)
 				fgcom_exit("frequency must be set for mode Play\n",110);
+
+			/* g_thread check */
+			/* if(!g_thread_supported())
+				g_printf("Warning! Your OS does not support g_threads - maybe you will get problems with\n the play mode.\n");
+			else
+			{
+				if((config.update_session_thread=g_thread_create(fgcom_update_session,"1",FALSE,NULL))==FALSE)
+					fgcom_exit("Cannot create g_thread for session updates!",758);
+				/* else
+					g_thread_init(config.update_session_thread); */
+			} */
+
+			/* dial and conect */
 			config.connected=fgcom_dial(config.frequency);
 
+			/* tell our position */
 			fgcom_conference_command("ADD",config.callsign,config.lon,config.lat,100);
 
+			/* play the sound endless */
 			while(1)
 			{
 				fgcom_send_audio((char *)config.play_file);
-				fgcom_conference_command("UPDATE",config.callsign,config.lon,config.lat,100);
 			}
 
 			break;
@@ -295,9 +309,7 @@ static void fgcom_quit (gint exitcode)
 	gchar text[256];
 
 	if(config.connected==TRUE)
-	{
 		fgcom_conference_command("DEL",config.callsign);
-	}
 	if(config.reg_id>0)
 	{
 		if(config.verbose==TRUE)
@@ -341,3 +353,8 @@ static gboolean fgcom_send_audio(gchar *filename)
 	}
 }
 
+static void fgcom_update_session(void)
+{
+	sleep(5);
+	fgcom_conference_command("UPDATE",config.callsign,config.lon,config.lat,100);
+}

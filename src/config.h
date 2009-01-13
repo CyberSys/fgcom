@@ -60,6 +60,7 @@ struct fgcom_config
 	gint mode;
 	gboolean reg;
 	gchar *play_file;
+	GThread *update_session_thread;
 } config;
 
 /* public prototypes */
