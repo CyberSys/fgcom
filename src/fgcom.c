@@ -139,7 +139,7 @@ int main(int argc, char *argv[])
 				fgcom_exit("frequency must be set for mode Play\n",110);
 
 			/* start the position update */
-			alarm(5);
+			alarm(DEFAULT_POSTTION_UPDATE_FREQUENCY);
 
 			/* dial and conect */
 			config.connected=fgcom_dial(config.frequency);
@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
 				printf("Mode: FlightGear\n");
 
 			/* start the position update */
-			alarm(5);
+			alarm(DEFAULT_POSTTION_UPDATE_FREQUENCY);
 
 			break;
 		case MODE_ATC:
@@ -185,7 +185,7 @@ int main(int argc, char *argv[])
 			fgcom_conference_command("ADD",config.callsign,config.lon,config.lat,100);
 
 			/* start the position update */
-			alarm(5);
+			alarm(DEFAULT_POSTTION_UPDATE_FREQUENCY);
 
 			while(1)
 			{
@@ -226,10 +226,10 @@ static gboolean fgcom_dial(gdouble frequency)
 
 	if(config.username!=NULL && config.password!=NULL)
 	{
-		g_snprintf(dest,sizeof(dest)-1,"%s:%s@%s/%02d%-6d",config.username,config.password,config.iax_server,DEFAULT_PRESELECTION,(int)frequency*1000);
+		g_snprintf(dest,sizeof(dest)-1,"%s:%s@%s/%02d%-6d",config.username,config.password,config.iax_server,DEFAULT_PRESELECTION,(int)(frequency*1000));
 	}
 	else
-		g_snprintf(dest,sizeof(dest)-1,"%s/%02d%-6d",config.iax_server,DEFAULT_PRESELECTION,(int)frequency*1000);
+		g_snprintf(dest,sizeof(dest)-1,"%s/%02d%-6d",config.iax_server,DEFAULT_PRESELECTION,(int)(frequency*1000));
 
 	if(config.verbose==TRUE)
 		g_printf("Dialing [%s]",dest);
@@ -356,5 +356,5 @@ static gboolean fgcom_send_audio(gchar *filename)
 static void fgcom_update_session(gint exitcode)
 {
 	fgcom_conference_command("UPDATE",config.callsign,config.lon,config.lat,100);
-	alarm(5);
+	alarm(DEFAULT_POSTTION_UPDATE_FREQUENCY);
 }

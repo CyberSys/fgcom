@@ -28,6 +28,7 @@
 #define DEFAULT_VOIP_SERVER "fgcom1.parasitstudio.de\0"
 #define DEFAULT_MIC_LEVEL 0.5
 #define DEFAULT_SPEAKER_LEVEL 0.5
+#define DEFAULT_POSTTION_UPDATE_FREQUENCY 7
 
 enum { MODE_PLAY=0, MODE_FG, MODE_ATC };
 
