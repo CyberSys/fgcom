@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
         signal (SIGINT, fgcom_quit);
         signal (SIGQUIT, fgcom_quit);
         signal (SIGTERM, fgcom_quit);
+        signal (SIGALRM, fgcom_update_session);
 
 	/* setup iaxclient */
 	if(iaxc_initialize(DEFAULT_MAX_CALLS))
@@ -113,6 +114,7 @@ int main(int argc, char *argv[])
 			config.mode=MODE_PLAY;
 	}
 
+	/* Handle modes */
 	switch(config.mode)
 	{
 		case MODE_PLAY:
@@ -136,16 +138,8 @@ int main(int argc, char *argv[])
 			if(config.frequency<=0.0)
 				fgcom_exit("frequency must be set for mode Play\n",110);
 
-			/* g_thread check */
-			/* if(!g_thread_supported())
-				g_printf("Warning! Your OS does not support g_threads - maybe you will get problems with\n the play mode.\n");
-			else
-			{
-				if((config.update_session_thread=g_thread_create(fgcom_update_session,"1",FALSE,NULL))==FALSE)
-					fgcom_exit("Cannot create g_thread for session updates!",758);
-				/* else
-					g_thread_init(config.update_session_thread); */
-			} */
+			/* start the position update */
+			alarm(5);
 
 			/* dial and conect */
 			config.connected=fgcom_dial(config.frequency);
@@ -164,6 +158,10 @@ int main(int argc, char *argv[])
 			/* mode FlightGear and mode InterCom */
 			if(config.verbose==TRUE)
 				printf("Mode: FlightGear\n");
+
+			/* start the position update */
+			alarm(5);
+
 			break;
 		case MODE_ATC:
 			/* mode ATC */
@@ -186,10 +184,12 @@ int main(int argc, char *argv[])
 
 			fgcom_conference_command("ADD",config.callsign,config.lon,config.lat,100);
 
+			/* start the position update */
+			alarm(5);
+
 			while(1)
 			{
-				sleep(5);
-				fgcom_conference_command("UPDATE",config.callsign,config.lon,config.lat,100);
+				sleep(10000);
 			}
 			break;
 		default:
@@ -353,8 +353,8 @@ static gboolean fgcom_send_audio(gchar *filename)
 	}
 }
 
-static void fgcom_update_session(void)
+static void fgcom_update_session(gint exitcode)
 {
-	sleep(5);
 	fgcom_conference_command("UPDATE",config.callsign,config.lon,config.lat,100);
+	alarm(5);
 }
