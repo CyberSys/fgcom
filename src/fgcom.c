@@ -346,7 +346,7 @@ static gboolean fgcom_send_audio(gchar *filename)
 
 		g_get_current_time(&now);
 		op=get_next_audio_op(now);
-		if(op!=NULL&&op->bytes>0)
+		if(op!=NULL && op->bytes>0)
 		{
 			iaxc_push_audio(op->packet, op->bytes,SPEEX_SAMPLING_RATE*SPEEX_FRAME_DURATION/1000);
 		}

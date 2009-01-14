@@ -64,9 +64,8 @@ void event_register(int id, int reply, int count)
       break;
     case IAXC_REGISTRATION_REPLY_REJ:
       reason = "denied";
-        {
-             fgcom_exit("Registering denied",201);
-        }
+      /* fgcom_exit("Registering denied",201);*/
+      printf("Registering denied!\n");
       break;
     case IAXC_REGISTRATION_REPLY_TIMEOUT:
       reason = "timeout";
