@@ -553,7 +553,7 @@ EXPORT int iaxc_initialize(int num_calls)
 	iaxc_set_audio_prefs(0);
 
 	if ( iaxc_recvfrom != (iaxc_recvfrom_t)recvfrom )
-		iax_set_networking(iaxc_sendto, iaxc_recvfrom);
+		iax_set_networking((iax_sendto_t)iaxc_sendto, (iax_recvfrom_t)iaxc_recvfrom);
 
 	/* Note that iax_init() only sets up the receive port when the
 	 * sendto/recvfrom functions have not been replaced. We need

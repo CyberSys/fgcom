@@ -25,10 +25,29 @@
 #include <glib.h>
 #include <ogg/ogg.h>
 
+struct op_node
+{
+        ogg_packet     *op;
+        long           serialno;
+        long           timestamp;
+        struct op_node *next;
+};
+
+struct ogg_stream
+{
+        struct op_node *first;
+        struct op_node *last;
+        struct op_node *current;
+        long           serialno;
+        long           page_ts;
+        long           page_count;
+        long           base_ts;
+        void           *data;
+};
+
 static const int SPEEX_FRAME_DURATION = 20;
 static const int SPEEX_SAMPLING_RATE = 8000;
 
-int load_ogg_file(const char *filename);
-ogg_packet *get_next_audio_op(GTimeVal now);
-int audio_is_eos();
+int oggfile_load_ogg_file(const char *filename);
+ogg_packet *oggfile_get_next_audio_op(GTimeVal now);
 #endif

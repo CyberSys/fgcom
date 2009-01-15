@@ -40,6 +40,6 @@ static int fgcom_iaxc_callback(iaxc_event e);
 static void fgcom_quit (gint exitcode);
 static gboolean fgcom_dial(gdouble frequency);
 static gboolean fgcom_conference_command(gchar *command, ...);
-static gboolean fgcom_send_audio(gchar *filename);
+static void fgcom_send_audio(void);
 static void fgcom_update_session(gint exitcode);
 #endif

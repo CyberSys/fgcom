@@ -27,32 +27,6 @@
 
 #include "oggfile.h"
 
-#ifdef __GNUC__
-void g_printf(const char * fmt, ...) __attribute__ ((format (printf, 1, 2)));
-#else
-void g_printf(const char * fmt, ...);
-#endif
-
-struct op_node
-{
-	ogg_packet     *op;
-	long           serialno;
-	long           timestamp;
-	struct op_node *next;
-};
-
-struct ogg_stream
-{
-	struct op_node *first;
-	struct op_node *last;
-	struct op_node *current;
-	long           serialno;
-	long           page_ts;
-	long           page_count;
-	long           base_ts;
-	void           *data;
-};
-
 static struct ogg_stream *audio_stream;
 
 static struct op_node *
@@ -151,8 +125,7 @@ read_page_cb(OGGZ *oggz, const ogg_page *og, long serialno, void *data)
 	return 0;
 }
 
-int
-load_ogg_file(const char *filename)
+int oggfile_load_ogg_file(const char *filename)
 {
 	OGGZ *oggz;
 
@@ -208,13 +181,7 @@ static ogg_packet * get_next_op(struct ogg_stream *os, GTimeVal tv)
 	return op;
 }
 
-ogg_packet * get_next_audio_op(GTimeVal now)
+ogg_packet * oggfile_get_next_audio_op(GTimeVal now)
 {
 	return get_next_op(audio_stream, now);
 }
-
-int audio_is_eos()
-{
-	return audio_stream->current == NULL;
-}
-

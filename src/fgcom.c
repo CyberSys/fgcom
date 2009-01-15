@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
         /* catch signals */
         signal (SIGINT, fgcom_quit);
         signal (SIGQUIT, fgcom_quit);
-        signal (SIGTERM, fgcom_quit);
+        signal (SIGHUP, fgcom_quit);
         signal (SIGALRM, fgcom_update_session);
 
 	/* setup iaxclient */
@@ -147,10 +147,22 @@ int main(int argc, char *argv[])
 			/* tell our position */
 			fgcom_conference_command("ADD",config.callsign,config.lon,config.lat,100);
 
+			if(config.play_file!=NULL)
+			{
+				if(oggfile_load_ogg_file(config.play_file))
+				{
+					fgcom_exit("Failed loading ogg file.\n",333);
+                		}
+			}
+			else
+			{
+					fgcom_exit("No audio filename.\n",334);
+			}
+
 			/* play the sound endless */
 			while(1)
 			{
-				fgcom_send_audio((char *)config.play_file);
+				fgcom_send_audio();
 			}
 
 			break;
@@ -327,25 +339,15 @@ static void fgcom_quit (gint exitcode)
 	exit((int)exitcode);
 }
 
-static gboolean fgcom_send_audio(gchar *filename)
+static void fgcom_send_audio(void)
 {
-	if(filename!=NULL)
-	{
-		if(load_ogg_file(filename))
-		{
-			fgcom_exit("Failed loading ogg file.\n",333);
-                }
-        }
-	else
-		return(FALSE);
-
 	while(1)
         {
 		GTimeVal now;
 		ogg_packet *op;
 
 		g_get_current_time(&now);
-		op=get_next_audio_op(now);
+		op=oggfile_get_next_audio_op(now);
 		if(op!=NULL && op->bytes>0)
 		{
 			iaxc_push_audio(op->packet, op->bytes,SPEEX_SAMPLING_RATE*SPEEX_FRAME_DURATION/1000);
