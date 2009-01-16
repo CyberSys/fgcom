@@ -174,6 +174,21 @@ int main(int argc, char *argv[])
 			/* start the position update */
 			alarm(DEFAULT_POSTTION_UPDATE_FREQUENCY);
 
+			if(net_open(config.fg,config.fg_port)==FALSE)
+				fgcom_exit("Cannot open conenction to FG!\n",567);
+
+			while(1)
+			{
+				gchar from_fg[FGCOM_UDP_MAX_BUFFER];
+				struct fg_data data;
+
+				if(net_block_read(from_fg)==FALSE)
+					printf("Read error from FG!\n");
+				if(config.verbose==TRUE)
+					printf(">%s",from_fg);
+				if(fgcom_parse_data(&data, from_fg)==FALSE)
+					printf("Parsing data from FG failed: %s\n",from_fg);
+			}
 			break;
 		case MODE_ATC:
 			/* mode ATC */
@@ -257,6 +272,9 @@ static gboolean fgcom_conference_command(gchar *command, ...)
 	gchar text[80];
 	va_list argPtr;
 
+	if(config.connected!=TRUE)
+		return(FALSE);
+
 	va_start(argPtr,command);
 
 	if(g_ascii_strcasecmp(command,"ADD")==0 || g_ascii_strcasecmp(command,"UPDATE")==0)
@@ -320,6 +338,8 @@ static void fgcom_quit (gint exitcode)
 {
 	gchar text[256];
 
+	if(config.fg_socket!=NULL)
+		net_close();
 	if(config.connected==TRUE)
 		fgcom_conference_command("DEL",config.callsign);
 	if(config.reg_id>0)
@@ -359,4 +379,34 @@ static void fgcom_update_session(gint exitcode)
 {
 	fgcom_conference_command("UPDATE",config.callsign,config.lon,config.lat,100);
 	alarm(DEFAULT_POSTTION_UPDATE_FREQUENCY);
+}
+
+static gboolean fgcom_parse_data(struct fg_data *data, gchar *from_fg)
+{
+	gchar *tmp;
+
+	tmp=g_strdup(strtok((char *)from_fg,","));
+	while(tmp!=NULL)
+	{
+		if(sscanf(tmp,"COM1_FRQ=%lf",&data->COM1_FRQ)==1);
+		else if(sscanf(tmp,"COM1_SRV=%d",&data->COM1_SRV)==1);
+		else if(sscanf(tmp,"COM2_FRQ=%lf",&data->COM2_FRQ)==1);
+		else if(sscanf(tmp,"COM2_SRV=%d",&data->COM2_SRV)==1);
+		else if(sscanf(tmp,"NAV1_FRQ=%lf",&data->NAV1_FRQ)==1);
+		else if(sscanf(tmp,"NAV1_SRV=%d",&data->NAV1_SRV)==1);
+		else if(sscanf(tmp,"NAV2_FRQ=%lf",&data->NAV2_FRQ)==1);
+		else if(sscanf(tmp,"NAV2_SRV=%d",&data->NAV2_SRV)==1);
+		else if(sscanf(tmp,"PTT=%d",&data->PTT)==1);
+		else if(sscanf(tmp,"TRANSPONDER=%d",&data->TRANSPONDER)==1);
+		else if(sscanf(tmp,"IAS=%d",&data->IAS)==1);
+		else if(sscanf(tmp,"GS=%d",&data->GS)==1);
+		else if(sscanf(tmp,"LON=%lf",&data->LON)==1);
+		else if(sscanf(tmp,"LAT=%lf",&data->LAT)==1);
+		else if(sscanf(tmp,"ALT=%d",&data->ALT)==1);
+		else if(sscanf(tmp,"HEAD=%lf",&data->HEAD)==1);
+		else if(sscanf(tmp,"CALLSIGN=%s",&config.callsign)==1);
+		else if(sscanf(tmp,"MODEL=%s",&config.modelname)==1);
+		tmp=strtok(NULL,",");
+	}
+	return(TRUE);
 }

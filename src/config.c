@@ -70,8 +70,8 @@ gboolean config_parse_cmd_options(char *filename, int argc, char *argv[])
 	config.username=NULL;
 	config.password=NULL;
 	config.codec=IAXC_FORMAT_SPEEX;
-	config.fg=NULL;
-	config.fg_port=0;
+	config.fg=g_strdup((gchar *)"localhost");
+	config.fg_port=16661;
 	config.fg_intercom_id=0;
 	config.fg_intercom_port=0;
 	config.frequency=0.0;
@@ -88,7 +88,8 @@ gboolean config_parse_cmd_options(char *filename, int argc, char *argv[])
 	config.mode=-1;
 	config.reg=FALSE;
 	config.play_file=NULL;
-	config.update_session_thread=NULL;
+	config.fg_addr=NULL;
+	config.fg_socket=NULL;
 
 	/* create the cmd line options */
 	context = g_option_context_new("- real radio simulation based on VoIP");

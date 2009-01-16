@@ -30,7 +30,28 @@
 #define DEFAULT_SPEAKER_LEVEL 0.5
 #define DEFAULT_POSTTION_UPDATE_FREQUENCY 7
 
+#define FGCOM_UDP_MAX_BUFFER 1024
+
 enum { MODE_PLAY=0, MODE_FG, MODE_ATC };
+
+struct fg_data {
+	gdouble COM1_FRQ;
+	gint COM1_SRV;
+	gdouble COM2_FRQ;
+	gint COM2_SRV;
+	gdouble NAV1_FRQ;
+	gint NAV1_SRV;
+	gdouble NAV2_FRQ;
+	gint NAV2_SRV;
+	gint PTT;
+	gdouble TRANSPONDER;
+	gdouble IAS;
+	gdouble GS;
+	gdouble LON;
+	gdouble LAT;
+	gint ALT;
+	gdouble HEAD;
+};
 
 /* public prototypes */
 void fgcom_exit(gchar *text, gint exitcode);
@@ -42,4 +63,5 @@ static gboolean fgcom_dial(gdouble frequency);
 static gboolean fgcom_conference_command(gchar *command, ...);
 static void fgcom_send_audio(void);
 static void fgcom_update_session(gint exitcode);
+static gboolean fgcom_parse_data(struct fg_data *data, gchar *from_fg);
 #endif

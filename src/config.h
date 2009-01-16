@@ -19,7 +19,8 @@
 #ifndef _config_h
 #define _config_h
 
-#include "glib.h"
+#include <glib.h>
+#include <gnet.h>
 
 /* configuration data */
 struct fgcom_config
@@ -60,7 +61,8 @@ struct fgcom_config
 	gint mode;
 	gboolean reg;
 	gchar *play_file;
-	GThread *update_session_thread;
+	GInetAddr* fg_addr;
+	GUdpSocket* fg_socket;
 } config;
 
 /* public prototypes */
