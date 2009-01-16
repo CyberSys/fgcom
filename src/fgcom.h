@@ -55,13 +55,14 @@ struct fg_data {
 
 /* public prototypes */
 void fgcom_exit(gchar *text, gint exitcode);
+void fgcom_send_audio(void);
+gboolean fgcom_dial(gdouble frequency);
+gboolean fgcom_hangup(void);
+gboolean fgcom_conference_command(gchar *command, ...);
+gboolean fgcom_parse_data(struct fg_data *data, gchar *from_fg);
+void fgcom_update_session(gint exitcode);
 
 /* private prototypes */
 static int fgcom_iaxc_callback(iaxc_event e);
 static void fgcom_quit (gint exitcode);
-static gboolean fgcom_dial(gdouble frequency);
-static gboolean fgcom_conference_command(gchar *command, ...);
-static void fgcom_send_audio(void);
-static void fgcom_update_session(gint exitcode);
-static gboolean fgcom_parse_data(struct fg_data *data, gchar *from_fg);
 #endif

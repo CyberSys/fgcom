@@ -27,6 +27,7 @@
 #include "config.h"
 #include "event.h"
 #include "oggfile.h"
+#include "mode.h"
 
 extern struct fgcom_config config;
 
@@ -119,105 +120,15 @@ int main(int argc, char *argv[])
 	{
 		case MODE_PLAY:
 			/* mode play file */
-			if(config.verbose==TRUE)
-				printf("Mode: Play\n");
-
-			config.modelname=g_strdup("LIGHTHOUSE");
-
-			/* change audio settings */ /* is this needed??? */
-			/* iaxc_mic_boost_set(0);
-			iaxc_input_level_set(0.0); */
-
-			/* consistency checks */
-			if(config.callsign==NULL)
-				fgcom_exit("callsign must be set for mode Play\n",110);
-			if(config.lat<-180.0)
-				fgcom_exit("latitude must be set for mode Play\n",110);
-			if(config.lon<-180.0)
-				fgcom_exit("longtitude must be set for mode Play\n",110);
-			if(config.frequency<=0.0)
-				fgcom_exit("frequency must be set for mode Play\n",110);
-
-			/* start the position update */
-			alarm(DEFAULT_POSTTION_UPDATE_FREQUENCY);
-
-			/* dial and conect */
-			config.connected=fgcom_dial(config.frequency);
-
-			/* tell our position */
-			fgcom_conference_command("ADD",config.callsign,config.lon,config.lat,100);
-
-			if(config.play_file!=NULL)
-			{
-				if(oggfile_load_ogg_file(config.play_file))
-				{
-					fgcom_exit("Failed loading ogg file.\n",333);
-                		}
-			}
-			else
-			{
-					fgcom_exit("No audio filename.\n",334);
-			}
-
-			/* play the sound endless */
-			while(1)
-			{
-				fgcom_send_audio();
-			}
-
+			mode_play();
 			break;
 		case MODE_FG:
 			/* mode FlightGear and mode InterCom */
-			if(config.verbose==TRUE)
-				printf("Mode: FlightGear\n");
-
-			/* start the position update */
-			alarm(DEFAULT_POSTTION_UPDATE_FREQUENCY);
-
-			if(net_open(config.fg,config.fg_port)==FALSE)
-				fgcom_exit("Cannot open conenction to FG!\n",567);
-
-			while(1)
-			{
-				gchar from_fg[FGCOM_UDP_MAX_BUFFER];
-				struct fg_data data;
-
-				if(net_block_read(from_fg)==FALSE)
-					printf("Read error from FG!\n");
-				if(config.verbose==TRUE)
-					printf(">%s",from_fg);
-				if(fgcom_parse_data(&data, from_fg)==FALSE)
-					printf("Parsing data from FG failed: %s\n",from_fg);
-			}
+			mode_fg();
 			break;
 		case MODE_ATC:
 			/* mode ATC */
-			if(config.verbose==TRUE)
-				printf("Mode: ATC\n");
-
-			config.modelname=g_strdup("ATC");
-
-			/* consistency checks */
-			if(config.callsign==NULL)
-				fgcom_exit("callsign must be set for mode ATC\n",110);
-			if(config.lat<-180.0)
-				fgcom_exit("latitude must be set for mode ATC\n",110);
-			if(config.lon<-180.0)
-				fgcom_exit("longtitude must be set for mode ATC\n",110);
-			if(config.frequency<=0.0)
-				fgcom_exit("frequency must be set for mode ATC\n",110);
-
-			config.connected=fgcom_dial(config.frequency);
-
-			fgcom_conference_command("ADD",config.callsign,config.lon,config.lat,100);
-
-			/* start the position update */
-			alarm(DEFAULT_POSTTION_UPDATE_FREQUENCY);
-
-			while(1)
-			{
-				sleep(10000);
-			}
+			mode_atc();
 			break;
 		default:
 			fgcom_exit("Cannot detect mode! Please check your commandline options or configuration file and read the manual.\n",876);
@@ -237,26 +148,32 @@ void fgcom_exit(gchar *text, gint exitcode)
 	fgcom_quit(exitcode);
 }
 
-/****************************************************************************
- *  private functions
- ****************************************************************************/
+gboolean fgcom_hangup(void)
+{
+	iaxc_dump_call();
+	config.connected=FALSE;
 
-static gboolean fgcom_dial(gdouble frequency)
+	return(TRUE);
+}
+
+gboolean fgcom_dial(gdouble frequency)
 {
 	char dest[80];
 
 	if(strlen(config.iax_server)==0)
 	{
-		g_printf("Cannot connect to %d on server %s\n",frequency,config.iax_server);
+		g_printf("No iax server given!\n");
 		return(FALSE);
 	}
 
-	if(config.username!=NULL && config.password!=NULL)
+/*	if(strlen(config.username)==0 || strlen(config.password)==0)
 	{
-		g_snprintf(dest,sizeof(dest)-1,"%s:%s@%s/%02d%-6d",config.username,config.password,config.iax_server,DEFAULT_PRESELECTION,(int)(frequency*1000));
+		g_snprintf(dest,sizeof(dest),"%s:%s@%s/%02d%-6d",config.username,config.password,config.iax_server,DEFAULT_PRESELECTION,(int)(frequency*1000));
 	}
 	else
-		g_snprintf(dest,sizeof(dest)-1,"%s/%02d%-6d",config.iax_server,DEFAULT_PRESELECTION,(int)(frequency*1000));
+		g_snprintf(dest,sizeof(dest),"%s/%02d%-6d",config.iax_server,DEFAULT_PRESELECTION,(int)(frequency*1000)); */
+
+	g_snprintf(dest,sizeof(dest),"%s/%02d%-6d",config.iax_server,DEFAULT_PRESELECTION,(int)(frequency*1000));
 
 	if(config.verbose==TRUE)
 		g_printf("Dialing [%s]",dest);
@@ -267,7 +184,7 @@ static gboolean fgcom_dial(gdouble frequency)
 	return(TRUE);
 }
 
-static gboolean fgcom_conference_command(gchar *command, ...)
+gboolean fgcom_conference_command(gchar *command, ...)
 {
 	gchar text[80];
 	va_list argPtr;
@@ -284,13 +201,13 @@ static gboolean fgcom_conference_command(gchar *command, ...)
 		gdouble lat=va_arg(argPtr,gdouble);
 		gint alt=va_arg(argPtr,gint);
 
-		g_snprintf(text,sizeof(text)-1,"FGCOM:%s:%s:%f:%f:%d:%s",command,callsign,lon,lat,alt,config.modelname);
+		g_snprintf(text,sizeof(text),"FGCOM:%s:%s:%f:%f:%d:%s",command,callsign,lon,lat,alt,config.modelname);
 	}
 	else if(g_ascii_strcasecmp(command,"DEL")==0)
 	{
 		gchar *callsign=va_arg(argPtr,gchar *);
 
-		g_snprintf(text,sizeof(text)-1,"FGCOM:%s:%s",command,callsign);
+		g_snprintf(text,sizeof(text),"FGCOM:%s:%s",command,callsign);
 	}
 	else
 	{
@@ -307,6 +224,68 @@ static gboolean fgcom_conference_command(gchar *command, ...)
 
 	return(TRUE);
 }
+
+void fgcom_send_audio(void)
+{
+	while(1)
+        {
+		GTimeVal now;
+		ogg_packet *op;
+
+		g_get_current_time(&now);
+		op=oggfile_get_next_audio_op(now);
+		if(op!=NULL && op->bytes>0)
+		{
+			iaxc_push_audio(op->packet, op->bytes,SPEEX_SAMPLING_RATE*SPEEX_FRAME_DURATION/1000);
+		}
+	}
+}
+
+gboolean fgcom_parse_data(struct fg_data *data, gchar *from_fg)
+{
+	gchar *tmp;
+	gchar tmp_string[256];
+
+	tmp=g_strdup(strtok((char *)from_fg,","));
+	while(tmp!=NULL)
+	{
+		if(sscanf(tmp,"COM1_FRQ=%lf",&data->COM1_FRQ)==1);
+		else if(sscanf(tmp,"COM1_SRV=%d",&data->COM1_SRV)==1);
+		else if(sscanf(tmp,"COM2_FRQ=%lf",&data->COM2_FRQ)==1);
+		else if(sscanf(tmp,"COM2_SRV=%d",&data->COM2_SRV)==1);
+		else if(sscanf(tmp,"NAV1_FRQ=%lf",&data->NAV1_FRQ)==1);
+		else if(sscanf(tmp,"NAV1_SRV=%d",&data->NAV1_SRV)==1);
+		else if(sscanf(tmp,"NAV2_FRQ=%lf",&data->NAV2_FRQ)==1);
+		else if(sscanf(tmp,"NAV2_SRV=%d",&data->NAV2_SRV)==1);
+		else if(sscanf(tmp,"PTT=%d",&data->PTT)==1);
+		else if(sscanf(tmp,"TRANSPONDER=%d",&data->TRANSPONDER)==1);
+		else if(sscanf(tmp,"IAS=%d",&data->IAS)==1);
+		else if(sscanf(tmp,"GS=%d",&data->GS)==1);
+		//else if(sscanf(tmp,"LON=%lf",&data->LON)==1);
+		//else if(sscanf(tmp,"LAT=%lf",&data->LAT)==1);
+		//else if(sscanf(tmp,"ALT=%d",&data->ALT)==1);
+		else if(sscanf(tmp,"LON=%lf",&config.lon)==1);
+		else if(sscanf(tmp,"LAT=%lf",&config.lat)==1);
+		else if(sscanf(tmp,"ALT=%d",&config.alt)==1);
+		else if(sscanf(tmp,"HEAD=%lf",&data->HEAD)==1);
+		else if(sscanf(tmp,"CALLSIGN=%s",&tmp_string)==1)
+			config.callsign=strdup(tmp_string);
+		else if(sscanf(tmp,"MODEL=%s",&tmp_string)==1)
+			config.modelname=strdup(tmp_string);
+		tmp=strtok(NULL,",");
+	}
+	return(TRUE);
+}
+
+void fgcom_update_session(gint exitcode)
+{
+	fgcom_conference_command("UPDATE",config.callsign,config.lon,config.lat,config.alt);
+	alarm(DEFAULT_POSTTION_UPDATE_FREQUENCY);
+}
+
+/****************************************************************************
+ *  private functions
+ ****************************************************************************/
 
 static int fgcom_iaxc_callback (iaxc_event e)
 {
@@ -357,56 +336,4 @@ static void fgcom_quit (gint exitcode)
 		iaxc_shutdown ();
 	}
 	exit((int)exitcode);
-}
-
-static void fgcom_send_audio(void)
-{
-	while(1)
-        {
-		GTimeVal now;
-		ogg_packet *op;
-
-		g_get_current_time(&now);
-		op=oggfile_get_next_audio_op(now);
-		if(op!=NULL && op->bytes>0)
-		{
-			iaxc_push_audio(op->packet, op->bytes,SPEEX_SAMPLING_RATE*SPEEX_FRAME_DURATION/1000);
-		}
-	}
-}
-
-static void fgcom_update_session(gint exitcode)
-{
-	fgcom_conference_command("UPDATE",config.callsign,config.lon,config.lat,100);
-	alarm(DEFAULT_POSTTION_UPDATE_FREQUENCY);
-}
-
-static gboolean fgcom_parse_data(struct fg_data *data, gchar *from_fg)
-{
-	gchar *tmp;
-
-	tmp=g_strdup(strtok((char *)from_fg,","));
-	while(tmp!=NULL)
-	{
-		if(sscanf(tmp,"COM1_FRQ=%lf",&data->COM1_FRQ)==1);
-		else if(sscanf(tmp,"COM1_SRV=%d",&data->COM1_SRV)==1);
-		else if(sscanf(tmp,"COM2_FRQ=%lf",&data->COM2_FRQ)==1);
-		else if(sscanf(tmp,"COM2_SRV=%d",&data->COM2_SRV)==1);
-		else if(sscanf(tmp,"NAV1_FRQ=%lf",&data->NAV1_FRQ)==1);
-		else if(sscanf(tmp,"NAV1_SRV=%d",&data->NAV1_SRV)==1);
-		else if(sscanf(tmp,"NAV2_FRQ=%lf",&data->NAV2_FRQ)==1);
-		else if(sscanf(tmp,"NAV2_SRV=%d",&data->NAV2_SRV)==1);
-		else if(sscanf(tmp,"PTT=%d",&data->PTT)==1);
-		else if(sscanf(tmp,"TRANSPONDER=%d",&data->TRANSPONDER)==1);
-		else if(sscanf(tmp,"IAS=%d",&data->IAS)==1);
-		else if(sscanf(tmp,"GS=%d",&data->GS)==1);
-		else if(sscanf(tmp,"LON=%lf",&data->LON)==1);
-		else if(sscanf(tmp,"LAT=%lf",&data->LAT)==1);
-		else if(sscanf(tmp,"ALT=%d",&data->ALT)==1);
-		else if(sscanf(tmp,"HEAD=%lf",&data->HEAD)==1);
-		else if(sscanf(tmp,"CALLSIGN=%s",&config.callsign)==1);
-		else if(sscanf(tmp,"MODEL=%s",&config.modelname)==1);
-		tmp=strtok(NULL,",");
-	}
-	return(TRUE);
 }
