@@ -19,6 +19,13 @@
 #include <alc.h>
 #include <iaxclient_lib.h>
 
+#ifdef __DEBUG__
+#define PRINTDBG(fmt, args...)			g_printf("%s,%d: "fmt, __FUNCTION__,__LINE__,##args)
+#define EPRINT(fmt, args...)			g_printf(fmt,##args)
+#else
+#define PRINTDBG(fmt, args...)
+#define EPRINT(fmt, args...)
+#endif
 
 int openal_initialize(struct iaxc_audio_driver *driver, int sample_rate);
 int openal_finalize();
