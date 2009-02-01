@@ -33,9 +33,9 @@
 
 #include "audio_openal.h"
 #include "iaxclient_lib.h"
-#include "ringbuffer.h"
 #include "portmixer.h"
 #include "config.h"
+#include "sndfile.h"
 
 #ifdef SPAN_EC
 #include "ec/echo.h"
@@ -48,7 +48,6 @@ static echo_can_state_t *ec;
 static SpeexEchoState *ec;
 #endif
 
-
 static ALCdevice *s_device;
 static ALCcontext *s_context;
 static char *s_list_devices;
@@ -56,6 +55,10 @@ static int s_selected_input;
 static int s_selected_output; 
 static int s_selected_ring;
 static int s_running;
+static struct iaxc_sound *s_sounds;
+static MUTEX sound_lock;
+static int running;
+
 
 
 static void func_dummy(void)
@@ -74,7 +77,7 @@ static void func_dummy(void)
  * |                  : previously allocated by the caller).                  |
  * +--------------------------------------------------------------------------+
 */
-static int scan_audio_devices(struct iaxc_audio_driver *driver)
+static int al_scan_audio_devices(struct iaxc_audio_driver *driver)
 {
 	const ALCchar *l_devlist;
 	const ALCchar *l_dummy;
@@ -123,7 +126,7 @@ static int scan_audio_devices(struct iaxc_audio_driver *driver)
 	return(0);
 }
 
-static int select_devices(struct iaxc_audio_driver *driver, int input, int output, int ring)
+static int al_select_devices(struct iaxc_audio_driver *driver, int input, int output, int ring)
 {
 	g_return_if_fail(driver != NULL);
 	
@@ -145,7 +148,7 @@ static int select_devices(struct iaxc_audio_driver *driver, int input, int outpu
 	return 0;
 }
 
-static int selected_devices(struct iaxc_audio_driver *d, int *input, int *output, int *ring)
+static int al_selected_devices(struct iaxc_audio_driver *d, int *input, int *output, int *ring)
 {
 	g_return_if_fail(input != NULL);
 	g_return_if_fail(output != NULL);
@@ -158,8 +161,80 @@ static int selected_devices(struct iaxc_audio_driver *d, int *input, int *output
 }
 
 
+static int al_play_sound(struct iaxc_sound *inSound, int ring)
+{
+}
 
+static int al_input(struct iaxc_audio_driver *d, void *samples, int *nSamples)
+{
+}
 
+static int al_output(struct iaxc_audio_driver *d, void *samples, int nSamples)
+{
+}
+
+static int al_play_direct_sound(const char *file)
+{
+	SF_INFO l_fi;
+	SNDFILE *l_pfile;
+	ALsizei l_nb_samples;
+	ALsizei l_sample_rate;
+	ALshort *l_pbuf;
+	ALenum l_format;
+	ALuint l_snd_buf;
+	ALuint l_source;
+	ALint l_snd_status;
+	ALint l_time_offset;
+
+	
+	l_pfile = sf_open(file, SFM_READ, &l_fi);
+	if (!l_pfile) return(-1);
+	
+	l_nb_samples = l_fi.channels * l_fi.frames;
+	l_sample_rate = l_fi.samplerate;
+
+	l_pbuf = (ALshort *)malloc(l_nb_samples * sizeof(ALshort));
+	if(!l_pbuf)
+	{
+		sf_close(l_pfile);
+		return(-2);
+	}
+
+	l_format = l_fi.channels==1?AL_FORMAT_MONO16:AL_FORMAT_STEREO16;
+
+	if(sf_read_short(l_pfile, l_pbuf, l_nb_samples) < l_nb_samples)
+	{
+		free(l_pbuf);
+		sf_close(l_pfile);
+		return(-3);
+	}
+	
+	sf_close(l_pfile);
+	
+	alGenBuffers(1, &l_snd_buf);
+
+	alBufferData(l_snd_buf, l_format, l_pbuf, l_nb_samples * sizeof(ALushort), l_sample_rate);
+	if(alGetError() != AL_NO_ERROR)
+	{
+		alDeleteBuffers(1, &l_snd_buf);
+		free(l_pbuf);
+		return(-4);
+	}
+
+	alGenSources(1, &l_source);
+
+	alSourcei(l_source, AL_BUFFER, l_snd_buf);
+	
+	alSourcePlay(l_source);
+	do
+	{
+		alGetSourcei(l_source, AL_SOURCE_STATE, &l_snd_status);
+	}while(l_snd_status == AL_PLAYING);
+
+	alSourcei(l_source, AL_BUFFER, 0);
+	alDeleteSources(1, &l_source);
+	alDeleteBuffers(1, &l_snd_buf);
+}
 
 
 
@@ -201,7 +276,7 @@ int openal_initialize(struct iaxc_audio_driver *driver, int sample_rate)
 		return (3);
 	}
 	
-	if(scan_audio_devices(driver) != 0)
+	if(al_scan_audio_devices(driver) != 0)
 	{
 		PRINTDBG("A problem occured when scanning for audio devices.\n");
 		return(4);
@@ -215,17 +290,17 @@ int openal_initialize(struct iaxc_audio_driver *driver, int sample_rate)
 	
 	driver->initialize = openal_initialize;
 	driver->destroy = openal_finalize;
-	driver->select_devices = select_devices;
-	driver->selected_devices = selected_devices;
+	driver->select_devices = al_select_devices;
+	driver->selected_devices = al_selected_devices;
 	driver->start = func_dummy;
 	driver->stop = func_dummy;
-	driver->output = func_dummy;
-	driver->input = func_dummy;
+	driver->output = al_output;
+	driver->input = al_input;
 	driver->input_level_get = func_dummy;
 	driver->input_level_set = func_dummy;
 	driver->output_level_get = func_dummy;
 	driver->output_level_set = func_dummy;
-	driver->play_sound = func_dummy;
+	driver->play_sound = al_play_sound;
 	driver->stop_sound = func_dummy;
 	driver->mic_boost_get = func_dummy;
 	driver->mic_boost_set = func_dummy;
@@ -233,10 +308,23 @@ int openal_initialize(struct iaxc_audio_driver *driver, int sample_rate)
 	s_selected_input = s_selected_output = s_selected_ring = 0;
 	s_running = 0;
 	
+	al_play_direct_sound("machine_chirp3.wav");
+	
 	return(0);
 }
 
 
+/*
+ * +--------------------------------------------------------------------------+
+ * | openal_finalize                                                          |
+ * +--------------------------------------------------------------------------+
+ * | Close OpenAL.                                                            |
+ * +--------------------------------------------------------------------------+
+ * | Parameters                                                               |
+ * |   driver (in/out): a structure that describes the audio driver (must be  |
+ * |                  : previously allocated by the caller).                  |
+ * +--------------------------------------------------------------------------+
+*/
 int openal_finalize(struct iaxc_audio_driver *driver)
 {
 	int l_index;
