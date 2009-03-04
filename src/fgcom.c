@@ -150,8 +150,12 @@ void fgcom_exit(gchar *text, gint exitcode)
 
 gboolean fgcom_hangup(void)
 {
+	if(config.verbose==TRUE)
+		printf("Hangup\n");
+
 	iaxc_dump_call();
 	config.connected=FALSE;
+	iaxc_millisleep(100);
 
 	return(TRUE);
 }

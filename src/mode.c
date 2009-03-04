@@ -28,6 +28,7 @@ void mode_fg(void)
 	gdouble com1frq=-1.0;
 	gdouble com2frq=-1.0;
 	gint ptt=0;
+	GTimer *packet_age;
 
 	/* mode FlightGear and mode InterCom */
 	if(config.verbose==TRUE)
@@ -41,15 +42,31 @@ void mode_fg(void)
 
 	/* start the position update */
 	alarm(DEFAULT_POSTTION_UPDATE_FREQUENCY);
-			
+
+	/* create a timer for measuring the packet age */
+	packet_age=g_timer_new();
+	g_timer_start(packet_age);
+
 	while(TRUE)
 	{
 		gchar from_fg[FGCOM_UDP_MAX_BUFFER];
 		struct fg_data data;
 
 		/* read and parse data from FG */
-		if(net_block_read(from_fg)==FALSE)
+		if(net_block_read(from_fg)==TRUE)
+		{
+			if(g_timer_elapsed(packet_age,NULL)>5.0)
+			{
+				/* packet is more than 5 seconds old */
+				fgcom_hangup();
+				g_timer_reset(packet_age);
+			}
+		}
+		else
+		{
 			printf("Read error from FG!\n");
+			continue;
+		}
 		if(config.verbose==TRUE)
 			printf(">%s",from_fg);
 		if(fgcom_parse_data(&data, from_fg)==FALSE)
