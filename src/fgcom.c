@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 	}
 
 	if(config.verbose==TRUE)
-		printf("fgcom starting up...\n");
+		g_printf("fgcom starting up...\n");
 
         /* catch signals */
         signal (SIGINT, fgcom_quit);
@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
 	iaxc_set_event_callback(fgcom_iaxc_callback);
 
 	if(config.verbose==TRUE)
-		printf("iaxclient initialized\n");
+		g_printf("iaxclient initialized\n");
 
 	iaxc_millisleep(100);
 
@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 	if(config.reg==TRUE)
 	{
 		if(config.verbose==TRUE)
-			printf("Trying registration at %s\n",config.iax_server);
+			g_printf("Trying registration at %s\n",config.iax_server);
 
 		if(config.username!=NULL && config.password!=NULL)
 		{
@@ -72,13 +72,13 @@ int main(int argc, char *argv[])
 			if((config.reg_id=iaxc_register((char *)config.username,(char *)config.password,(char *)config.iax_server))>0)
 			{
 				if(config.verbose==TRUE)
-					printf("Registered as %s at %s with id: %d\n",config.username,config.iax_server,config.reg_id);
+					g_printf("Registered as %s at %s with id: %d\n",config.username,config.iax_server,config.reg_id);
 
 				iaxc_set_callerid((char *)config.username,"0");
 			}
 			else
 			{
-				printf("Registering as %s at %s failed: %d\n",config.username,config.iax_server,config.reg_id);
+				g_printf("Registering as %s at %s failed: %d\n",config.username,config.iax_server,config.reg_id);
 				fgcom_exit("",125);
 			}
 		}
@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
 	else
 	{
 		if(config.verbose==TRUE)
-			printf("Setting callerid to: %s/%s\n",DEFAULT_FRQ,DEFAULT_USER);
+			g_printf("Setting callerid to: %s/%s\n",DEFAULT_FRQ,DEFAULT_USER);
 		iaxc_set_callerid((char *)DEFAULT_USER,(char *)DEFAULT_FRQ);
 	}
 
@@ -106,7 +106,8 @@ int main(int argc, char *argv[])
 		iaxc_mic_boost_set(0);
 
 	/* mode decission */
-	config.mode=MODE_FG;
+	config.mode=MODE_FG;	/* default mode */
+
 	if(config.frequency>0.0 || config.lon>0.0 || config.lat>0.0)
 	{
 		config.mode=MODE_ATC;
@@ -151,7 +152,7 @@ void fgcom_exit(gchar *text, gint exitcode)
 gboolean fgcom_hangup(void)
 {
 	if(config.verbose==TRUE)
-		printf("Hangup\n");
+		g_printf("Hangup\n");
 
 	iaxc_dump_call();
 	config.connected=FALSE;
@@ -170,17 +171,18 @@ gboolean fgcom_dial(gdouble frequency)
 		return(FALSE);
 	}
 
-/*	if(strlen(config.username)==0 || strlen(config.password)==0)
+	if(strlen(config.username)!=0 && strlen(config.password)!=0)
 	{
 		g_snprintf(dest,sizeof(dest),"%s:%s@%s/%02d%-6d",config.username,config.password,config.iax_server,DEFAULT_PRESELECTION,(int)(frequency*1000));
+		if(config.verbose==TRUE)
+			g_printf("%s:XXXXXXX@%s/%02d%-6d",config.username,config.iax_server,DEFAULT_PRESELECTION,(int)(frequency*1000));
 	}
 	else
-		g_snprintf(dest,sizeof(dest),"%s/%02d%-6d",config.iax_server,DEFAULT_PRESELECTION,(int)(frequency*1000)); */
-
-	g_snprintf(dest,sizeof(dest),"%s/%02d%-6d",config.iax_server,DEFAULT_PRESELECTION,(int)(frequency*1000));
-
-	if(config.verbose==TRUE)
-		g_printf("Dialing [%s]",dest);
+	{
+		g_snprintf(dest,sizeof(dest),"%s/%02d%-6d",config.iax_server,DEFAULT_PRESELECTION,(int)(frequency*1000));
+		if(config.verbose==TRUE)
+			g_printf("Dialing [%s]",dest);
+	}
 
 	iaxc_call(dest);
 	iaxc_millisleep(100);
@@ -265,9 +267,6 @@ gboolean fgcom_parse_data(struct fg_data *data, gchar *from_fg)
 		else if(sscanf(tmp,"TRANSPONDER=%d",&data->TRANSPONDER)==1);
 		else if(sscanf(tmp,"IAS=%d",&data->IAS)==1);
 		else if(sscanf(tmp,"GS=%d",&data->GS)==1);
-		//else if(sscanf(tmp,"LON=%lf",&data->LON)==1);
-		//else if(sscanf(tmp,"LAT=%lf",&data->LAT)==1);
-		//else if(sscanf(tmp,"ALT=%d",&data->ALT)==1);
 		else if(sscanf(tmp,"LON=%lf",&config.lon)==1);
 		else if(sscanf(tmp,"LAT=%lf",&config.lat)==1);
 		else if(sscanf(tmp,"ALT=%d",&config.alt)==1);

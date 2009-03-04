@@ -52,7 +52,7 @@ void mode_fg(void)
 		gchar from_fg[FGCOM_UDP_MAX_BUFFER];
 		struct fg_data data;
 
-		/* read and parse data from FG */
+		/* read data from FG */
 		if(net_block_read(from_fg)==TRUE)
 		{
 			if(g_timer_elapsed(packet_age,NULL)>5.0)
@@ -60,6 +60,8 @@ void mode_fg(void)
 				/* packet is more than 5 seconds old */
 				fgcom_hangup();
 				g_timer_reset(packet_age);
+				if(config.verbose==TRUE)
+					printf("fgcom detected packets older than 5 seconds: dropping the call!\n");
 			}
 		}
 		else
@@ -69,6 +71,8 @@ void mode_fg(void)
 		}
 		if(config.verbose==TRUE)
 			printf(">%s",from_fg);
+
+		/* parse data from FG */
 		if(fgcom_parse_data(&data, from_fg)==FALSE)
 			printf("Parsing data from FG failed: %s\n",from_fg);
 
@@ -76,7 +80,7 @@ void mode_fg(void)
 		if(data.COM1_FRQ!=com1frq)
 		{
 			if(config.verbose==TRUE)
-				printf("Freqeuncy change %3.3lf->%3.3lf\n",com1frq,data.COM1_FRQ);
+				printf("Frequency change %3.3lf->%3.3lf\n",com1frq,data.COM1_FRQ);
 			com1frq=data.COM1_FRQ;
 			if(config.connected==TRUE)
 				fgcom_hangup();
@@ -150,9 +154,9 @@ void mode_play(void)
 
 	config.modelname=g_strdup("LIGHTHOUSE");
 
-	/* change audio settings */ /* is this needed??? */
-	/* iaxc_mic_boost_set(0);
-	iaxc_input_level_set(0.0); */
+	/* change audio settings */ /* This may be not needed if iaxclient fully supports test mode */
+	iaxc_mic_boost_set(0);
+	iaxc_input_level_set(0.0);
 
 	/* consistency checks */
 	if(config.callsign==NULL)

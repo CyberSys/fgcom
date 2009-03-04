@@ -40,7 +40,7 @@ void event_state(int state, char *remote, char *remote_name, char *local, char *
       /* in fg mode the next incoming packet will do that anyway */
     }
 
-  snprintf (tmp, sizeof (tmp),
+  g_snprintf (tmp, sizeof (tmp),
             "S%c0x%x%c%s%c%.50s%c%.50s%c%.50s%c%.50s", delim, state,
             delim, map_state (state), delim, remote, delim, remote_name,
             delim, local, delim, local_context);
@@ -49,8 +49,8 @@ void event_state(int state, char *remote, char *remote_name, char *local, char *
 
 void event_text(int type, char *message)
 {
-  snprintf (tmp, sizeof (tmp), "T%c%d%c%.200s", delim, type, delim, message);
-  printf("%s\n",message);
+  g_snprintf (tmp, sizeof (tmp), "T%c%d%c%.200s", delim, type, delim, message);
+  g_printf("%s\n",message);
   report (tmp);
 }
 
@@ -65,7 +65,7 @@ void event_register(int id, int reply, int count)
     case IAXC_REGISTRATION_REPLY_REJ:
       reason = "denied";
       /* fgcom_exit("Registering denied",201);*/
-      printf("Registering denied!\n");
+      g_printf("Registering denied!\n");
       break;
     case IAXC_REGISTRATION_REPLY_TIMEOUT:
       reason = "timeout";
@@ -73,7 +73,7 @@ void event_register(int id, int reply, int count)
     default:
       reason = "unknown";
     }
-  snprintf (tmp, sizeof (tmp), "R%c%d%c%s%c%d", delim, id, delim,
+  g_snprintf (tmp, sizeof (tmp), "R%c%d%c%s%c%d", delim, id, delim,
             reason, delim, count);
   report (tmp);
 }
@@ -82,7 +82,7 @@ void event_netstats(struct iaxc_ev_netstats stat)
 {
   struct iaxc_netstat local = stat.local;
   struct iaxc_netstat remote = stat.remote;
-  snprintf (tmp, sizeof (tmp),
+  g_snprintf (tmp, sizeof (tmp),
             "N%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c%d",
             delim, stat.callNo, delim, stat.rtt,
             delim, local.jitter, delim, local.losspct, delim,
@@ -96,13 +96,13 @@ void event_netstats(struct iaxc_ev_netstats stat)
 
 void event_level(double in, double out)
 {
-  snprintf (tmp, sizeof (tmp), "L%c%.1f%c%.1f", delim, in, delim, out);
+  g_snprintf (tmp, sizeof (tmp), "L%c%.1f%c%.1f", delim, in, delim, out);
   report (tmp);
 }
 
 void event_unknown(int type)
 {
-  snprintf (tmp, sizeof (tmp), "U%c%d", delim, type);
+  g_snprintf (tmp, sizeof (tmp), "U%c%d", delim, type);
   report (tmp);
 }
 
@@ -114,7 +114,7 @@ static void report(char *text)
 {
 	if(config.verbose==TRUE)
 	{
-		printf("%s\n",text);
+		g_printf("%s\n",text);
       		fflush (stdout);
 	}
 }

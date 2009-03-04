@@ -226,10 +226,10 @@ static gboolean config_play(gchar *option_name,gchar *value,gpointer data,GError
 
 static void config_show_version(void)
 {
-	printf("(c)2008,2009 by H. Wirtz <dcoredump@gmail.com> && C. Ingels <charles@maisonblv.net>\n");
-	printf("Version %3.2f build TOBEFIXED\n",VERSION);
+	g_printf("(c)2008,2009 by H. Wirtz <dcoredump@gmail.com> && C. Ingels <charles@maisonblv.net>\n");
+	g_printf("Version %3.2f build TOBEFIXED\n",VERSION);
 #ifdef __DEBUG__
-	printf("Debug version, build time %s, %s\n", __DATE__, __TIME__);
+	g_printf("Debug version, build time %s, %s\n", __DATE__, __TIME__);
 #endif
 
 	fgcom_exit("",0);
@@ -242,10 +242,10 @@ static void config_show_audio_devices(void)
 
 	config.initialized=1;
 
-	printf("Input audio devices:\n");
+	g_printf("Input audio devices:\n");
 	config_report_devices (IAXC_AD_INPUT);
-	printf("\n");
-	printf("Output audio devices:\n");
+	g_printf("\n");
+	g_printf("Output audio devices:\n");
 	config_report_devices (IAXC_AD_OUTPUT);
 
 	fgcom_exit("",0);
@@ -260,12 +260,12 @@ static void config_report_devices(int io)
   int flag = io ? IAXC_AD_INPUT : IAXC_AD_OUTPUT;
   iaxc_audio_devices_get (&devs, &ndevs, &input, &output, &ring);
   current = io ? input : output;
-  printf("\t%s\n",devs[current].name);
+  g_printf("\t%s\n",devs[current].name);
   for (i = 0; i < ndevs; i++)
     {
       if (devs[i].capabilities & flag && i != current)
         {
-          printf("\t\t%s\n",devs[i].name);
+          g_printf("\t\t%s\n",devs[i].name);
         }
     }
 }
