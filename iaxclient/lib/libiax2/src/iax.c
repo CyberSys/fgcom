@@ -46,6 +46,10 @@ void gettimeofday(struct timeval *tv, void /*struct timezone*/ *tz);
 #else
 
 #include <netdb.h>
+/* newer libc doesn't define this. hopefully we don't run into systems where it isn't a macro */
+#ifndef h_addr
+#define h_addr h_addr_list[0]
+#endif
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <sys/time.h>
