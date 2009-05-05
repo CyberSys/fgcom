@@ -130,6 +130,8 @@ SRCS +=						\
 	audio_encode.h				\
 	audio_portaudio.c			\
 	audio_portaudio.h			\
+	audio_alsa.c			\
+	audio_alsa.h			\
 	codec_alaw.c				\
 	codec_alaw.h				\
 	codec_ilbc.h				\

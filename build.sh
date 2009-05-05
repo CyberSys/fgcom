@@ -6,14 +6,14 @@ export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$INSTALL_PATH/lib/pkgconfig"
 
 # Building speex
 cd $SRC_PATH/speex
-./configure --prefix=$INSTALL_PATH --enable-static --enable-shared
+./configure --prefix=$INSTALL_PATH --enable-static --enable-shared "CFLAGS=-O2"
 make
 make install
 
 # Building iaxclient
 cd $SRC_PATH/iaxclient
 autogen.sh
-./configure --prefix=$INSTALL_PATH --enable-static --enable-shared --enable-local-gsm --disable-video --disable-clients --without-theora --without-vidcap --with-speex=$INSTALL_PATH
+./configure --prefix=$INSTALL_PATH --enable-static --enable-shared --enable-local-gsm --disable-video --disable-clients --without-theora --without-vidcap --with-speex=$INSTALL_PATH "CFLAGS=-O2 -DAUDIO_ALSA"
 make
 make install
 
