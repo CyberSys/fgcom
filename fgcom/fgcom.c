@@ -171,11 +171,14 @@ gboolean fgcom_dial(gdouble frequency)
 		return(FALSE);
 	}
 
-	if(strlen(config.username)!=0 && strlen(config.password)!=0)
+	if(config.username!=NULL && config.password!=NULL)
 	{
-		g_snprintf(dest,sizeof(dest),"%s:%s@%s/%02d%-6d",config.username,config.password,config.iax_server,DEFAULT_PRESELECTION,(int)(frequency*1000));
-		if(config.verbose==TRUE)
-			g_printf("%s:XXXXXXX@%s/%02d%-6d",config.username,config.iax_server,DEFAULT_PRESELECTION,(int)(frequency*1000));
+		if(strlen(config.username)!=0 && strlen(config.password)!=0)
+		{
+			g_snprintf(dest,sizeof(dest),"%s:%s@%s/%02d%-6d",config.username,config.password,config.iax_server,DEFAULT_PRESELECTION,(int)(frequency*1000));
+			if(config.verbose==TRUE)
+				g_printf("%s:XXXXXXX@%s/%02d%-6d",config.username,config.iax_server,DEFAULT_PRESELECTION,(int)(frequency*1000));
+		}
 	}
 	else
 	{
