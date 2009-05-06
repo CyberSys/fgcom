@@ -121,6 +121,7 @@ int main(int argc, char *argv[])
 	{
 		case MODE_PLAY:
 			/* mode play file */
+			iaxc_set_test_mode(1);
 			mode_play();
 			break;
 		case MODE_FG:
