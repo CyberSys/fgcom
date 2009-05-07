@@ -73,20 +73,20 @@ distclean: clean
 fgcom: iaxclient speex config.o  event.o  fgcom.o  mode.o  net.o  oggfile.o
 	$(CC) $(LDFLAGS) config.o  event.o  fgcom.o  mode.o  net.o  oggfile.o $(LIBS) -o fgcom
 
-libvidcap: 
-	@if [ ! -f ../libvidcap/configure ]; then \
-		cd ../libvidcap; \
-		sh autogen.sh; \
-	fi
-	@if [ ! -f ../libvidcap/Makefile ]; then \
-		cd ../libvidcap; \
-		export PKG_CONFIG_PATH="$(INSTALL_DIR)/lib/pkgconfig:$(PKG_CONFIG_PATH)";\
-		./configure --prefix=$(INSTALL_DIR); \
-	fi
-	make -C ../libvidcap
-	make -C ../libvidcap install
+#libvidcap: 
+#	@if [ ! -f ../libvidcap/configure ]; then \
+#		cd ../libvidcap; \
+#		sh autogen.sh; \
+#	fi
+#	@if [ ! -f ../libvidcap/Makefile ]; then \
+#		cd ../libvidcap; \
+#		export PKG_CONFIG_PATH="$(INSTALL_DIR)/lib/pkgconfig:$(PKG_CONFIG_PATH)";\
+#		./configure --prefix=$(INSTALL_DIR); \
+#	fi
+#	make -C ../libvidcap
+#	make -C ../libvidcap install
 
-iaxclient: speex libvidcap
+iaxclient: speex
 	@if [ ! -f ../iaxclient/configure ]; then \
 		cd ../iaxclient; \
 		sh autogen.sh; \
@@ -94,7 +94,7 @@ iaxclient: speex libvidcap
 	@if [ ! -f ../iaxclient/Makefile ]; then \
 		cd ../iaxclient; \
 		export PKG_CONFIG_PATH="$(INSTALL_DIR)/lib/pkgconfig:$(PKG_CONFIG_PATH)";\
-		./configure --prefix=$(INSTALL_DIR) --without-video -without-theora --without-vidcap --disable-gsmtest --disable-iax2test --enable-local-gsm --disable-clients --with-openal; \
+		./configure --prefix=$(INSTALL_DIR) --disable-video -without-theora --without-vidcap --disable-gsmtest --disable-iax2test --enable-local-gsm --disable-clients --with-openal --with-echo-can=speex;\
 	fi
 	make CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" -C ../iaxclient
 	make -C ../iaxclient install

@@ -140,6 +140,10 @@ void mode_atc(void)
 	/* start the position update */
 	alarm(DEFAULT_POSTTION_UPDATE_FREQUENCY);
 
+	/* change audio settings */ /* This may be not needed if iaxclient fully supports test mode */
+	iaxc_mic_boost_set(1);
+	iaxc_input_level_set(1.0);
+
 	while(TRUE)
 	{
 		sleep(10000);
@@ -187,6 +191,7 @@ void mode_play(void)
 		fgcom_exit("No audio filename.\n",334);
 
 	/* play the sound endless */
-	while(TRUE)
-		fgcom_send_audio();
+	if(config.verbose==TRUE)
+		printf("Playing %s\n",config.play_file);
+	fgcom_send_audio();
 }
