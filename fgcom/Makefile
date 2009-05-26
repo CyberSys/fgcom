@@ -61,30 +61,15 @@ uninstall:
 clean:
 	make -C ../iaxclient clean
 	make -C ../speex clean
-	make -C ../libvidcap clean
 	rm -f *.o *~
 
 distclean: clean
 	make -C ../iaxclient distclean
 	make -C ../speex distclean
-	make -C ../libvidcap distclean
 	rm -f fgcom
 
 fgcom: iaxclient speex config.o  event.o  fgcom.o  mode.o  net.o  oggfile.o
 	$(CC) $(LDFLAGS) config.o  event.o  fgcom.o  mode.o  net.o  oggfile.o $(LIBS) -o fgcom
-
-#libvidcap: 
-#	@if [ ! -f ../libvidcap/configure ]; then \
-#		cd ../libvidcap; \
-#		sh autogen.sh; \
-#	fi
-#	@if [ ! -f ../libvidcap/Makefile ]; then \
-#		cd ../libvidcap; \
-#		export PKG_CONFIG_PATH="$(INSTALL_DIR)/lib/pkgconfig:$(PKG_CONFIG_PATH)";\
-#		./configure --prefix=$(INSTALL_DIR); \
-#	fi
-#	make -C ../libvidcap
-#	make -C ../libvidcap install
 
 iaxclient: speex
 	@if [ ! -f ../iaxclient/configure ]; then \

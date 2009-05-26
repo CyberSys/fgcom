@@ -324,12 +324,15 @@ static void fgcom_quit (gint exitcode)
 {
 	gchar text[256];
 
-	g_printf("Got stop signal...\n");
+	g_printf("shutting down - please wait...\n");
 
 	if(config.fg_socket!=NULL)
 		net_close();
 	if(config.connected==TRUE)
+	{
 		fgcom_conference_command("DEL",config.callsign);
+		sleep(1);
+	}
 	if(config.reg_id>0)
 	{
 		if(config.verbose==TRUE)
