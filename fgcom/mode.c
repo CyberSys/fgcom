@@ -61,7 +61,13 @@ void mode_fg(void)
 				fgcom_hangup();
 				g_timer_reset(packet_age);
 				if(config.verbose==TRUE)
-					printf("fgcom detected packets older than 5 seconds: dropping the call!\n");
+				{
+					g_printf("fgcom detected packets older than 5 seconds: dropping the call!\n");
+				}
+			}
+			else
+			{
+				g_timer_reset(packet_age);
 			}
 		}
 		else

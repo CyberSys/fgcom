@@ -29,7 +29,7 @@ PKG_CONFIG_LIBDIR:=$(PKG_CONFIG_LIBDIR):$(INSTALL_PATH)
 SVNDEF:=-D'SVN_REV="$(shell svnversion -n .)"'
 CFLAGS:=-O2 $(SVNDEF) -I $(INSTALL_DIR)/include -I/usr/lib/glib-2.0/include -I/usr/include/glib-2.0 -I/usr/lib/gnet-2.0/include -I/usr/include/gnet-2.0
 LDFLAGS:=-L $(INSTALL_DIR)/lib
-LIBS:=-liaxclient -lspeex -lspeexdsp -lopenal -glib-2.0 -lgnet-2.0 -loggz -lvidcap
+LIBS:=-liaxclient -lspeex -lspeexdsp -lopenal -glib-2.0 -lgnet-2.0 -loggz
 endif
 
 #

@@ -23931,17 +23931,26 @@ echo "$as_me: error:
       fi
    fi
 
-# dcoredump@gmail.com
-#   if test x$has_vidcap = xyes; then
-#      AC_DEFINE(USE_VIDCAP, 1, [VIDCAP])
-#      PACKAGE_REQUIRES="$PACKAGE_REQUIRES vidcap"
-#   else
-#      AC_MSG_ERROR([
-#         libvidcap is required to build this package!
-#         please see http://libvidcap.sourceforge.net/ for how to
-#         obtain a copy.
-#      ])
-#   fi
+   if test x$has_vidcap = xyes; then
+
+cat >>confdefs.h <<\_ACEOF
+#define USE_VIDCAP 1
+_ACEOF
+
+      PACKAGE_REQUIRES="$PACKAGE_REQUIRES vidcap"
+   else
+      { { echo "$as_me:$LINENO: error:
+         libvidcap is required to build this package!
+         please see http://libvidcap.sourceforge.net/ for how to
+         obtain a copy.
+      " >&5
+echo "$as_me: error:
+         libvidcap is required to build this package!
+         please see http://libvidcap.sourceforge.net/ for how to
+         obtain a copy.
+      " >&2;}
+   { (exit 1); exit 1; }; }
+   fi
 
    if test x$with_ffmpeg != xno; then
       if test x$has_ffmpeg = xyes; then

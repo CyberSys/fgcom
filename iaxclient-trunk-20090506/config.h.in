@@ -130,6 +130,9 @@
 /* THEORA */
 #undef USE_THEORA
 
+/* VIDCAP */
+#undef USE_VIDCAP
+
 /* Define to 1 to enable video support */
 #undef USE_VIDEO
 
