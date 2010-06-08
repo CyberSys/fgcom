@@ -18,7 +18,6 @@
 #include <al.h>
 #include <alc.h>
 #include <iaxclient_lib.h>
-#include <glib.h>
 
 #ifdef __DEBUG__
 #define PRINTDBG(fmt, args...)			g_printf("%s,%d: "fmt, __FUNCTION__,__LINE__,##args)

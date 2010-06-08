@@ -484,6 +484,12 @@ EXPORT int iaxc_initialize(int audType, int inCalls) {
                                 return -1;
                         break;			
 #endif
+#ifdef AUDIO_OPENAL
+                case AUDIO_INTERNAL_OPENAL:
+                        if (openal_initialize(&audio, 8000))
+                                return -1;
+                        break;			
+#endif
 	}
 
 	audio_format_capability = IAXC_FORMAT_ULAW | IAXC_FORMAT_ALAW | IAXC_FORMAT_GSM | IAXC_FORMAT_SPEEX;

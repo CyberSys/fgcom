@@ -29,7 +29,6 @@
 #else
 #include <strings.h>
 #endif
-#include <glib-2.0/glib.h>
 
 #include "audio_openal.h"
 #include "iaxclient_lib.h"

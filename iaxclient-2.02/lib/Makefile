@@ -27,12 +27,14 @@ USE_NEWJB=1
 
 USE_VIDEO=0
 
-CFLAGS= -I. -Igsm/inc \
+OPENAL_HEADER=/usr/include/AL
+
+CFLAGS= -I. -Igsm/inc -I$(OPENAL_HEADER) \
 	-Iportaudio/pa_common -Iportaudio/pablio -Iportmixer/px_common \
 	-Ilibspeex/include --std=c99 -Wall -Wmissing-noreturn
 
 #CFLAGS:= $(CFLAGS) -g -Wall -Wpointer-arith
-CFLAGS:= $(CFLAGS) -g -O2
+CFLAGS:= $(CFLAGS) -g -O2 -D_GNU_SOURCE
 
 CFLAGS:= $(CFLAGS) -DLIBVER='"SVN $(shell svnversion)"'
 
@@ -55,6 +57,7 @@ OBJS=\
 	spandsp/plc.o \
 	audio_encode.o \
 	audio_portaudio.o \
+	audio_openal.o \
 	audio_file.o \
 	codec_gsm.o \
 	codec_ulaw.o \
@@ -239,6 +242,7 @@ DYNCFLAGS=-fPIC
 DYNLIB=libiaxclient.so
 # change below to 1 to include audio_alsa;
 AUDIO_ALSA=0  
+AUDIO_OPENAL=1  
 endif
 
 ifeq ($(OSTYPE),SOLARIS)
@@ -289,7 +293,7 @@ endif
 
 OBJS:= $(OBJS) $(OBJS_IAX2)
 #CFLAGS:= $(CFLAGS) -Ilibiax2/src -DIAXC_IAX2 -DLIBIAX -DDEBUG_SUPPORT 
-CFLAGS:= $(CFLAGS) -Ilibiax2/src -DLIBIAX 
+CFLAGS:= $(CFLAGS) -Ilibiax2/src -DLIBIAX
 
 ifeq ($(SPAN_EC),1)
 OBJS:= $(OBJS) ec/echo.o

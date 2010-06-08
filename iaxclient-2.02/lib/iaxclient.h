@@ -60,6 +60,7 @@ extern "C" {
 #define AUDIO_INTERNAL_PA 1
 #define AUDIO_INTERNAL_FILE 2
 #define AUDIO_INTERNAL_ALSA 3
+#define AUDIO_INTERNAL_OPENAL 4
 #define AUDIO_EXTERNAL 99
 
 /* payload formats : WARNING: must match libiax values!!! */
