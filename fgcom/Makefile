@@ -2,8 +2,8 @@ INSTALL_BIN:=/usr/local/fgcom/bin
 INSTALL_DIR:=/usr/local/fgcom
 SVNDEF:=-D'SVN_REV="$(shell svnversion -n .)"'
 CFLAGS:=-O2 $(SVNDEF) -I $(INSTALL_DIR)/include -I/usr/lib/glib-2.0/include -I/usr/include/glib-2.0 -I/usr/lib/gnet-2.0/include -I/usr/include/gnet-2.0
-LDFLAGS:=-L $(INSTALL_DIR)/lib
-LIBS:=-liaxclient -lsndfile -lspeex -lspeexdsp -lopenal -glib-2.0 -lgnet-2.0 -loggz
+LDFLAGS:=-L ../iaxclient
+LIBS:=-liaxclient -lspeex -lspeexdsp -lopenal -glib-2.0 -lgnet-2.0
 
 all: fgcom
 
@@ -16,23 +16,23 @@ uninstall:
 	rm -rf $(INSTALL_DIR)
 
 clean:
-	@if [ ! -f ../iaxclient/Makefile ]; then \
-                cd ../iaxclient/lib && make clean; \
+	@if [ -f ../iaxclient/Makefile ]; then \
+                cd ../iaxclient && make clean; \
 	fi
 	rm -f *.o *~
 
 distclean: clean
 	@if [ ! -f ../iaxclient/Makefile ]; then \
-                cd ../iaxclient/lib && make distclean; \
+                cd ../iaxclient && make distclean; \
 	fi
 	rm -f fgcom
 
-fgcom: iaxclient config.o  event.o  fgcom.o  mode.o  net.o  oggfile.o
-	$(CC) $(LDFLAGS) config.o  event.o  fgcom.o  mode.o  net.o  oggfile.o $(LIBS) -o fgcom
+fgcom: iaxclient config.o event.o fgcom.o mode.o net.o
+	$(CC) $(LDFLAGS) config.o event.o fgcom.o mode.o net.o $(LIBS) -o fgcom
 
 iaxclient:
-	@if [ ! -f ../iaxclient/Makefile ]; then \
-                cd ../iaxclient/lib && make; \
+	@if [ -f ../iaxclient/Makefile ]; then \
+                cd ../iaxclient && make; \
 	fi
 
 config.o: config.c config.h

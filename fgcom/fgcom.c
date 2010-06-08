@@ -26,7 +26,6 @@
 #include "fgcom.h"
 #include "config.h"
 #include "event.h"
-#include "oggfile.h"
 #include "mode.h"
 
 extern struct fgcom_config config;
@@ -119,11 +118,6 @@ int main(int argc, char *argv[])
 	/* Handle modes */
 	switch(config.mode)
 	{
-		case MODE_PLAY:
-			/* mode play file */
-			iaxc_set_test_mode(1);
-			mode_play();
-			break;
 		case MODE_FG:
 			/* mode FlightGear and mode InterCom */
 			mode_fg();
@@ -233,22 +227,6 @@ gboolean fgcom_conference_command(gchar *command, ...)
 	va_end(argPtr);
 
 	return(TRUE);
-}
-
-void fgcom_send_audio(void)
-{
-	while(1)
-        {
-		GTimeVal now;
-		ogg_packet *op;
-
-		g_get_current_time(&now);
-		op=oggfile_get_next_audio_op(now);
-		if(op!=NULL && op->bytes>0)
-		{
-			iaxc_push_audio(op->packet, op->bytes,SPEEX_SAMPLING_RATE*SPEEX_FRAME_DURATION/1000);
-		}
-	}
 }
 
 gboolean fgcom_parse_data(struct fg_data *data, gchar *from_fg)
