@@ -14,8 +14,6 @@
 # the GNU Lesser (Library) General Public License
 #
 
-
-
 CODEC_ILBC=0
 
 SPEEX_PREPROCESS=1
@@ -57,7 +55,6 @@ OBJS=\
 	spandsp/plc.o \
 	audio_encode.o \
 	audio_portaudio.o \
-	audio_openal.o \
 	audio_file.o \
 	codec_gsm.o \
 	codec_ulaw.o \
@@ -237,12 +234,11 @@ DYNLIB=iaxclient.dll
 endif
 
 ifeq ($(OSTYPE),LINUX)
-OBJS:= $(OBJS) $(OBJS_LINUX) 
+OBJS:= $(OBJS) $(OBJS_LINUX)
 DYNCFLAGS=-fPIC
 DYNLIB=libiaxclient.so
-# change below to 1 to include audio_alsa;
-AUDIO_ALSA=0  
-AUDIO_OPENAL=1  
+AUDIO_ALSA=0
+AUDIO_OPENAL=1
 endif
 
 ifeq ($(OSTYPE),SOLARIS)
@@ -288,6 +284,11 @@ endif
 ifeq ($(AUDIO_ALSA),1)
 OBJS:= $(OBJS) audio_alsa.o
 CFLAGS:= $(CFLAGS) -DAUDIO_ALSA
+endif
+
+ifeq ($(AUDIO_OPENAL),1)
+OBJS:= $(OBJS) audio_openal.o
+CFLAGS:= $(CFLAGS) -DAUDIO_OPENAL -DHUGO
 endif
 
 
@@ -349,9 +350,10 @@ endif
 
 
 plat:
-	echo Platform is $(OSTYPE)
-	echo OBJS are $(OBJS)
-	echo OBJS_LINUX are $(OBJS_LINUX)
+	@echo Platform is $(OSTYPE)
+	@echo CFLAGS are $(CFLAGS)
+	@echo OBJS are $(OBJS)
+	@echo OBJS_LINUX are $(OBJS_LINUX)
 
 clean:
 	rm -f $(OBJS) $(LIB)

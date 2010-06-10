@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
         signal (SIGALRM, fgcom_update_session);
 
 	/* setup iaxclient */
-	if(iaxc_initialize(DEFAULT_MAX_CALLS))
+	if(iaxc_initialize(AUDIO_INTERNAL_OPENAL,DEFAULT_MAX_CALLS))
 		fgcom_exit("cannot initialize iaxclient!",100);
 	config.initialized=TRUE;
 	iaxc_set_formats(config.codec,IAXC_FORMAT_ULAW|IAXC_FORMAT_ALAW|IAXC_FORMAT_GSM|IAXC_FORMAT_SPEEX);

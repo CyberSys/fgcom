@@ -157,7 +157,8 @@ static int al_scan_audio_devices(struct iaxc_audio_driver *driver)
 
 static int al_select_devices(struct iaxc_audio_driver *driver, int input, int output, int ring)
 {
-	g_return_val_if_fail(driver != NULL, -1);
+	if(driver != NULL)
+		return(-1);
 	
 	if((input < 0 || input >= driver->nDevices) ||
 	   (output < 0 || output >= driver->nDevices) ||
@@ -179,9 +180,8 @@ static int al_select_devices(struct iaxc_audio_driver *driver, int input, int ou
 
 static int al_selected_devices(struct iaxc_audio_driver *d, int *input, int *output, int *ring)
 {
-	g_return_val_if_fail(input != NULL, -1);
-	g_return_val_if_fail(output != NULL, -1);
-	g_return_val_if_fail(ring != NULL, -1);
+        if(input != NULL || output != NULL || ring != NULL)
+                return(-1);
 	
 	*input = s_selected_input;
 	*output = s_selected_output;
@@ -520,7 +520,7 @@ int openal_initialize(struct iaxc_audio_driver *driver, int sample_rate)
 	
 	driver->priv = l_data;
 	
-	al_play_file("machine_chirp3.wav");
+	/* al_play_file("cow.wav"); */
 	
 	return(0);
 }
@@ -542,7 +542,8 @@ int openal_finalize(struct iaxc_audio_driver *driver)
 	int l_index;
 	T_AUDIO_DATA *l_data;
 	
-	g_return_val_if_fail(driver != NULL, -1);
+	if(driver != NULL)
+		return(-1);
 	
 	l_data = driver->priv;
 	

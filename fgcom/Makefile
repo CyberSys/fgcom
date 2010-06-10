@@ -1,9 +1,9 @@
 INSTALL_BIN:=/usr/local/fgcom/bin
 INSTALL_DIR:=/usr/local/fgcom
 SVNDEF:=-D'SVN_REV="$(shell svnversion -n .)"'
-CFLAGS:=-O2 $(SVNDEF) -I $(INSTALL_DIR)/include -I/usr/lib/glib-2.0/include -I/usr/include/glib-2.0 -I/usr/lib/gnet-2.0/include -I/usr/include/gnet-2.0
+CFLAGS:=-O2 $(SVNDEF) -I ../iaxclient -I/usr/lib/glib-2.0/include -I/usr/include/glib-2.0 -I/usr/lib/gnet-2.0/include -I/usr/include/gnet-2.0
 LDFLAGS:=-L ../iaxclient
-LIBS:=-liaxclient -lspeex -lspeexdsp -lopenal -glib-2.0 -lgnet-2.0
+LIBS:=-liaxclient -lspeex -lspeexdsp -lsndfile -lopenal -lglib-2.0 -lgnet-2.0
 
 all: fgcom
 
@@ -49,6 +49,3 @@ mode.o: mode.c mode.h
 
 net.o: net.c net.h
 	$(CC) $(CFLAGS) -c net.c
-
-oggfile.o: oggfile.c oggfile.h
-	$(CC) $(CFLAGS) -c oggfile.c

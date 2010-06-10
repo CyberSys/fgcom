@@ -24,6 +24,10 @@
 #include <varargs.h>
 #endif
 
+#ifdef AUDIO_OPENAL
+#include "audio_openal.h"
+#endif
+
 #include "iaxclient_lib.h"
 #include "jitterbuf.h"
 
@@ -469,7 +473,6 @@ EXPORT int iaxc_initialize(int audType, int inCalls) {
 				return -1;
 			break;
 #endif
-		default:
 		case AUDIO_INTERNAL_PA:
 			if (pa_initialize(&audio, 8000))
 				return -1;
@@ -490,6 +493,10 @@ EXPORT int iaxc_initialize(int audType, int inCalls) {
                                 return -1;
                         break;			
 #endif
+		default:
+printf("IAT:%d %d\n",iAudioType,AUDIO_INTERNAL_OPENAL);
+			printf("No audio system selected\n");
+			return(-1);
 	}
 
 	audio_format_capability = IAXC_FORMAT_ULAW | IAXC_FORMAT_ALAW | IAXC_FORMAT_GSM | IAXC_FORMAT_SPEEX;

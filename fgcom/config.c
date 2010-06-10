@@ -237,7 +237,7 @@ static void config_show_version(void)
 
 static void config_show_audio_devices(void)
 {
-	if(iaxc_initialize(DEFAULT_MAX_CALLS)!=0)
+	if(iaxc_initialize(AUDIO_INTERNAL_OPENAL,DEFAULT_MAX_CALLS)!=0)
 		fgcom_exit("Cannot initialize iaxclient!",203);
 
 	config.initialized=1;
