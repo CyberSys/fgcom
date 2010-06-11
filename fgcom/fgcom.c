@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
         signal (SIGALRM, fgcom_update_session);
 
 	/* setup iaxclient */
-	if(iaxc_initialize(AUDIO_INTERNAL_OPENAL,DEFAULT_MAX_CALLS))
+	if(iaxc_initialize(AUDIO_SYSTEM,DEFAULT_MAX_CALLS))
 		fgcom_exit("cannot initialize iaxclient!",100);
 	config.initialized=TRUE;
 	iaxc_set_formats(config.codec,IAXC_FORMAT_ULAW|IAXC_FORMAT_ALAW|IAXC_FORMAT_GSM|IAXC_FORMAT_SPEEX);
@@ -264,7 +264,10 @@ gboolean fgcom_parse_data(struct fg_data *data, gchar *from_fg)
 
 void fgcom_update_session(gint exitcode)
 {
-	fgcom_conference_command("UPDATE",config.callsign,config.lon,config.lat,config.alt);
+	if(config.mode==MODE_ATC)
+		config.alt=0.0;
+
+	fgcom_conference_command("UPDATE",config.callsign,config.lon,config.lat,(gint)config.alt);
 	alarm(DEFAULT_POSTTION_UPDATE_FREQUENCY);
 }
 
