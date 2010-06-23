@@ -1768,8 +1768,8 @@ int iax_register(struct iax_session *session, const char *server, const char *pe
 		snprintf(iax_errstr, sizeof(iax_errstr), "Invalid hostname: %s", tmp);
 		return -1;
 	}
-	/* memcpy(&session->peeraddr.sin_addr, hp->h_addr, sizeof(session->peeraddr.sin_addr)); */
-	memcpy(&session->peeraddr.sin_addr, hp->h_addr_list[0], sizeof(session->peeraddr.sin_addr)); /* dcoredump@gmail.com */
+	memcpy(&session->peeraddr.sin_addr, hp->h_addr, sizeof(session->peeraddr.sin_addr));
+	// memcpy(&session->peeraddr.sin_addr, hp->h_addr_list[0], sizeof(session->peeraddr.sin_addr)); /* dcoredump@gmail.com */
 	session->peeraddr.sin_port = htons(portno);
 	session->peeraddr.sin_family = AF_INET;
 	strncpy(session->username, peer, sizeof(session->username) - 1);
@@ -1814,8 +1814,8 @@ int iax_unregister(struct iax_session *session, const char *server, const char *
 		snprintf(iax_errstr, sizeof(iax_errstr), "Invalid hostname: %s", tmp);
 		return -1;
 	}
-	/* memcpy(&session->peeraddr.sin_addr, hp->h_addr, sizeof(session->peeraddr.sin_addr)); */
-	memcpy(&session->peeraddr.sin_addr, hp->h_addr_list[0], sizeof(session->peeraddr.sin_addr)); /* dcoredump@gmail.com */
+	memcpy(&session->peeraddr.sin_addr, hp->h_addr, sizeof(session->peeraddr.sin_addr));
+	// memcpy(&session->peeraddr.sin_addr, hp->h_addr_list[0], sizeof(session->peeraddr.sin_addr)); /* dcoredump@gmail.com */
 	session->peeraddr.sin_port = htons(portno);
 	session->peeraddr.sin_family = AF_INET;
 	strncpy(session->username, peer, sizeof(session->username) - 1);
@@ -2213,8 +2213,8 @@ int iax_call(struct iax_session *session, const char *cidnum, const char *cidnam
 		snprintf(iax_errstr, sizeof(iax_errstr), "Invalid hostname: %s", hostname);
 		return -1;
 	}
-	/* memcpy(&session->peeraddr.sin_addr, hp->h_addr, sizeof(session->peeraddr.sin_addr)); */
-	memcpy(&session->peeraddr.sin_addr, hp->h_addr_list[0], sizeof(session->peeraddr.sin_addr)); /* dcoredump@gmail.com */
+	memcpy(&session->peeraddr.sin_addr, hp->h_addr, sizeof(session->peeraddr.sin_addr));
+	// memcpy(&session->peeraddr.sin_addr, hp->h_addr_list[0], sizeof(session->peeraddr.sin_addr)); /* dcoredump@gmail.com */
 	session->peeraddr.sin_port = htons(portno);
 	session->peeraddr.sin_family = AF_INET;
 	res = send_command(session, AST_FRAME_IAX, IAX_COMMAND_NEW, 0, ied.buf, ied.pos, -1);

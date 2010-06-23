@@ -351,7 +351,7 @@ static void fgcom_set_audio_interface(char* in_dev_name, char* out_dev_name)
 		{
 			input_id=i;
 			if(config.verbose==TRUE)
-				g_printf("set input audio: %s\n",in_dev_name);
+				g_printf("set input audio: %s[%d]\n",in_dev_name,input_id);
 		}
 	}
 
@@ -362,7 +362,7 @@ static void fgcom_set_audio_interface(char* in_dev_name, char* out_dev_name)
 		{
 			output_id=i;
 			if(config.verbose==TRUE)
-				g_printf("set output audio: %s\n",out_dev_name);
+				g_printf("set output audio: %s[%d]\n",out_dev_name,output_id);
 		}
 	}
 
