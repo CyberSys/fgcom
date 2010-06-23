@@ -6,17 +6,12 @@
 #include <glib.h>
 #include "iaxclient.h"
 
-#define DEFAULT_MAX_CALLS 2
-#define DEFAULT_USER "guest\0"
-#define DEFAULT_PASSWORD "guest\0"
-#define DEFAULT_FRQ "02911000"
+#define DEFAULT_MAX_CALLS 1
+#define DEFAULT_FRQ "02910000"
 #define DEFAULT_PRESELECTION 2
 #define DEFAULT_VOIP_SERVER "fgcom1.parasitstudio.de\0"
 #define DEFAULT_MIC_LEVEL 0.5
 #define DEFAULT_SPEAKER_LEVEL 0.5
-#define DEFAULT_POSTTION_UPDATE_FREQUENCY 7
-
-#define AUDIO_SYSTEM AUDIO_INTERNAL_OPENAL
 
 #define FGCOM_UDP_MAX_BUFFER 1024
 
@@ -26,7 +21,6 @@ void fgcom_send_audio(void);
 gboolean fgcom_dial(gdouble frequency);
 gboolean fgcom_hangup(void);
 gboolean fgcom_conference_command(gchar *command, ...);
-void fgcom_update_session(gint exitcode);
 void event_state(int state, char *remote, char *remote_name, char *local, char *local_context);
 void event_text(int type, char *message);
 void event_register(int id, int reply, int count);
@@ -40,6 +34,7 @@ static int fgcom_iaxc_callback(iaxc_event e);
 static void fgcom_quit (gint exitcode);
 static void report(char *text);
 static const char *map_state (int state);
+static void fgcom_set_audio_interface(char* in_dev_name, char* out_dev_name);
 
 static int last_state = 0;
 static char tmp[1024];
@@ -58,19 +53,22 @@ int main(int argc, char *argv[])
         signal (SIGHUP, fgcom_quit);
 
 	/* setup iaxclient */
-	if(iaxc_initialize(AUDIO_SYSTEM,DEFAULT_MAX_CALLS))
+	if(iaxc_initialize(DEFAULT_MAX_CALLS))
 		fgcom_exit("cannot initialize iaxclient!",100);
 	iaxc_set_formats(IAXC_FORMAT_SPEEX,IAXC_FORMAT_ULAW|IAXC_FORMAT_ALAW|IAXC_FORMAT_GSM|IAXC_FORMAT_SPEEX);
 	iaxc_set_event_callback(fgcom_iaxc_callback);
+
+	fgcom_set_audio_interface("default","default");
 
 	iaxc_millisleep(100);
 
 	/* Start the IAX client */
 	iaxc_start_processing_thread();
 
-	fgcom_dial(911.000);
+	fgcom_dial(910.000);
 
 	sleep(3600);
+	fgcom_exit("Exiting after 3600 seconds.",0);
 }
 
 /****************************************************************************
@@ -98,8 +96,7 @@ gboolean fgcom_dial(gdouble frequency)
 {
 	char dest[80];
 
-	//g_snprintf(dest,sizeof(dest),"%s/%02d%-6d",DEFAULT_VOIP_SERVER,DEFAULT_PRESELECTION,(int)(frequency*1000));
-	g_snprintf(dest,sizeof(dest),"alcyone.dfn.de/94941");
+	g_snprintf(dest,sizeof(dest),"%s/%02d%-6d",DEFAULT_VOIP_SERVER,DEFAULT_PRESELECTION,(int)(frequency*1000));
 	g_printf("Dialing [%s]",dest);
 
 	iaxc_call(dest);
@@ -258,5 +255,39 @@ static const char *map_state (int state)
         }
     }
   return states;
+}
+
+static void fgcom_set_audio_interface(char* in_dev_name, char* out_dev_name)
+{
+        struct iaxc_audio_device *devs;       /* audio devices */
+        int ndevs;                    /* audio dedvice count */
+        int input, output, ring;      /* audio device id's */
+        int input_id, output_id;
+        int i;
+
+        iaxc_audio_devices_get (&devs, &ndevs, &input, &output, &ring);
+
+        // set up input audio interface
+        for (i = 0; i < ndevs; i++)
+        {
+                if(strcmp(devs[i].name,in_dev_name)==0 && devs[i].capabilities &
+ IAXC_AD_INPUT)
+                {
+                        input_id=i;
+                        g_printf("set input audio: %s\n",in_dev_name);
+                }
+        }
+
+        // set up output audio interface
+        for (i = 0; i < ndevs; i++)
+        {
+                if(strcmp(devs[i].name,out_dev_name)==0 && devs[i].capabilities & IAXC_AD_OUTPUT)
+                {
+                        output_id=i;
+                        g_printf("set output audio: %s\n",out_dev_name);
+                }
+        }
+
+        iaxc_audio_devices_set(devs[input_id].devID,devs[output_id].devID,devs[output_id].devID);
 }
 

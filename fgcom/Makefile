@@ -6,7 +6,7 @@ LIBS:=-liaxclient -lspeex -lspeexdsp -lglib-2.0 -lgnet-2.0
 
 all: fgcom Makefile
 
-testclient: testclient.c Makefile
+testclient: testclient.c Makefile iaxclient
 	$(CC) $(CFLAGS) -c testclient.c
 	$(CC) $(LDFLAGS) testclient.o $(LIBS) -o testclient
 
