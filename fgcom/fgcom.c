@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
         signal (SIGALRM, fgcom_update_session);
 
 	/* setup iaxclient */
-	if(iaxc_initialize(AUDIO_SYSTEM,DEFAULT_MAX_CALLS))
+	if(iaxc_initialize(DEFAULT_MAX_CALLS))
 		fgcom_exit("cannot initialize iaxclient!",100);
 	config.initialized=TRUE;
 	iaxc_set_formats(config.codec,IAXC_FORMAT_ULAW|IAXC_FORMAT_ALAW|IAXC_FORMAT_GSM|IAXC_FORMAT_SPEEX);
@@ -56,6 +56,9 @@ int main(int argc, char *argv[])
 
 	if(config.verbose==TRUE)
 		g_printf("iaxclient initialized\n");
+
+	/* Setting the audio interface **/
+	fgcom_set_audio_interface(config.audio_in,config.audio_out);
 
 	iaxc_millisleep(100);
 
@@ -329,4 +332,39 @@ static void fgcom_quit (gint exitcode)
 		iaxc_shutdown ();
 	}
 	exit((int)exitcode);
+}
+
+static void fgcom_set_audio_interface(char* in_dev_name, char* out_dev_name)
+{
+	struct iaxc_audio_device *devs;       /* audio devices */
+	int ndevs;                    /* audio dedvice count */
+	int input, output, ring;      /* audio device id's */
+	int input_id, output_id;
+	int i;
+
+	iaxc_audio_devices_get (&devs, &ndevs, &input, &output, &ring);
+
+	// set up input audio interface
+	for (i = 0; i < ndevs; i++)
+	{
+		if(strcmp(devs[i].name,in_dev_name)==0 && devs[i].capabilities & IAXC_AD_INPUT)
+		{
+			input_id=i;
+			if(config.verbose==TRUE)
+				g_printf("set input audio: %s\n",in_dev_name);
+		}
+	}
+
+	// set up output audio interface
+	for (i = 0; i < ndevs; i++)
+	{
+		if(strcmp(devs[i].name,out_dev_name)==0 && devs[i].capabilities & IAXC_AD_OUTPUT)
+		{
+			output_id=i;
+			if(config.verbose==TRUE)
+				g_printf("set output audio: %s\n",out_dev_name);
+		}
+	}
+
+	iaxc_audio_devices_set(devs[input_id].devID,devs[output_id].devID,devs[output_id].devID);
 }

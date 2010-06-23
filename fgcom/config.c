@@ -237,7 +237,7 @@ static void config_show_version(void)
 
 static void config_show_audio_devices(void)
 {
-	if(iaxc_initialize(AUDIO_SYSTEM,DEFAULT_MAX_CALLS)!=0)
+	if(iaxc_initialize(DEFAULT_MAX_CALLS)!=0)
 		fgcom_exit("Cannot initialize iaxclient!",203);
 
 	config.initialized=1;
@@ -258,14 +258,15 @@ static void config_report_devices(int io)
   int input, output, ring;      /* audio device id's */
   int current, i;
   int flag = io ? IAXC_AD_INPUT : IAXC_AD_OUTPUT;
+
   iaxc_audio_devices_get (&devs, &ndevs, &input, &output, &ring);
-  current = io ? input : output;
-  g_printf("\t%s\n",devs[current].name);
+  current=io ? input : output;
+  g_printf("Device: %s\n",devs[current].name);
   for (i = 0; i < ndevs; i++)
     {
       if (devs[i].capabilities & flag && i != current)
         {
-          g_printf("\t\t%s\n",devs[i].name);
+          g_printf("\t%s\n",devs[i].name);
         }
     }
 }

@@ -30,8 +30,6 @@
 #define DEFAULT_SPEAKER_LEVEL 0.5
 #define DEFAULT_POSTTION_UPDATE_FREQUENCY 7
 
-#define AUDIO_SYSTEM AUDIO_INTERNAL_ALSA
-
 #define FGCOM_UDP_MAX_BUFFER 1024
 
 enum { MODE_PLAY=0, MODE_FG, MODE_ATC };
@@ -67,4 +65,5 @@ void fgcom_update_session(gint exitcode);
 /* private prototypes */
 static int fgcom_iaxc_callback(iaxc_event e);
 static void fgcom_quit (gint exitcode);
+static void fgcom_set_audio_interface(char* in_dev_name, char* out_dev_name);
 #endif

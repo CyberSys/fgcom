@@ -2,7 +2,7 @@ INSTALL_BIN:=/usr/local/bin
 SVNDEF:=-D'SVN_REV="$(shell svnversion -n .)"'
 CFLAGS:=-O2 $(SVNDEF) -I ../iaxclient -I/usr/lib/glib-2.0/include -I/usr/include/glib-2.0 -I/usr/lib/gnet-2.0/include -I/usr/include/gnet-2.0
 LDFLAGS:=-L ../iaxclient
-LIBS:=-liaxclient -lspeex -lspeexdsp -lsndfile -lopenal -lglib-2.0 -lgnet-2.0 -lasound
+LIBS:=-liaxclient -lspeex -lspeexdsp -lglib-2.0 -lgnet-2.0
 
 all: fgcom Makefile
 
@@ -31,10 +31,12 @@ distclean: clean
 fgcom: iaxclient config.o event.o fgcom.o mode.o net.o
 	$(CC) $(LDFLAGS) config.o event.o fgcom.o mode.o net.o $(LIBS) -o fgcom
 
-iaxclient:
-	@if [ -f ../iaxclient/Makefile ]; then \
-                cd ../iaxclient && make; \
-	fi
+iaxclient: ../iaxclient/Makefile
+	@cd ../iaxclient && make
+
+../iaxclient/Makefile:
+	@cd ../iaxclient; \
+	./configure --prefix=/usr --with-gnu-ld --with-echo-can --without-ogg --without-theora --without-vidcap --disable-clients
 
 config.o: config.c config.h
 	$(CC) $(CFLAGS) -c config.c
