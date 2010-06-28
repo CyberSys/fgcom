@@ -38,6 +38,7 @@ int ring_id=0;
 int main(int argc, char *argv[])
 {
 	char dest[80];
+	double frq=0.0;
 
         signal (SIGINT, quit);
         signal (SIGQUIT, quit);
@@ -46,10 +47,8 @@ int main(int argc, char *argv[])
 	/* setup iaxclient */
 	if(iaxc_initialize(1))
 		test_exit("cannot initialize iaxclient!",100);
-	iaxc_set_formats(IAXC_FORMAT_ULAW,IAXC_FORMAT_ULAW|IAXC_FORMAT_ALAW|IAXC_FORMAT_SPEEX);
+	iaxc_set_formats(IAXC_FORMAT_SPEEX,IAXC_FORMAT_ULAW|IAXC_FORMAT_ALAW|IAXC_FORMAT_SPEEX);
 	iaxc_set_event_callback(iaxc_callback);
-
-	set_audio_interface("default","default");
 
 	/* Start the IAX client */
 	iaxc_start_processing_thread();
@@ -58,7 +57,19 @@ int main(int argc, char *argv[])
 	iaxc_set_test_mode(1);
 
 	/* Dial */
-	snprintf(dest,sizeof(dest),"fgcom1.parasitstudio.de/02909000");
+	if(argc>1)
+	{
+		if((frq=atof(argv[1]))>0.0)
+			snprintf(dest,sizeof(dest),"fgcom1.parasitstudio.de/02%06d",(int)(frq*1000));
+		else
+		{
+			printf("Unknown parameter: %s\n");
+			test_exit("Stopping now.",199);
+		}
+	}
+	else
+		snprintf(dest,sizeof(dest),"fgcom1.parasitstudio.de/02123450");
+
 	printf("Dialing [%s]",dest);
 	iaxc_call(dest);
 

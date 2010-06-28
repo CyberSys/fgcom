@@ -33,9 +33,15 @@ extern struct fgcom_config config;
 /* Main program */
 int main(int argc, char *argv[])
 {
-	if(config_parse_cmd_options("/home/wirtz/.fgcomrc",argc,argv)==FALSE)
+	char* home;
+
+	if((home=getenv("HOME"))!=NULL)
 	{
-		fgcom_exit("Program stop due to option errors.",100);
+		sprintf(tmp,"%s/.fgcomrc",home);
+		if(config_parse_cmd_options(tmp,argc,argv)==FALSE)
+		{
+			fgcom_exit("Program stop due to option errors.",100);
+		}
 	}
 
 	if(config.verbose==TRUE)

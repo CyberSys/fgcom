@@ -1,0 +1,3 @@
+$ sox lighthouse.wav -c 1 -r 8000 lighthouse2.wav
+$ speecenc lighthouse2.wav lighthouse.ogg
+$ ogg123 lighthouse.ogg (just for testing)

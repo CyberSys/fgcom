@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
 	/* Start the IAX client */
 	iaxc_start_processing_thread();
 
-	fgcom_dial(910.000);
+	fgcom_dial(123.450);
 
 	sleep(3600);
 	fgcom_exit("Exiting after 3600 seconds.",0);
