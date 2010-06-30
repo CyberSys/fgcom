@@ -34,11 +34,10 @@ void mode_fg(void)
 	if(config.verbose==TRUE)
 		printf("Mode: FlightGear\n");
 
-	/* start the position update */
 	alarm(DEFAULT_POSTTION_UPDATE_FREQUENCY);
 
 	if(net_open(config.fg,config.fg_port)==FALSE)
-		fgcom_exit("Cannot open conenction to FG!\n",567);
+		fgcom_exit("Cannot open connection to FG!\n",567);
 
 	/* start the position update */
 	alarm(DEFAULT_POSTTION_UPDATE_FREQUENCY);
@@ -55,15 +54,16 @@ void mode_fg(void)
 		/* read data from FG */
 		if(net_block_read(from_fg)==TRUE)
 		{
-			if(g_timer_elapsed(packet_age,NULL)>5.0)
+			if(g_timer_elapsed(packet_age,NULL)>DEFAULT_PACKET_TIMEOUT)
 			{
-				/* packet is more than 5 seconds old */
-				fgcom_hangup();
+				/* packet is older than DEFAULT_PACKET_TIMEOUT seconds */
+				fgcom_hangup("packet too old");
 				g_timer_reset(packet_age);
 				if(config.verbose==TRUE)
 				{
-					g_printf("fgcom detected packets older than 5 seconds: dropping the call!\n");
+					g_printf("fgcom detected packets older than %d seconds: dropping the call!\n",(int)DEFAULT_PACKET_TIMEOUT);
 				}
+				sleep(5);
 			}
 			else
 			{
@@ -89,9 +89,12 @@ void mode_fg(void)
 				printf("Frequency change %3.3lf->%3.3lf\n",com1frq,data.COM1_FRQ);
 			com1frq=data.COM1_FRQ;
 			if(config.connected==TRUE)
-				fgcom_hangup();
-			if((config.connected=fgcom_dial(com1frq))!=TRUE)
-				fgcom_exit("Dialing failed\n",330);
+				fgcom_hangup("frequency change");
+			if((fgcom_dial(com1frq))!=TRUE)
+			{
+				g_printf("Connecting failed, trying again...\n");
+				sleep(1);
+			}
 		}
 
 		/* PTT change detection */
@@ -103,14 +106,14 @@ void mode_fg(void)
 				if(config.verbose==TRUE)
 					printf("PTT pressed.\n");
 				iaxc_input_level_set(config.mic_level);
-				iaxc_output_level_set(0.0);
+				//iaxc_output_level_set(0.0);
 			}
 			else if(ptt==0)
 			{
 				if(config.verbose==TRUE)
 					printf("PTT released.\n");
 				iaxc_input_level_set(0.0);
-				iaxc_output_level_set(config.speaker_level);
+				//iaxc_output_level_set(config.speaker_level);
 			}
 			else
 			{
@@ -138,20 +141,83 @@ void mode_atc(void)
 	if(config.frequency<=0.0)
 		fgcom_exit("frequency must be set for mode ATC\n",110);
 
-	if((config.connected=fgcom_dial(config.frequency))!=TRUE)
-		fgcom_exit("Dialing failed\n",330);
-
-	fgcom_conference_command("ADD",config.callsign,config.lon,config.lat,100);
-
 	/* start the position update */
 	alarm(DEFAULT_POSTTION_UPDATE_FREQUENCY);
 
 	/* change audio settings */ /* This may be not needed if iaxclient fully supports test mode */
-	iaxc_mic_boost_set(1);
-	iaxc_input_level_set(1.0);
+	iaxc_mic_boost_set(config.mic_boost);
+	iaxc_input_level_set(config.mic_level);
+	iaxc_output_level_set(config.speaker_level);
 
 	while(TRUE)
 	{
-		sleep(10000);
+		if(config.connected==FALSE)
+		{
+			if((fgcom_dial(config.frequency))!=TRUE)
+			if(config.verbose==TRUE)
+				printf("Connecting failed, trying again...\n");
+			sleep(1);
+		}
+		else
+		{
+			sleep(5);
+		}
+	}
+}
+
+void mode_play(void)
+{
+	/* mode play file */
+	if(config.verbose==TRUE)
+		printf("Mode: Play\n");
+
+	config.modelname=g_strdup("LIGHTHOUSE");
+
+	/* change audio settings */ /* This may be not needed if iaxclient fully supports test mode */
+	iaxc_mic_boost_set(0);
+	iaxc_input_level_set(0.0);
+
+	/* consistency checks */
+	if(config.callsign==NULL)
+		fgcom_exit("callsign must be set for mode Play\n",110);
+	if(config.lat<-180.0)
+		fgcom_exit("latitude must be set for mode Play\n",110);
+	if(config.lon<-180.0)
+		fgcom_exit("longtitude must be set for mode Play\n",110);
+	if(config.frequency<=0.0)
+		fgcom_exit("frequency must be set for mode Play\n",110);
+
+	// load audio file
+	if(config.play_file!=NULL)
+	{
+		if(oggfile_load_ogg_file(config.play_file))
+			fgcom_exit("Failed loading ogg file.\n",333);
+	}
+	else
+		fgcom_exit("No audio filename.\n",334);
+
+	while(TRUE)
+	{
+		if(config.connected==FALSE)
+		{
+			if((fgcom_dial(config.frequency))!=TRUE)
+			{
+				if(config.verbose==TRUE)
+				g_printf("Connecting failed, trying again...\n");
+				sleep(1);
+			}
+			else
+			{
+				/* start the position update */
+				alarm(DEFAULT_POSTTION_UPDATE_FREQUENCY);
+			}
+		}
+		else
+		{
+			/* play the sound endless */
+			if(config.verbose==TRUE)
+				g_printf("Playing %s\n",config.play_file);
+			fgcom_send_audio();
+		}
 	}
 }

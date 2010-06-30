@@ -27,8 +27,11 @@
 #include "config.h"
 #include "event.h"
 #include "mode.h"
+#include "oggfile.h"
 
 extern struct fgcom_config config;
+
+static void fgcom_set_audio_interface(char* in_dev_name, char* out_dev_name);
 
 /* Main program */
 int main(int argc, char *argv[])
@@ -127,6 +130,11 @@ int main(int argc, char *argv[])
 	/* Handle modes */
 	switch(config.mode)
 	{
+                case MODE_PLAY:
+                        /* mode play file */
+                        iaxc_set_test_mode(1);
+                        mode_play();
+                        break;
 		case MODE_FG:
 			/* mode FlightGear and mode InterCom */
 			mode_fg();
@@ -153,10 +161,10 @@ void fgcom_exit(gchar *text, gint exitcode)
 	fgcom_quit(exitcode);
 }
 
-gboolean fgcom_hangup(void)
+gboolean fgcom_hangup(char* cause)
 {
 	if(config.verbose==TRUE)
-		g_printf("Hangup\n");
+		g_printf("Hangup (cause: %s)\n",cause);
 
 	iaxc_dump_call();
 	config.connected=FALSE;
@@ -188,11 +196,13 @@ gboolean fgcom_dial(gdouble frequency)
 	{
 		g_snprintf(dest,sizeof(dest),"%s/%02d%-6d",config.iax_server,DEFAULT_PRESELECTION,(int)(frequency*1000));
 		if(config.verbose==TRUE)
-			g_printf("Dialing [%s]",dest);
+			g_printf("Dialing [%s]\n",dest);
 	}
 
-	iaxc_call(dest);
-	iaxc_millisleep(100);
+	if(iaxc_call(dest)<0)
+		return(FALSE);
+	else
+		iaxc_millisleep(100);
 
 	return(TRUE);
 }
@@ -238,6 +248,22 @@ gboolean fgcom_conference_command(gchar *command, ...)
 	return(TRUE);
 }
 
+void fgcom_send_audio(void)
+{
+        while(1)
+        {
+                GTimeVal now;
+                ogg_packet *op;
+
+                g_get_current_time(&now);
+                op=oggfile_get_next_audio_op(now);
+                if(op!=NULL && op->bytes>0)
+                {
+                        iaxc_push_audio(op->packet, op->bytes,SPEEX_SAMPLING_RATE*SPEEX_FRAME_DURATION/1000);
+                }
+        }
+}
+
 gboolean fgcom_parse_data(struct fg_data *data, gchar *from_fg)
 {
 	gchar *tmp;
@@ -274,9 +300,9 @@ gboolean fgcom_parse_data(struct fg_data *data, gchar *from_fg)
 void fgcom_update_session(gint exitcode)
 {
 	if(config.mode==MODE_ATC)
-		config.alt=0.0;
+		config.alt=0;
 
-	fgcom_conference_command("UPDATE",config.callsign,config.lon,config.lat,(gint)config.alt);
+	fgcom_conference_command("UPDATE",config.callsign,config.lon,config.lat,config.alt);
 	alarm(DEFAULT_POSTTION_UPDATE_FREQUENCY);
 }
 

@@ -2,7 +2,7 @@ INSTALL_BIN:=/usr/local/bin
 SVNDEF:=-D'SVN_REV="$(shell svnversion -n .)"'
 CFLAGS:=-O2 $(SVNDEF) -I ../iaxclient/lib -I/usr/lib/glib-2.0/include -I/usr/include/glib-2.0 -I/usr/lib/gnet-2.0/include -I/usr/include/gnet-2.0
 LDFLAGS:=-L../iaxclient/lib/.libs
-LIBS:=-liaxclient -lspeex -lspeexdsp -lgnet-2.0 -lglib-2.0
+LIBS:=-liaxclient -lspeex -lspeexdsp -lgnet-2.0 -lglib-2.0 -loggz
 
 all: fgcom Makefile
 
@@ -13,7 +13,7 @@ testclient: testclient.c Makefile iaxclient
 lighthouse: lighthouse.c oggfile.c oggfile.h Makefile iaxclient
 	$(CC) $(CFLAGS) -c lighthouse.c
 	$(CC) $(CFLAGS) -c oggfile.c
-	$(CC) $(LDFLAGS) lighthouse.o oggfile.o $(LIBS) -loggz -o lighthouse
+	$(CC) $(LDFLAGS) lighthouse.o oggfile.o $(LIBS) -o lighthouse
 
 install: all
 	install -m 755 -s fgcom $(INSTALL_BIN)/fgcom
@@ -33,8 +33,8 @@ distclean: clean
 	fi
 	rm -f fgcom
 
-fgcom: iaxclient config.o event.o fgcom.o mode.o net.o
-	$(CC) $(LDFLAGS) config.o event.o fgcom.o mode.o net.o $(LIBS) -o fgcom
+fgcom: iaxclient config.o event.o fgcom.o mode.o net.o oggfile.o
+	$(CC) $(LDFLAGS) config.o event.o fgcom.o mode.o net.o oggfile.o $(LIBS) -o fgcom
 
 iaxclient: ../iaxclient/Makefile
 	@cd ../iaxclient && make
@@ -53,7 +53,7 @@ event.o: event.c event.h
 fgcom.o: fgcom.c fgcom.h
 	$(CC) $(CFLAGS) -c fgcom.c
 
-mode.o: mode.c mode.h
+mode.o: mode.c mode.h fgcom.h
 	$(CC) $(CFLAGS) -c mode.c
 
 net.o: net.c net.h

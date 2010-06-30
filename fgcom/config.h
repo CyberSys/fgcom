@@ -46,7 +46,7 @@ struct fgcom_config
 	gdouble frequency;
 	gdouble lon;
 	gdouble lat;
-	gdouble alt;
+	gint alt;
 
 	/* group audio parameters */
 	gboolean mic_boost;

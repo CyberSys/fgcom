@@ -29,6 +29,7 @@
 #define DEFAULT_MIC_LEVEL 0.5
 #define DEFAULT_SPEAKER_LEVEL 0.5
 #define DEFAULT_POSTTION_UPDATE_FREQUENCY 7
+#define DEFAULT_PACKET_TIMEOUT 15.0
 
 #define FGCOM_UDP_MAX_BUFFER 1024
 
@@ -57,7 +58,7 @@ struct fg_data {
 void fgcom_exit(gchar *text, gint exitcode);
 void fgcom_send_audio(void);
 gboolean fgcom_dial(gdouble frequency);
-gboolean fgcom_hangup(void);
+gboolean fgcom_hangup(char* cause);
 gboolean fgcom_conference_command(gchar *command, ...);
 gboolean fgcom_parse_data(struct fg_data *data, gchar *from_fg);
 void fgcom_update_session(gint exitcode);
@@ -65,5 +66,4 @@ void fgcom_update_session(gint exitcode);
 /* private prototypes */
 static int fgcom_iaxc_callback(iaxc_event e);
 static void fgcom_quit (gint exitcode);
-static void fgcom_set_audio_interface(char* in_dev_name, char* out_dev_name);
 #endif

@@ -10,8 +10,8 @@
 #define DEFAULT_FRQ "02910000"
 #define DEFAULT_PRESELECTION 2
 #define DEFAULT_VOIP_SERVER "fgcom1.parasitstudio.de\0"
-#define DEFAULT_MIC_LEVEL 0.5
-#define DEFAULT_SPEAKER_LEVEL 0.5
+#define DEFAULT_MIC_LEVEL 1.0
+#define DEFAULT_SPEAKER_LEVEL 0.7
 
 #define FGCOM_UDP_MAX_BUFFER 1024
 
@@ -65,7 +65,9 @@ int main(int argc, char *argv[])
 	/* Start the IAX client */
 	iaxc_start_processing_thread();
 
-	fgcom_dial(123.450);
+	//fgcom_dial(911.000);
+	//fgcom_dial(123.450);
+	fgcom_dial(122.820);
 
 	sleep(3600);
 	fgcom_exit("Exiting after 3600 seconds.",0);

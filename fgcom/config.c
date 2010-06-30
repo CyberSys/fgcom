@@ -77,7 +77,8 @@ gboolean config_parse_cmd_options(char *filename, int argc, char *argv[])
 	config.frequency=0.0;
 	config.lon=-9999.99;
 	config.lat=-9999.99;
-	config.mic_boost=FALSE;
+	config.alt=0;
+	config.mic_boost=TRUE;
 	config.mic_level=DEFAULT_MIC_LEVEL;
 	config.speaker_level=DEFAULT_SPEAKER_LEVEL;
 	config.audio_in=g_strdup("default");
@@ -140,7 +141,7 @@ static gboolean config_cb_lat(gchar *option_name,gchar *value,gpointer data,GErr
 
 	if(config.lat<-90.0 || config.lat>90.0)
 	{
-		tmp_error=g_error_new(G_OPTION_ERROR,G_OPTION_ERROR_BAD_VALUE,"%s must be between -180.0 and 180.0 degree\n",option_name);
+		tmp_error=g_error_new(G_OPTION_ERROR,G_OPTION_ERROR_BAD_VALUE,"%s must be between -90.0 and 90.0 degree\n",option_name);
 		g_propagate_error(error,tmp_error);
 		return(FALSE);
 	}

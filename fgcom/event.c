@@ -49,9 +49,29 @@ void event_state(int state, char *remote, char *remote_name, char *local, char *
 
 void event_text(int type, char *message)
 {
-  g_snprintf (tmp, sizeof (tmp), "T%c%d%c%.200s", delim, type, delim, message);
-  g_printf("%s\n",message);
-  report (tmp);
+	if(g_regex_match_simple("^.+\\s+answered\\s*$",message,G_REGEX_CASELESS,0)==TRUE)
+	{
+		config.connected=TRUE;
+
+	        /* initial tell our position */
+		iaxc_millisleep(100);
+		fgcom_conference_command("ADD",config.callsign,config.lon,config.lat,config.alt);
+	}
+	else if(g_regex_match_simple("^.+\\s+hangup\\s*$",message,G_REGEX_CASELESS,0)==TRUE)
+	{
+		// reconnect
+		config.connected=FALSE;
+	}
+	else if(g_regex_match_simple("^.+\\s+disconnected\\s+by\\s+remote\\s*$",message,G_REGEX_CASELESS,0)==TRUE)
+	{
+		config.connected=FALSE;
+		fgcom_exit("Diconected by remote",999);
+	}
+
+	g_snprintf (tmp, sizeof (tmp), "T%c%d%c%.200s", delim, type, delim, message);
+	g_printf("%s\n",message);
+
+	report (tmp);
 }
 
 void event_register(int id, int reply, int count)
