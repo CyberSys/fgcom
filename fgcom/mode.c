@@ -105,14 +105,14 @@ void mode_fg(void)
 			{
 				if(config.verbose==TRUE)
 					printf("PTT pressed.\n");
-				iaxc_input_level_set(config.mic_level);
+				printf("PTT-Press:%d\n",iaxc_input_level_set(config.mic_level));
 				//iaxc_output_level_set(0.0);
 			}
 			else if(ptt==0)
 			{
 				if(config.verbose==TRUE)
 					printf("PTT released.\n");
-				iaxc_input_level_set(0.0);
+				printf("PTT-Release:%d\n",iaxc_input_level_set(0.0));
 				//iaxc_output_level_set(config.speaker_level);
 			}
 			else

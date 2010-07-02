@@ -2,7 +2,7 @@ INSTALL_BIN:=/usr/local/bin
 SVNDEF:=-D'SVN_REV="$(shell svnversion -n .)"'
 CFLAGS:=-O2 $(SVNDEF) -I ../iaxclient/lib -I/usr/lib/glib-2.0/include -I/usr/include/glib-2.0 -I/usr/lib/gnet-2.0/include -I/usr/include/gnet-2.0
 LDFLAGS:=-L../iaxclient/lib/.libs
-LIBS:=-liaxclient -lspeex -lspeexdsp -lgnet-2.0 -lglib-2.0 -loggz
+LIBS:=-liaxclient -lspeex -lspeexdsp -lgnet-2.0 -lglib-2.0 -loggz -lvidcap
 
 all: fgcom Makefile
 
