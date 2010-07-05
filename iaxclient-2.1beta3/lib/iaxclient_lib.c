@@ -33,7 +33,8 @@
 #endif
 
 #include "iaxclient_lib.h"
-#include "audio_portaudio.h"
+//#include "audio_portaudio.h"
+#include "audio_openal.h"
 #include "audio_encode.h"
 #ifdef USE_VIDEO
 #include "video.h"
@@ -49,16 +50,16 @@
 # endif
 #endif
 
-#ifdef AUDIO_ALSA
-#include "audio_alsa.h"
-#endif
+// #ifdef AUDIO_ALSA
+// #include "audio_alsa.h"
+// #endif
 
 #define IAXC_ERROR  IAXC_TEXT_TYPE_ERROR
 #define IAXC_STATUS IAXC_TEXT_TYPE_STATUS
 #define IAXC_NOTICE IAXC_TEXT_TYPE_NOTICE
 
-#define DEFAULT_CALLERID_NAME    "Not Available"
-#define DEFAULT_CALLERID_NUMBER  "7005551212"
+#define DEFAULT_CALLERID_NAME    "FGCOM guest"
+#define DEFAULT_CALLERID_NUMBER  "02123450"
 
 #undef JB_DEBUGGING
 
@@ -626,6 +627,7 @@ EXPORT int iaxc_initialize(int num_calls)
 
 	if ( !test_mode )
 	{
+/*
 #ifndef AUDIO_ALSA
 		if ( pa_initialize(&audio_driver, 8000) )
 		{
@@ -633,16 +635,15 @@ EXPORT int iaxc_initialize(int num_calls)
 			return -1;
 		}
 #else
-		/* TODO: It is unknown whether this stuff for direct access to
-		* alsa should be left in iaxclient. We're leaving it in here for
-		* the time being, but unless it becomes clear that someone cares
-		* about having it, it will be removed. Also note that portaudio
-		* is capable of using alsa. This is another reason why this
-		* direct alsa access may be unneeded.
-		*/
 		if ( alsa_initialize(&audio_driver, 8000) )
 			return -1;
 #endif
+*/
+		if (openal_initialize(&audio_driver, 8000))
+		{
+			iaxci_usermsg(IAXC_ERROR, "failed openal_initialize");
+			return -1;
+		}
 	}
 #ifdef USE_VIDEO
 	if ( video_initialize() )

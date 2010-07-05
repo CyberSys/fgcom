@@ -7,7 +7,7 @@ libiaxclient_la_SOURCES = $(SRCS)
 nodist_libiaxclient_la_SOURCES = $(NODIST_SRCS)
 
 AM_CPPFLAGS =					\
-	-I$(srcdir)/portmixer/px_common
+	-I$(srcdir)/portmixer/px_common -I/usr/include/AL -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include/
 
 AM_CFLAGS =					\
 	$(PTHREAD_CFLAGS)			\
@@ -128,8 +128,8 @@ SRCS_LIBGSM=					\
 SRCS +=						\
 	audio_encode.c				\
 	audio_encode.h				\
-	audio_portaudio.c			\
-	audio_portaudio.h			\
+	audio_openal.c			\
+	audio_openal.h			\
 	codec_alaw.c				\
 	codec_alaw.h				\
 	codec_ilbc.h				\

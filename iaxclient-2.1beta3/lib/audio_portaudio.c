@@ -179,7 +179,6 @@ static int scan_devices(struct iaxc_audio_driver *d)
 			dev->name = (char *)pa->name;
 			dev->devID = i;
 			dev->capabilities = 0;
-
 			if ( pa->maxInputChannels > 0 )
 				dev->capabilities |= IAXC_AD_INPUT;
 
@@ -188,7 +187,6 @@ static int scan_devices(struct iaxc_audio_driver *d)
 				dev->capabilities |= IAXC_AD_OUTPUT;
 				dev->capabilities |= IAXC_AD_RING;
 			}
-
 			if ( i == Pa_GetDefaultInputDevice() )
 				dev->capabilities |= IAXC_AD_INPUT_DEFAULT;
 
@@ -785,6 +783,7 @@ static int pa_start(struct iaxc_audio_driver *d)
 		return -1;
 
 	iMixer = Px_OpenMixer(iStream, 0);
+	//iMixer = Px_OpenMixer(iStream, selectedInput); /* wirtz@dfn.de */
 
 	if ( !oneStream )
 	{

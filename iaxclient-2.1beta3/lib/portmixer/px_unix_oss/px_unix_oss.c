@@ -115,7 +115,8 @@ PxMixer *Px_OpenMixer( void *pa_stream, int index )
    int i;
 
    if (PxNumDevices <= 0)
-      Px_GetNumMixers(pa_stream);
+      // Px_GetNumMixers(pa_stream);
+      PxNumDevices=Px_GetNumMixers(pa_stream); /* dcoredump@gmail.com */
 
    if (index < 0 || index >= PxNumDevices)
       return NULL;
