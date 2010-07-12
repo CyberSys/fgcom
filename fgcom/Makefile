@@ -6,8 +6,12 @@ LIBS:=-liaxclient -lspeex -lspeexdsp -lgnet-2.0 -lglib-2.0 -loggz -lvidcap -lope
 
 all: fgcom Makefile
 
-testclient: testclient.c Makefile iaxclient
-	$(CC) $(CFLAGS) -c testclient.c
+openaltest: test/openaltest.c Makefile
+	$(CC) $(CFLAGS) -c test/openaltest.c
+	$(CC) openaltest.o -lalut -lopenal -o test/openaltest
+
+testclient: test/testclient.c Makefile iaxclient
+	$(CC) $(CFLAGS) -c test/testclient.c
 	$(CC) $(LDFLAGS) testclient.o $(LIBS) -o testclient
 
 lighthouse: lighthouse.c oggfile.c oggfile.h Makefile iaxclient

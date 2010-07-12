@@ -15,22 +15,34 @@ ALint err=0;
 
 #define SAMPLERATE 8000
 #define FORMAT AL_FORMAT_STEREO16
-#define BUFFERSIZE 24000
+#define BYTES_PER_SAMPLE 2*2
+#define CAPTURE_TIME_SECS 3
+#define BUFFERSIZE 192000
 
 int main(int argc, char *argv[])
 {
 	alutInit (&argc, argv);
 	ALubyte* buf=NULL;
 
-	// Test simple Output
-	play_hello();
+	// Query version information
+	fprintf(stderr,"Version:    %s\n",alGetString(AL_VERSION));
+	fprintf(stderr,"Renderer:   %s\n",alGetString(AL_RENDERER));
+	fprintf(stderr,"Vendor:     %s\n",alGetString(AL_VENDOR));
+	fprintf(stderr,"Extensions: %s\n",alGetString(AL_EXTENSIONS));
 
+	// Test simple Output
+	fprintf(stderr,"Playing \"Hello World\"...\n");
+	//play_hello();
+
+	fprintf(stderr,"Usable capture devices:\n");
 	show_capture_devices();
-	
+
+	fprintf(stderr,"Capturing for %d seconds...\n",CAPTURE_TIME_SECS);
 	if((buf=capture())==NULL)
 		fprintf(stderr,"Cannot capture audio data!\n");
 	else
 	{
+		fprintf(stderr,"Playing captured audio...\n");
 		if(play(buf)<0)
 			fprintf(stderr,"Cannot play captured audio data!\n");
 	}
@@ -38,6 +50,8 @@ int main(int argc, char *argv[])
 	if(buf!=NULL)
 		free(buf);
 
+	fprintf(stderr,"Exit %s\n",argv[0]);
+	alutExit();
 	exit(0);
 }
 
@@ -49,7 +63,6 @@ void play_hello(void)
 	alSourcei(helloSource,AL_BUFFER,helloBuffer);
 	alSourcePlay(helloSource);
 	alutSleep(1);
-	alutExit();
 }
 
 int play(ALubyte* buf)
@@ -65,13 +78,14 @@ int play(ALubyte* buf)
 		return(-1);
 	}
 	else
-		alBufferData(Buffer,FORMAT,buf,BUFFERSIZE,SAMPLERATE);
+	{
+		alBufferData(Buffer,FORMAT,buf,SAMPLERATE*BYTES_PER_SAMPLE*CAPTURE_TIME_SECS,SAMPLERATE);
+	}
 
-    alGenSources(1,&Source);
-    alSourcei(Source,AL_BUFFER,Buffer);
-    alSourcePlay(Source);
-    alutSleep(1);
-    alutExit();
+	alGenSources(1,&Source);
+	alSourceQueueBuffers(Source,1,&Buffer);
+	alSourcePlay(Source);
+	sleep(CAPTURE_TIME_SECS);
 }
 
 ALubyte* capture(void)
@@ -92,17 +106,17 @@ ALubyte* capture(void)
 		exit(15);
 	}
 
-	err=alGetError(); // clear any error messages
-	capture_device=alcCaptureOpenDevice((ALCchar*)capture_device_name,SAMPLERATE,FORMAT,BUFFERSIZE);
-	if(capture_device=NULL)
-	{
-                fprintf(stderr,"alcCaptureOpenDevice returned NULL\n");
-		exit(14);
-        }
+	// Open capture device
+	capture_device=alcCaptureOpenDevice((ALCchar*)capture_device_name,SAMPLERATE,FORMAT,SAMPLERATE*BYTES_PER_SAMPLE*CAPTURE_TIME_SECS);
 	if((err=alGetError())!=AL_NO_ERROR) 
     	{
                 s_openal_error("alcCaptureOpenDevice",err);
 		exit(10);
+        }
+	if(capture_device==NULL)
+	{
+                fprintf(stderr,"alcCaptureOpenDevice returned NULL\n");
+		exit(14);
         }
 
 	alcCaptureStart(capture_device);
@@ -112,7 +126,7 @@ ALubyte* capture(void)
                 exit(11);
         }
 
-	sleep(5);
+	sleep(CAPTURE_TIME_SECS);
 
 	alcCaptureStop(capture_device);
 	if((err=alGetError())!=AL_NO_ERROR) 
@@ -130,7 +144,8 @@ ALubyte* capture(void)
         }
 	else
     	{
-		if((buf=malloc(sizeof(ALubyte)*samples*2*6))==NULL)
+		fprintf(stderr,"Samples: %d\n",samples);
+		if((buf=calloc(sizeof(ALubyte)*samples*BYTES_PER_SAMPLE))==NULL)
 		{
 			fprintf(stderr,"Cannot malloc for buf\n");
 			exit(12);
@@ -156,18 +171,16 @@ void show_capture_devices(void)
 	if(d!=NULL)
 	{
 		tmp=d;
-		fprintf(stderr,"Capture device: %s\n",tmp);
-		while(strlen(tmp)>0)
+		do
 		{
+			fprintf(stderr,"Capture device: %s\n",tmp);
 			tmp+=strlen(tmp)+1;
-			if(strlen(tmp)>0)
-				fprintf(stderr,"Capture device: %s\n",tmp);
-		}
+		} while(strlen(tmp)>0);
 	}
 	fprintf(stderr,"Default capture device: %s\n",(char*)alcGetString(NULL,ALC_CAPTURE_DEFAULT_DEVICE_SPECIFIER));
 }
 
 static void s_openal_error(const char* function, int err)
 {
-        fprintf(stderr, "OpenAl function %s failed with code %d: %s\n",function,err,alGetString(err));
+        fprintf(stderr, "OpenAl function %s failed with code 0x%x: %s\n",function,err,alGetString(err));
 }
