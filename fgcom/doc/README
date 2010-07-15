@@ -1,5 +1,5 @@
 Start fgcom playing a testfile as ATC on KSFO TWR:
 
-./fgcom --lat=37.617171 --lon=-122.383304 --callsign=ATC_KSFO --play=lighthouse.ogg --frq=120.500
+./fgcom --lat=37.617171 --lon=-122.383304 --callsign=ATC_KSFO --frq=120.500 --play=lighthouse.ogg
 
 

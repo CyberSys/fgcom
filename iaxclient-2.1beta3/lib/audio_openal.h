@@ -35,6 +35,8 @@
 typedef struct
 {
 	int sample_rate;
+	int cap_format;
+	int cap_sample_size;
 	int num_buffers;
 	int buffers_head;
 	int buffers_tail;
@@ -43,9 +45,10 @@ typedef struct
 	ALCcontext* out_ctx;
 	ALuint source;
 	ALCdevice* in_dev;
+	ALCdevice* out_dev;
 	double input_level;
 	double output_level;
-}T_AUDIO_DATA;
+} T_AUDIO_DATA;
 
 
 int openal_initialize(struct iaxc_audio_driver *driver, int sample_rate);

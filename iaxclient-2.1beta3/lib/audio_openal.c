@@ -33,7 +33,6 @@
 
 #include "audio_openal.h"
 #include "iaxclient_lib.h"
-#include "portmixer.h"
 #include "config.h"
 #include "sndfile.h"
 
@@ -42,24 +41,10 @@
 static echo_can_state_t *ec;
 #endif
 
-#ifdef SPEEX_EC
-#define restrict __restrict
-#include "speex/speex_echo.h"
-static SpeexEchoState *ec;
-#endif
-
-static ALCdevice *s_device;
-static ALCcontext *s_context;
-static char *s_list_devices;
 static int s_selected_input;
 static int s_selected_output; 
 static int s_selected_ring;
 static int s_running;
-static struct iaxc_sound *s_sounds;
-static MUTEX sound_lock;
-
-
-
 
 static int s_openal_error(const char* function, int err)
 {
@@ -357,6 +342,8 @@ static int al_play_file(const char *file)
 	alSourcei(l_source, AL_BUFFER, 0);
 	alDeleteSources(1, &l_source);
 	alDeleteBuffers(1, &l_snd_buf);
+
+	return(0);
 }
 
 
@@ -375,21 +362,21 @@ int al_stop(struct iaxc_audio_driver *d)
 	return 0;
 }
 
-double al_input_level_get(struct iaxc_audio_driver *d)
+float al_input_level_get(struct iaxc_audio_driver *d)
 {
 	T_AUDIO_DATA* priv = (T_AUDIO_DATA*)(d->priv);
 
 	return priv->input_level;
 }
 
-double al_output_level_get(struct iaxc_audio_driver *d)
+float al_output_level_get(struct iaxc_audio_driver *d)
 {
 	T_AUDIO_DATA* priv = (T_AUDIO_DATA*)(d->priv);
 
 	return priv->output_level;
 }
 
-int al_input_level_set(struct iaxc_audio_driver *d, double level)
+int al_input_level_set(struct iaxc_audio_driver *d, float level)
 {
 	T_AUDIO_DATA* priv = (T_AUDIO_DATA*)(d->priv);
 	priv->input_level = (level < 0.5) ? 0 : 1;
@@ -397,7 +384,7 @@ int al_input_level_set(struct iaxc_audio_driver *d, double level)
 	return 0;
 }
 
-int al_output_level_set(struct iaxc_audio_driver *d, double level)
+int al_output_level_set(struct iaxc_audio_driver *d, float level)
 {
 	T_AUDIO_DATA* priv = (T_AUDIO_DATA*)(d->priv);
 	priv->output_level = level;
@@ -428,26 +415,55 @@ int openal_initialize(struct iaxc_audio_driver *driver, int sample_rate)
 {
 	T_AUDIO_DATA *l_data;
 	ALenum l_err;
+	ALint err=0;
 	
 	l_data = (T_AUDIO_DATA *)malloc(sizeof(T_AUDIO_DATA));
 	if (!l_data)
 		return (6);
-	
-	s_device = alcOpenDevice(NULL);
-	if(!s_device) return (1);
-	
-	s_context = alcCreateContext(s_device, NULL);
-	if(!s_context)
+
+	// Open incoming audio device
+	// First try AL_FORMAT_MONO16, then AL_FORMAT_STEREO16
+	l_data->cap_format=AL_FORMAT_MONO16;
+	l_data->in_dev=alcCaptureOpenDevice((ALCchar*)NULL,l_data->sample_rate,l_data->cap_format,l_data->sample_rate*l_data->cap_sample_size);
+        if((err=alGetError())!=AL_NO_ERROR)
+        {
+		l_data->cap_format=AL_FORMAT_STEREO16;
+		l_data->in_dev=alcCaptureOpenDevice((ALCchar*)NULL,l_data->sample_rate,l_data->cap_format,l_data->sample_rate*l_data->cap_sample_size);
+		if((err=alGetError())!=AL_NO_ERROR)
+        	{
+                	s_openal_error("alcCaptureOpenDevice",err);
+			return(1);
+		}
+        }
+        if(l_data->in_dev==NULL)
+        {
+                fprintf(stderr,"alcCaptureOpenDevice returned NULL\n");
+                exit(1);
+        }
+
+	if(alcIsExtensionPresent(l_data->in_dev,"ALC_EXT_CAPTURE")==AL_FALSE)
 	{
-		alcCloseDevice(s_device);
+		alcCloseDevice(l_data->in_dev);
+		//return(AL_CAPTURE_EXT_MISSING);
+		return(1);
+	}
+
+	// Open outgoing audio device
+	l_data->out_dev = alcOpenDevice(NULL);
+	if(!l_data->out_dev) return (1);
+	
+	l_data->out_ctx = alcCreateContext(l_data->out_dev, NULL);
+	if(!l_data->out_ctx)
+	{
+		alcCloseDevice(l_data->out_dev);
 		free(l_data);
 		return(2);
 	}
 	
-	if(!alcMakeContextCurrent(s_context))
+	if(!alcMakeContextCurrent(l_data->out_ctx))
 	{
-		alcDestroyContext(s_context);
-		alcCloseDevice(s_device);
+		alcDestroyContext(l_data->out_ctx);
+		alcCloseDevice(l_data->out_dev);
 		free(l_data);
 		return (3);
 	}
@@ -491,8 +507,8 @@ int openal_initialize(struct iaxc_audio_driver *driver, int sample_rate)
 	l_data->buffers = (ALuint *)malloc(sizeof(ALuint) * l_data->num_buffers);
 	if (!l_data->buffers)
 	{
-		alcDestroyContext(s_context);
-		alcCloseDevice(s_device);
+		alcDestroyContext(l_data->out_ctx);
+		alcCloseDevice(l_data->out_dev);
 		free(l_data);
 		return(6);
 	}
@@ -552,8 +568,8 @@ int openal_finalize(struct iaxc_audio_driver *driver)
 	free(l_data->buffers);
 	
 	alcMakeContextCurrent(NULL);
-	alcDestroyContext(s_context);
-	alcCloseDevice(s_device);
+	alcDestroyContext(l_data->out_ctx);
+	alcCloseDevice(l_data->out_dev);
 	
 	if(driver->devices != NULL)
 	{
@@ -561,7 +577,7 @@ int openal_finalize(struct iaxc_audio_driver *driver)
 		{
 			if(driver->devices[l_index].name)
 			{
-				free(driver->devices[l_index].name);
+				free((char*)driver->devices[l_index].name);
 				driver->devices[l_index].name = NULL;
 			}
 		}
@@ -569,5 +585,7 @@ int openal_finalize(struct iaxc_audio_driver *driver)
 		driver->devices = NULL;
 		driver->nDevices = 0;
 	}
+
+	return(0);
 }
 

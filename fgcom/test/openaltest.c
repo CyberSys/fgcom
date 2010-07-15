@@ -145,7 +145,7 @@ ALubyte* capture(void)
 	else
     	{
 		fprintf(stderr,"Samples: %d\n",samples);
-		if((buf=calloc(sizeof(ALubyte)*samples*BYTES_PER_SAMPLE))==NULL)
+		if((buf=calloc(sizeof(ALubyte),samples*BYTES_PER_SAMPLE))==NULL)
 		{
 			fprintf(stderr,"Cannot malloc for buf\n");
 			exit(12);
