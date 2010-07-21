@@ -416,18 +416,25 @@ int openal_initialize(struct iaxc_audio_driver *driver, int sample_rate)
 	T_AUDIO_DATA *l_data;
 	ALenum l_err;
 	ALint err=0;
-	
+	ALCdevice* capture_device_name=NULL;
+
 	l_data = (T_AUDIO_DATA *)malloc(sizeof(T_AUDIO_DATA));
 	if (!l_data)
 		return (6);
 
+	l_data->sample_rate=sample_rate;
+
 	// Open incoming audio device
+	alGetError(); // clear any error messages
+	capture_device_name=(ALCdevice*)alcGetString(NULL,ALC_CAPTURE_DEFAULT_DEVICE_SPECIFIER);
 	// First try AL_FORMAT_MONO16, then AL_FORMAT_STEREO16
 	l_data->cap_format=AL_FORMAT_MONO16;
+	l_data->cap_sample_size=2;
 	l_data->in_dev=alcCaptureOpenDevice((ALCchar*)NULL,l_data->sample_rate,l_data->cap_format,l_data->sample_rate*l_data->cap_sample_size);
         if((err=alGetError())!=AL_NO_ERROR)
         {
 		l_data->cap_format=AL_FORMAT_STEREO16;
+		l_data->cap_sample_size=4;
 		l_data->in_dev=alcCaptureOpenDevice((ALCchar*)NULL,l_data->sample_rate,l_data->cap_format,l_data->sample_rate*l_data->cap_sample_size);
 		if((err=alGetError())!=AL_NO_ERROR)
         	{
