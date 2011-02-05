@@ -77,7 +77,7 @@ static const char *radio_map[] = {
 struct airport *airportlist;
 struct fgdata data;
 char icao[5];
-double special_frq[] = { 999.999, 910.0, 123.45, 122.75, -1.0 };
+double special_frq[] = { 999.999, 910.0, 123.45, 122.75, 123.5, 121.5, 732.34 -1.0 };
 
 double previous_com_frequency = 0.0;
 int previous_ptt = 0;
