@@ -12,5 +12,6 @@ void icao2number (char *icao, float frequency, char *buf);
 /* Search for the closest airport on selected frequency. */
 const char *
 icaobypos (struct airport *airports, double frequency, double plane_lat,
-	   double plane_lon, double range)
+	   double plane_lon, double range);
+
 #endif

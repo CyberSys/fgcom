@@ -77,7 +77,7 @@ iaxclient:
 
 fgcomstatic: $(OFILES)
 	cd ../iaxclient/lib && make
-	$(CXX) $(LDFLAGS) fgcom.o position.o fgcom_init.o $(STATIC_LIBS) -o fgcom
+	$(CXX) $(LDFLAGS) $(OFILES) $(STATIC_LIBS) -o fgcom
 
 indent:	$(CPPFILES) $(HFILES)
 	$(INDENT) $(IFLAGS) $(CPPFILES) $(HFILES)
@@ -99,7 +99,7 @@ clean:
 list:	
 	@$(ECHO) "Source files: \t" $(CPPFILES)
 	@$(ECHO) "Header files: \t" $(HFILES)
-
+	@$(ECHO) "Object files: \t" $(OFILES)
 
 #
 # End of file.
