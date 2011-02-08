@@ -34,16 +34,17 @@ ifeq ($(OSTYPE),LINUX)
 PLIB_PREFIX := /usr/local/src/fgfs-builder/install
 OPENAL_PREFIX := /usr/local/src/fgfs-builder/install
 SVNDEF := -D'SVN_REV="$(shell svnversion -n .)"'
+INSTALL_BIN := /usr/local/bin
+INSTALL_DIR := /usr/local/fgcom
 SIMGEAR_INC := ~/tmp/simgear
-CXXFLAGS := -O2 $(SVNDEF) -I $(OPENAL_PREFIX) -I ../iaxclient/lib -I $(PLIB_PREFIX)/include
-CXXFLAGS += -I $(SIMGEAR_INC) -DDEFAULT_POSITIONS_FILE=\"$(INSTALL_DIR)/positions.txt\"
+DEBUG := -O0 -Wall -ggdb
+CXXFLAGS := $(DEBUG) $(SVNDEF) -I $(OPENAL_PREFIX) -I ../iaxclient/lib -I $(PLIB_PREFIX)/include
+CXXFLAGS += -I $(SIMGEAR_INC) -DDEFAULT_POSITIONS_FILE=\"$(INSTALL_DIR)/positions.txt\" -DSPECIAL_FREQUENCIES_FILE=\"$(INSTALL_DIR)/special_frequencies.txt\"
 LDFLAGS := -L $(PLIB_PREFIX)/lib
 STATIC_LIBS := ../iaxclient/lib/libiaxclient.a -lopenal -lasound -lplibul -lplibnet -lpthread -lsgmisc -lsgdebug -lz -lm
 INDENT := /usr/bin/indent
 ECHO := /bin/echo -e
 IFLAGS :=
-INSTALL_BIN := /usr/local/bin
-INSTALL_DIR := /usr/local/fgcom
 endif
 
 ifeq ($(OSTYPE),MACOSX)
@@ -70,7 +71,7 @@ OFILES := $(patsubst %.cpp,%.o,$(CPPFILES))
 .PHONY:	all iaxclient fgcomstatic indent install clean list
 
 
-all: fgcomstatic iaxclient list
+all: fgcomstatic iaxclient
 
 iaxclient:
 	 cd ../iaxclient/lib && make
