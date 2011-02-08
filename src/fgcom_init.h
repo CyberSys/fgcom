@@ -26,12 +26,13 @@
 
 #include <string>
 
-enum {
-	FGCOM_OPTIONS_OK = 0,
-	FGCOM_OPTIONS_HELP = 1,
-	FGCOM_OPTIONS_ERROR = 2,
-	FGCOM_OPTIONS_EXIT = 3,
-	FGCOM_OPTIONS_VERBOSE_HELP = 4
+enum
+{
+  FGCOM_OPTIONS_OK = 0,
+  FGCOM_OPTIONS_HELP = 1,
+  FGCOM_OPTIONS_ERROR = 2,
+  FGCOM_OPTIONS_EXIT = 3,
+  FGCOM_OPTIONS_VERBOSE_HELP = 4
 };
 
 /*
@@ -51,32 +52,35 @@ enum {
 	For OPTION_FLOAT, OPTION_DOUBLE and OPTION_INT, the parameter value is converted into a
 	float, double or an integer and set to the property.
 */
-enum OptionType { 
-	OPTION_NONE, 
-	OPTION_BOOL, 
-	OPTION_STRING, 
-	OPTION_FLOAT, 
-	OPTION_DOUBLE,
-	OPTION_FREQ,
-	OPTION_INT,
-	OPTION_CHAR
+enum OptionType
+{
+  OPTION_NONE,
+  OPTION_BOOL,
+  OPTION_STRING,
+  OPTION_FLOAT,
+  OPTION_DOUBLE,
+  OPTION_FREQ,
+  OPTION_INT,
+  OPTION_CHAR
 };
 
-typedef struct _OptionEntry   OptionEntry;
+typedef struct _OptionEntry OptionEntry;
 
-struct _OptionEntry {
-	const char *long_option;
-	char option;
-	bool has_param;
-	enum OptionType type;
-	void *parameter;
-	char property;
-	const char *description;
-	const void *default_value;
+struct _OptionEntry
+{
+  const char *long_option;
+  char option;
+  bool has_param;
+  enum OptionType type;
+  void *parameter;
+  char property;
+  const char *description;
+  const void *default_value;
 };
 
 // Read in configuration (file and command line)
-bool fgcomInitOptions ( const OptionEntry *fgcomOptions, int argc, char **argv );
+bool fgcomInitOptions (const OptionEntry * fgcomOptions, int argc,
+		       char **argv);
 
 // fgcom usage
-void fgcomUsage();
+void fgcomUsage ();

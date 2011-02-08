@@ -1,40 +1,49 @@
+##
+## Makefile for the FGCom project.
+##
+
+
+
+
+
 ifneq (,$(findstring Linux,$(shell uname)))
-OSTYPE=LINUX
+  OSTYPE=LINUX
 else
-ifneq (,$(findstring Darwin,$(shell uname)))
-OSTYPE=MACOSX
-else
-# CYGWIN reports CYGWIN_NT-5.0 under Win2K
-ifneq (,$(findstring WIN,$(shell uname)))
-OSTYPE=WIN32
-else
-ifneq (,$(findstring MINGW,$(shell uname)))
-OSTYPE=WIN32
-else
-ifneq (,$(findstring SunOS,$(shell uname)))
-OSTYPE=SOLARIS
-else
-$(warning OSTYPE cannot be detected, assuming Linux)
-OSTYPE=LINUX
-endif
-endif
-endif
-endif
+  ifneq (,$(findstring Darwin,$(shell uname)))
+    OSTYPE=MACOSX
+  else
+    # CYGWIN reports CYGWIN_NT-5.0 under Win2K
+    ifneq (,$(findstring WIN,$(shell uname)))
+      OSTYPE=WIN32
+    else
+      ifneq (,$(findstring MINGW,$(shell uname)))
+        OSTYPE=WIN32
+      else
+        ifneq (,$(findstring SunOS,$(shell uname)))
+          OSTYPE=SOLARIS
+        else
+          $(warning OSTYPE cannot be detected, assuming Linux)
+          OSTYPE=LINUX
+        endif
+      endif
+    endif
+  endif
 endif
 
 ifeq ($(OSTYPE),LINUX)
-PLIB_PREFIX:=/usr/local/src/fgfs-builder/install
-OPENAL_PREFIX:=/usr/local/src/fgfs-builder/install
-SVNDEF:=-D'SVN_REV="$(shell svnversion -n .)"'
-#CXXFLAGS:=-O2 -DDEBUG $(SVNDEF)
-CXXFLAGS:=-O2 $(SVNDEF) -I $(OPENAL_PREFIX) -I ../iaxclient/lib -I $(PLIB_PREFIX)/include
-#CXXFLAGS:=-ggdb -Wall -DDEBUG $(SVNDEF) -I $(OPENAL_PREFIX) -I ../iaxclient/lib -I $(PLIB_PREFIX)/include
-LDFLAGS:=-L $(PLIB_PREFIX)/lib
-STATIC_LIBS:=../iaxclient/lib/libiaxclient.a -lopenal -lasound -lplibul -lplibnet -lpthread -lsgmisc -lsgdebug -lz -lm
-INDENT:=/usr/bin/indent
-IFLAGS:=
-INSTALL_BIN:=/usr/local/bin
-INSTALL_DIR:=/usr/local/fgcom
+PLIB_PREFIX := /usr/local/src/fgfs-builder/install
+OPENAL_PREFIX := /usr/local/src/fgfs-builder/install
+SVNDEF := -D'SVN_REV="$(shell svnversion -n .)"'
+SIMGEAR_INC := ~/tmp/simgear
+CXXFLAGS := -O2 $(SVNDEF) -I $(OPENAL_PREFIX) -I ../iaxclient/lib -I $(PLIB_PREFIX)/include
+CXXFLAGS += -I $(SIMGEAR_INC) -DDEFAULT_POSITIONS_FILE=\"$(INSTALL_DIR)/positions.txt\"
+LDFLAGS := -L $(PLIB_PREFIX)/lib
+STATIC_LIBS := ../iaxclient/lib/libiaxclient.a -lopenal -lasound -lplibul -lplibnet -lpthread -lsgmisc -lsgdebug -lz -lm
+INDENT := /usr/bin/indent
+ECHO := /bin/echo -e
+IFLAGS :=
+INSTALL_BIN := /usr/local/bin
+INSTALL_DIR := /usr/local/fgcom
 endif
 
 ifeq ($(OSTYPE),MACOSX)
@@ -44,46 +53,55 @@ CXXFLAGS:=-O2 $(SVNDEF) -I ../iaxclient/lib -I $(PLIB_PREFIX)/Headers
 LDFLAGS:= -F$(PLIB_PREFIX)/.. -framework OpenAL -framework PLIB
 STATIC_LIBS:=../iaxclient/lib/libiaxclient.a -lpthread -lm
 INDENT:=/usr/bin/indent
-IFLAGS:=
+IFLAGS:=-DDEFAULT_POSITIONS_FILE=\"$(INSTALL_DIR)/positions.txt\"
 INSTALL_BIN:=../FlightGearOSX/build/Deployment/FlightGear.app/Contents/Resources
 INSTALL_DIR:=$(INSTALL_BIN)/data/fgcom
 endif
 
-all: fgcomstatic iaxclient
+##
+## Look for all C source files (.c & .cpp)
+##
+CPPFILES := $(wildcard *.cpp)
+HFILES := $(patsubst %.cpp,%.h,$(CPPFILES))
+OFILES := $(patsubst %.cpp,%.o,$(CPPFILES))
+
+
+
+.PHONY:	all iaxclient fgcomstatic indent install clean list
+
+
+all: fgcomstatic iaxclient list
 
 iaxclient:
 	 cd ../iaxclient/lib && make
 
-test: test.o
-	cd ../iaxclient/lib && make
-	$(CC) test.o $(STATIC_LIBS) -o test
-
-fgcomstatic: fgcom.o position.o fgcom_init.o
+fgcomstatic: $(OFILES)
 	cd ../iaxclient/lib && make
 	$(CXX) $(LDFLAGS) fgcom.o position.o fgcom_init.o $(STATIC_LIBS) -o fgcom
 
-indent: fgcom.cpp fgcom.h
-	$(INDENT) $(IFLAGS) fgcom.cpp
-	$(INDENT) $(IFLAGS) fgcom.h
-	$(INDENT) $(IFLAGS) position.cpp
-	$(INDENT) $(IFLAGS) fgcom_init.cxx
-	$(INDENT) $(IFLAGS) fgcom_init.h
+indent:	$(CPPFILES) $(HFILES)
+	$(INDENT) $(IFLAGS) $(CPPFILES) $(HFILES)
 
 install: all
 	install -m 755 -s fgcom $(INSTALL_BIN)/fgcom
 	install -d -m 755 $(INSTALL_DIR)
 	install -m 644 ../data/positions.txt $(INSTALL_DIR)
 	install -m 644 ../data/phonebook.txt $(INSTALL_DIR)
+	install -m 644 ../data/special_frequencies.txt $(INSTALL_DIR)
 
 clean:
 	cd ../iaxclient/lib && make clean
 	rm -f *.o fgcom *~
 
-fgcom.o: Makefile fgcom.cpp fgcom.h
-	$(CXX) $(CXXFLAGS) -DDEFAULT_POSITIONS_FILE=\"$(INSTALL_DIR)/positions.txt\" -c fgcom.cpp
+%o:	%cpp $(HFILES)
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-position.o: Makefile position.cpp
-	$(CXX) $(CXXFLAGS) -c position.cpp
+list:	
+	@$(ECHO) "Source files: \t" $(CPPFILES)
+	@$(ECHO) "Header files: \t" $(HFILES)
 
-fgcom_init.o: Makefile fgcom_init.cpp fgcom_init.h
-	$(CXX) $(CXXFLAGS) -c fgcom_init.cpp
+
+#
+# End of file.
+#
+

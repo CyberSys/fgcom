@@ -105,4 +105,5 @@ int set_device (const char *name, int out);
 struct pos posbyicao (struct airport *airports, char *icao);
 void parse_fgdata (struct fgdata *data, char *buf);
 int check_special_frq (double frq);
-void do_iaxc_call(const char* username, const char* password, const char* voipserver, const char* number);
+void do_iaxc_call (const char *username, const char *password,
+		   const char *voipserver, const char *number);
