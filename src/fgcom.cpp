@@ -27,11 +27,20 @@
  */
 
 #include <iostream>
-
 #include <plib/netSocket.h>
-
 #include "fgcom.h"
 #include "fgcom_init.h"
+#include "utils.h"
+
+/**
+ *
+ * \define ALLOCK_CHUNK_SIZE
+ * \brief Size of a memory chunk to allocate.
+ *
+ */
+#define ALLOC_CHUNK_SIZE	5
+
+
 
 /* global vars */
 int exitcode = 0;
@@ -46,15 +55,18 @@ const char* voipserver;
 const char* fgserver;
 */
 
-const char *dialstring;
-
+/**
+ * Global variables.
+ */
+const char* dialstring;
 char airport[5];
-
-static double selected_frequency = 0.0;
-
 int codec = DEFAULT_IAX_CODEC;
-static char mode = 0;
 
+/**
+ * Variables declared as static.
+ */
+static double selected_frequency = 0.0;
+static char mode = 0;
 static char tmp[1024];		/* report output buffer */
 static int last_state = 0;	/* previous state of the channel */
 static char states[256];	/* buffer to hold ascii states */
@@ -81,6 +93,7 @@ struct fgdata data;
 char icao[5];
 double special_frq[] =
   { 999.999, 910.0, 123.45, 122.75, 123.5, 121.5, 732.34 - 1.0 };
+double *special_frequencies;
 
 double previous_com_frequency = 0.0;
 int previous_ptt = 0;
@@ -213,16 +226,14 @@ main (int argc, char *argv[])
   int c;
   int ret = 0;
 
-  prog = strdup (argv[0]);
-
-  /* program header */
-  std::cout << prog <<
-    " - a communication radio based on VoIP with IAX/Asterisk" << std::endl;
-  std::cout << "(c)2007 by H. Wirtz <wirtz@dfn.de>" << std::endl;
-  std::cout << "Version " << VERSION << " build " << SVN_REV << std::endl;
-  std::cout << "Using iaxclient library Version " << iaxc_version (tmp) <<
-    std::endl;
-  std::cout << std::endl;
+	prog = strdup( argv[0] );
+  
+	/* program header */
+	std::cout << prog << " - a communication radio based on VoIP with IAX/Asterisk" << std::endl;
+	std::cout << "(c)2007-2011 by H. Wirtz <wirtz@dfn.de>" << std::endl;
+	std::cout << "Version " << VERSION << " build " << SVN_REV << std::endl;
+	std::cout << "Using iaxclient library Version " << iaxc_version (tmp) << std::endl;
+	std::cout << std::endl;
 
   /* init values */
   voipserver = DEFAULT_VOIP_SERVER;
@@ -356,8 +367,15 @@ main (int argc, char *argv[])
       mode = 1;
     }
 
-  /* read airport frequencies and positions */
-  airportlist = read_airports (DEFAULT_POSITIONS_FILE);
+	/* Read special frequencies file (if exists).
+	 * If no file $(INSTALL_DIR)/special_frequencies.txt exists, then default frequencies
+	 * are used and are hard coded.
+	 */
+	if((special_frequencies = read_special_frequencies(SPECIAL_FREQUENCIES_FILE)) == NULL)
+		special_frequencies = special_frq;
+
+	/* read airport frequencies and positions */
+	airportlist = read_airports (DEFAULT_POSITIONS_FILE);
 
   /* preconfigure iax */
   std::cout << "Initializing IAX client as " << username << ":" <<
@@ -873,6 +891,62 @@ split (char *string, char *fields[], int nfields, const char *sep)
   /* not reached */
 }
 
+/**
+ *
+ * \fn double *read_special_frequencies(const char *file)
+ *
+ * \brief Reads the file "special_frequencies.txt" if it exists.
+ * If no file exists, then no special frequencies are useable.
+ *
+ * \param file	pointer on the filename.
+ *
+ * \return Returns the pointer on an array containing doubles if file
+ * has been successfully opened and read, otherwise returns NULL.
+ *
+ */
+double *read_special_frequencies(const char *file)
+{
+	double *l_pfrq = NULL;
+	double l_value;
+	int l_count;
+	int l_allocated = 0;
+	int l_new_size;
+
+	if((l_pfrq = (double *)malloc(ALLOC_CHUNK_SIZE * sizeof(double))) != NULL)
+	{
+		l_allocated += ALLOC_CHUNK_SIZE;
+
+		if(SUCCESS(parser_init(file)))
+		{
+			l_count = 0;
+
+			while(SUCCESS(parser_get_next_value(&l_value)))
+			{
+				if(l_count >= l_allocated)
+				{
+					l_new_size = ALLOC_CHUNK_SIZE * (l_count / ALLOC_CHUNK_SIZE + 1);
+					l_pfrq = (double *)realloc(l_pfrq, l_new_size * sizeof(double));
+					l_allocated += ALLOC_CHUNK_SIZE;
+				}
+
+				l_pfrq[l_count] = l_value;
+
+				l_count++;
+			}
+
+			/* Last value of the array must be -1.0 which is the terminator. */
+			if(l_count == l_allocated)
+				l_pfrq = (double *)realloc(l_pfrq, (l_count + 1) * sizeof(double));
+			l_pfrq[l_count] = -1.0;
+		}
+	}
+
+	parser_exit();
+
+	return(l_pfrq);
+}
+
+
 struct airport *
 read_airports (const char *file)
 {
@@ -1120,18 +1194,30 @@ parse_fgdata (struct fgdata *data, char *buf)
 #endif
 }
 
-int
-check_special_frq (double frq)
+/**
+ *
+ * \fn int check_special_frq (double frq)
+ *
+ * \brief Check to see if specified frequency is a special frequency.
+ *
+ * \param frq	frequency to check against special frequencies
+ *
+ * \return Returns 1 if successful, otherwise returns 0.
+ *
+ */
+int check_special_frq (double frq)
 {
-  int i = 0;
-  while (special_frq[i] >= 0.0)
-    {
-      if (frq == special_frq[i])
-	return (1);
-      i++;
-    }
-
-  return (0);
+	int i = 0;
+	while (special_frequencies[i] >= 0.0)
+	{
+		if (frq == special_frequencies[i])
+		{
+			printf("Special freq : %3.3f\n", frq);
+			return (1);
+		}
+		i++;
+	}
+	return (0);
 }
 
 void
