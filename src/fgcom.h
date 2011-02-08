@@ -17,25 +17,29 @@
 #define HAVE_IAX12		/* Only for newer iaxclient libraries */
 #endif
 
-#define VERSION "1.2.2"
+#define VERSION "1.2.3"
 #define DEFAULT_USER "guest"
 #define DEFAULT_PASSWORD "guest"
 #define DEFAULT_FG_SERVER "localhost"
 #define DEFAULT_FG_PORT 16661
 #define DEFAULT_CODE 1
-#define DEFAULT_VOIP_SERVER "fgcom1.parasitstudio.de"
+#define DEFAULT_VOIP_SERVER "mpserver13.flightgear.org"
 #define DEFAULT_CODEC 'u'
 #define DEFAULT_IAX_CODEC IAXC_FORMAT_ULAW
 #define DEFAULT_IAX_AUDIO AUDIO_INTERNAL
 #define DEFAULT_MAX_CALLS 2
 #define DEFAULT_MILLISLEEP 100
-#define DEFAULT_RANGE 50.0
+#define DEFAULT_RANGE 100.0
 #define DEFAULT_TZ 300
 #define DEFAULT_LOWER_FRQ_LIMIT 108.0
 #define DEFAULT_UPPER_FRQ_LIMIT 140.0
 #define MAXBUFLEN 1024
 #define MAX_COM 4;
 #define DEFAULT_ALARM_TIMER 15
+
+#define SUCCESS(__x__)		(__x__ == 0)
+#define FAILED(__x__)		(__x__ < 0)
+
 
 struct airport
 {
@@ -96,6 +100,7 @@ void ptt (int mode);
 double distance (double lat1, double lon1, double lat2, double lon2);
 int split (char *string, char *fields[], int nfields, const char *sep);
 char *readln (FILE * fp, char *buf, int len);
+double *read_special_frequencies(const char *file);
 struct airport *read_airports (const char *file);
 const char *icaobypos (struct airport *airports, double frequency,
 		       double plane_lat, double plane_lon, double range);
