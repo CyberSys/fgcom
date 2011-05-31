@@ -1,21 +1,21 @@
-/*
- * fgcom: a real radio VoIP client for FlightGear based on iaxclient
- *
- * Copyrights:
- * Copyright (C) 2006-2008 Holger Wirtz   <dcoredump@gmail.com>
- *                                        <wirtz@parasitstudio.de>
- * Copyright (C) 2008,2009 Holger Wirtz   <dcoredump@gmail.com>
- *                                        <wirtz@parasitstudio.de>
- *                         Charles Ingels <charles@maisonblv.net>
- *
- * This program may be modified and distributed under the
- * terms of the GNU General Public License. You should have received
- * a copy of the GNU General Public License along with this
- * program; if not, write to the Free Software Foundation, Inc.
- * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
- */
 
+/*
+* fgcom: a real radio VoIP client for FlightGear based on iaxclient
+*
+* Copyrights:
+* Copyright (C) 2006-2008 Holger Wirtz   <dcoredump@gmail.com>
+*                                        <wirtz@parasitstudio.de>
+* Copyright (C) 2008,2009 Holger Wirtz   <dcoredump@gmail.com>
+*                                        <wirtz@parasitstudio.de>
+*                         Charles Ingels <charles@maisonblv.net>
+*
+* This program may be modified and distributed under the
+* terms of the GNU General Public License. You should have received
+* a copy of the GNU General Public License along with this
+* program; if not, write to the Free Software Foundation, Inc.
+* 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*
+*/
 #ifndef _fgcom_h
 #define _fgcom_h
 
@@ -25,7 +25,7 @@
 #define DEFAULT_PASSWORD "guest\0"
 #define DEFAULT_FRQ "02911000"
 #define DEFAULT_PRESELECTION 2
-#define DEFAULT_VOIP_SERVER "fgcom1.parasitstudio.de\0"
+#define DEFAULT_SERVER "127.0.0.1\0"
 #define DEFAULT_MIC_LEVEL 0.5
 #define DEFAULT_SPEAKER_LEVEL 0.5
 #define DEFAULT_POSTTION_UPDATE_FREQUENCY 7
@@ -33,9 +33,11 @@
 
 #define FGCOM_UDP_MAX_BUFFER 1024
 
-enum { MODE_PLAY=0, MODE_FG, MODE_ATC };
+enum
+{ MODE_PLAY = 0, MODE_FG, MODE_ATC };
 
-struct fg_data {
+struct fg_data
+{
 	gdouble COM1_FRQ;
 	gint COM1_SRV;
 	gdouble COM2_FRQ;
@@ -55,15 +57,9 @@ struct fg_data {
 };
 
 /* public prototypes */
-void fgcom_exit(gchar *text, gint exitcode);
-void fgcom_send_audio(void);
-gboolean fgcom_dial(gdouble frequency);
-gboolean fgcom_hangup(char* cause);
-gboolean fgcom_conference_command(gchar *command, ...);
-gboolean fgcom_parse_data(struct fg_data *data, gchar *from_fg);
-void fgcom_update_session(gint exitcode);
+void fgcom_exit (gchar * text, gint exitcode);
+gboolean fgcom_parse_data (struct fg_data *data, gchar * from_fg);
 
 /* private prototypes */
-static int fgcom_iaxc_callback(iaxc_event e);
-static void fgcom_quit (gint exitcode);
+static void _fgcom_quit (gint exitcode);
 #endif

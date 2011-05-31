@@ -1,21 +1,21 @@
-/*
- * fgcom: a real radio VoIP client for FlightGear based on iaxclient
- *
- * Copyrights:
- * Copyright (C) 2006-2008 Holger Wirtz   <dcoredump@gmail.com>
- *                                        <wirtz@parasitstudio.de>
- * Copyright (C) 2008,2009 Holger Wirtz   <dcoredump@gmail.com>
- *                                        <wirtz@parasitstudio.de>
- *                         Charles Ingels <charles@maisonblv.net>
- *
- * This program may be modified and distributed under the
- * terms of the GNU General Public License. You should have received
- * a copy of the GNU General Public License along with this
- * program; if not, write to the Free Software Foundation, Inc.
- * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
- */
 
+/*
+* fgcom: a real radio VoIP client for FlightGear based on iaxclient
+*
+* Copyrights:
+* Copyright (C) 2006-2008 Holger Wirtz   <dcoredump@gmail.com>
+*                                        <wirtz@parasitstudio.de>
+* Copyright (C) 2008,2009 Holger Wirtz   <dcoredump@gmail.com>
+*                                        <wirtz@parasitstudio.de>
+*                         Charles Ingels <charles@maisonblv.net>
+*
+* This program may be modified and distributed under the
+* terms of the GNU General Public License. You should have received
+* a copy of the GNU General Public License along with this
+* program; if not, write to the Free Software Foundation, Inc.
+* 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*
+*/
 #ifndef _config_h
 #define _config_h
 
@@ -26,15 +26,10 @@
 struct fgcom_config
 {
 	/* group main options */
-	gchar *iax_server;
+	gchar *server;
 	gboolean verbose;
 	gchar *callsign;
 	gchar *modelname;
-
-	/* group VoIP server */
-        gchar *username;
-        gchar *password;
-	gint codec;
 
 	/* group FG arguments */
 	gchar *fg;
@@ -56,31 +51,26 @@ struct fgcom_config
 	gchar *audio_out;
 
 	/* program internal data */
-	gint reg_id;
-	gboolean initialized;
-	gboolean connected;
 	gint mode;
-	gboolean reg;
-	gchar *play_file;
-	GInetAddr* fg_addr;
-	GUdpSocket* fg_socket;
+	GInetAddr *fg_addr;
+	GUdpSocket *fg_socket;
 } config;
 
 /* public prototypes */
-gboolean config_parse_cmd_options(char *filename, int argc, char *argv[]);
+gboolean config_parse_cmd_options (char *filename, int argc, char *argv[]);
 
 /* private prototypes */
-static gboolean config_cb_callsign(gchar *option_name,gchar *value,gpointer data,GError **error);
-static gboolean config_cb_lon(gchar *option_name,gchar *value,gpointer data,GError **error);
-static gboolean config_cb_lat(gchar *option_name,gchar *value,gpointer data,GError **error);
-static gboolean config_cb_codec(gchar *option_name,gchar *value,gpointer data,GError **error);
-static gboolean config_cb_username(gchar *option_name,gchar *value,gpointer data,GError **error);
-static gboolean config_cb_password(gchar *option_name,gchar *value,gpointer data,GError **error);
-static gboolean config_cb_mic_level(gchar *option_name,gchar *value,gpointer data,GError **error);
-static gboolean config_cb_speaker_level(gchar *option_name,gchar *value,gpointer data,GError **error);
-static gboolean config_play(gchar *option_name,gchar *value,gpointer data,GError **error);
-static void config_show_version(void);
-static void config_show_audio_devices(void);
-static void config_report_devices(int io);
+static gboolean _config_cb_callsign (gchar * option_name, gchar * value,
+							 gpointer data, GError ** error);
+static gboolean _config_cb_lon (gchar * option_name, gchar * value,
+						 gpointer data, GError ** error);
+static gboolean _config_cb_lat (gchar * option_name, gchar * value,
+						 gpointer data, GError ** error);
+static gboolean _config_cb_mic_level (gchar * option_name, gchar * value,
+							  gpointer data, GError ** error);
+static gboolean _config_cb_speaker_level (gchar * option_name, gchar * value,
+								 gpointer data, GError ** error);
+static void _config_show_version (void);
+static void _config_show_audio_devices (void);
 
 #endif
