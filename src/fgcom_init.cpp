@@ -378,7 +378,7 @@ _parseOption (const std::string & arg, const std::string & next_arg)
     }
   else
     {
-      map < string, size_t >::iterator it;
+      std::map < string, size_t >::iterator it;
       std::string arg_name, arg_value;
 
       if (arg.find ("--") == 0)
@@ -436,7 +436,7 @@ _parseOption (const std::string & arg, const std::string & next_arg)
 	}
       else
 	{
-	  map < string, string >::iterator it_b;
+	  std::map < string, string >::iterator it_b;
 	  arg_name = arg.substr (1, 1);
 	  arg_value = arg.substr (2);
 
