@@ -26,11 +26,15 @@
  *
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 #include <iostream>
 #include <plib/netSocket.h>
 #include "fgcom.h"
 #include "fgcom_init.h"
 #include "utils.h"
+#include "version.h"
 
 /**
  *
@@ -231,7 +235,8 @@ main (int argc, char *argv[])
 	/* program header */
 	std::cout << prog << " - a communication radio based on VoIP with IAX/Asterisk" << std::endl;
 	std::cout << "(c)2007-2011 by H. Wirtz <wirtz@dfn.de>" << std::endl;
-	std::cout << "Version " << VERSION << " build " << SVN_REV << std::endl;
+    std::cout << "OSX and Windows ports 2012 by Yves Sablonier and Geoff R. McLane, respectively." << std::endl;
+	std::cout << "Version " << FGCOM_VERSION << " build " << SVN_REV << " date " << __DATE__ << ", at " << __TIME__ << std::endl;
 	std::cout << "Using iaxclient library Version " << iaxc_version (tmp) << std::endl;
 	std::cout << std::endl;
 
@@ -257,7 +262,8 @@ main (int argc, char *argv[])
 #else
   if (iaxc_initialize (DEFAULT_IAX_AUDIO, DEFAULT_MAX_CALLS))
 #endif
-    fatal_error ("cannot initialize iaxclient!");
+    fatal_error ("cannot initialize iaxclient!\nHINT: Have you checked the mic and speakers?");
+
   initialized = 1;
 
   // option parser
@@ -916,11 +922,11 @@ double *read_special_frequencies(const char *file)
 	{
 		l_allocated += ALLOC_CHUNK_SIZE;
 
-		if(SUCCESS(parser_init(file)))
+		if(FGC_SUCCESS(parser_init(file)))
 		{
 			l_count = 0;
 
-			while(SUCCESS(parser_get_next_value(&l_value)))
+			while(FGC_SUCCESS(parser_get_next_value(&l_value)))
 			{
 				if(l_count >= l_allocated)
 				{

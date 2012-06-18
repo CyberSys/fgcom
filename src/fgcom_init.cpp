@@ -71,7 +71,9 @@
 #include <errno.h>
 #include <stdarg.h>
 #include <sys/types.h>
+#ifndef _MSC_VER
 #include <pwd.h>
+#endif /* !_MSC_VER */
 
 #include "fgcom_init.h"
 #include "getopt.h"
@@ -182,8 +184,10 @@ fgcomUsage ()
       current_length += 10;
 
       std::string option = std::string ("  -")
-	+ std::string (&currentEntry->option)
-	+ std::string (", -")
+	+ std::string (&currentEntry->option);
+      if (option.size() > 4)
+          option = option.substr(0,4);
+	option += std::string (", -")
 	+ std::string (currentEntry->long_option)
 	+ std::string (", --")
 	+ std::string (currentEntry->long_option)
@@ -277,6 +281,23 @@ fgcomUsage ()
   std::cout << std::endl;
 }
 
+static char *
+get_alternate_home(void)
+{
+	char *ah = 0;
+#ifdef _MSC_VER
+	char *app_data = getenv("LOCALAPPDATA");
+	if (app_data) {
+		ah  = _strdup(app_data);
+	}
+#else
+      struct passwd *
+	pwd = getpwent ();
+      ah = strdup (pwd->pw_dir);
+#endif
+	return ah;
+}
+
 // Attempt to locate and parse the various non-XML config files in order
 // from least precidence to greatest precidence
 static void
@@ -292,10 +313,7 @@ _doOptions (int argc, char **argv)
 
   if (homedir == NULL)
     {
-      struct passwd *
-	pwd = getpwent ();
-
-      homedir = strdup (pwd->pw_dir);
+	  homedir = get_alternate_home();
     }
 
 /*#if defined( unix ) || defined( __CYGWIN__ )
@@ -500,6 +518,9 @@ _parseOption (const std::string & arg, const std::string & next_arg)
 	    case OPTION_FLOAT:
 	      if (!arg_value.empty ())
 		{
+#ifdef _MSC_VER
+		  float temp = atof(arg_value.c_str ());
+#else // !_MSC_VER
 		  char *
 		    end;
 		  float
@@ -516,6 +537,7 @@ _parseOption (const std::string & arg, const std::string & next_arg)
 			      "' for option " << arg_name << "!");
 		      return FGCOM_OPTIONS_ERROR;
 		    }
+#endif // _MSC_VER y/n
 
 		  *(float *) (entry->parameter) = temp;
 		  if (*(float *) (entry->parameter) != temp

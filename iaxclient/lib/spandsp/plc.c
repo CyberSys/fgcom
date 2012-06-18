@@ -28,6 +28,9 @@
  */
 
 /*! \file */
+#ifdef HAVE_CONIG_H
+#include "config.h"
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -52,6 +55,11 @@
 /* msvc doesn't know rint() */
 #if defined(WIN32) && defined(_MSC_VER)
 #define rint(x) floor((x) + 0.5)
+#undef inline
+#define inline __inline
+#ifndef int16_t
+typedef short int16_t;
+#endif
 #endif
 
 /* We do a straight line fade to zero volume in 50ms when we are filling in for missing data. */

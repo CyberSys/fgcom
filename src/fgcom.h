@@ -37,8 +37,9 @@
 #define MAX_COM 4;
 #define DEFAULT_ALARM_TIMER 15
 
-#define SUCCESS(__x__)		(__x__ == 0)
-#define FAILED(__x__)		(__x__ < 0)
+/* avoid name clash with winerror.h */
+#define FGC_SUCCESS(__x__)		(__x__ == 0)
+#define FGC_FAILED(__x__)		(__x__ < 0)
 
 
 struct airport
