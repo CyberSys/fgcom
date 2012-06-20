@@ -1,0 +1,60 @@
+// config.h
+// 2012-06-20 - 2012-06-08 - HAND CRAFTED for MSVC
+// ===============================================
+#ifndef _CONFIG_H_
+#define _CONFIG_H_
+
+// try without these
+// #ifdef _MSC_VER
+// #pragma warning(disable: 4996 4244 4305 4018 4804)
+// #endif
+
+#include <io.h> // for open, close, write, read
+
+#ifndef SPECIAL_FREQUENCIES_FILE
+#define SPECIAL_FREQUENCIES_FILE "fgcom-data\\special_frequencies.txt"
+#endif
+#ifndef DEFAULT_POSITIONS_FILE
+#define DEFAULT_POSITIONS_FILE "fgcom-data\\positions.txt"
+#endif
+
+#define snprintf _snprintf
+
+#ifndef SVN_REV
+#define SVN_REV "260"
+#endif
+
+#define inline __inline
+typedef __int64 ssize_t;
+
+// add in some DEBUG
+#ifndef NDEBUG
+#ifndef DEBUG_SUPPORT
+#define DEBUG_SUPPORT 1
+#endif
+#ifndef DEBUG_DEFAULT
+#define DEBUG_DEFAULT 1
+#endif
+#ifndef JB_DEBUGGING
+#define JB_DEBUGGING 1
+#endif
+#ifndef DEBUG
+#define DEBUG 1
+#endif
+#endif
+
+
+// options to experiment with USE_WIN_AUDIO | AUDIO_PA | AUDIO_ALSA | AUDIO_OPENAL
+#ifdef USE_WIN_AUDIO
+// This FAILS - #define USE_WIN_AUDIO 1 - no win_initialize_audio(), win_flush_audio_output_buffers(), etc
+#undef USE_WIN_AUDIO
+#endif
+
+// put this option in cmake, default ON, and added search for ALUT and OpenAL libraries
+// #ifndef AUDIO_OPENAL 
+// #define AUDIO_OPENAL 1  // ok this compiles, but must then LINK with OpenAL for __imp__alSourcePlay() etc...
+// #endif
+// Now all magically works ;=))
+
+#endif // #ifndef _CONFIG_H_
+/* eof - config.h */

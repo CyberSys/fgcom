@@ -254,7 +254,7 @@ endif()
 
 if(WIN32)
     if(MSVC)
-        # turn off various warnings
+        # optionally turn off various warnings
         set(WARNING_FLAGS "${WARNING_FLAGS} /wd4996")
         # foreach(warning 4244 4251 4267 4275 4290 4786 4305)
         foreach(warning 4244 4305 4018 4101)
