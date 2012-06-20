@@ -29,7 +29,12 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+#include<sys/types.h>
 #include <iostream>
+#include <stdlib.h>
+#include <errno.h>
+#include <string.h>
+#include <ctype.h>
 #include <plib/netSocket.h>
 #include "fgcom.h"
 #include "fgcom_init.h"
@@ -80,9 +85,11 @@ static const char *map[] = {
   "busy", "transfer", NULL
 };
 
+#ifdef DEBUG /* only used in DEBUG, to show mode */
 static const char *mode_map[] = {
-  "ATC", "Flightgear"
+  (const char *)"ATC", (const char *)"Flightgear"
 };
+#endif
 
 static const char *radio_map[] = {
   "COM1", "NAV1", "COM2", "NAV2"
@@ -227,8 +234,8 @@ main (int argc, char *argv[])
 {
   int numbytes;
   static char buf[MAXBUFLEN];
-  int c;
-  int ret = 0;
+  //int c;
+  //int ret = 0;
 
 	prog = strdup( argv[0] );
   
@@ -963,6 +970,7 @@ read_airports (const char *file)
   struct airport *my_airport = NULL;
   struct airport *previous_airport = NULL;
   printf ("Reading list of airports...");
+
   if ((fp = fopen (file, "rt")) == NULL)
     {
       printf ("Cannot open %s\n", DEFAULT_POSITIONS_FILE);

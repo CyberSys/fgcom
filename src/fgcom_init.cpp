@@ -35,6 +35,8 @@
 #endif
 
 #include <iostream>
+#include <sstream>
+#include <fstream>
 //#include <stdlib.h>
 //#include <string.h>             // strcmp()
 
@@ -52,86 +54,110 @@
 #  define _G_NO_EXTERN_TEMPLATES
 #endif
 
-#include <simgear/compiler.h>
-
 #include <string>
-
-#include <simgear/constants.h>
-#include <simgear/debug/logstream.hxx>
-#include <simgear/structure/exception.hxx>
-#include <simgear/structure/event_mgr.hxx>
-#include <simgear/math/sg_geodesy.hxx>
-#include <simgear/math/interpolater.hxx>
-#include <simgear/misc/sg_path.hxx>
-#include <simgear/misc/sgstream.hxx>
-#include <simgear/timing/sg_time.hxx>
-#include <simgear/timing/lowleveltime.h>
-
 #include <iomanip>
+#include <map>
 #include <errno.h>
 #include <stdarg.h>
 #include <sys/types.h>
-#ifndef _MSC_VER
+#ifdef _MSC_VER
+#include "fgcom_getopt.h"
+#else /* !_MSC_VER */
 #include <pwd.h>
-#endif /* !_MSC_VER */
-
+#include <getopt.h>
+#endif /* _MSC_VER y/n */
 #include "fgcom_init.h"
-#include "getopt.h"
 #include "fgcom.h"
 
-using
-  std::string;
+using namespace std;
+using std::string;
+using std::cerr;
+using std::endl;
 
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof(*(x)))
 
+static int io_type = -1;
+static int io_level = -1;
+#define SG_GENERAL  0x01
+#define SG_INFO     0x01
+#define SG_ALERT    0x02
+#define SG_LOG(a,b,c) if ((io_type & a)&&(io_level & b)) cerr << c << endl
+
+//
+// Manipulators
+//
+istream& skip_eol( istream& in ) {
+    char c = '\0';
+    // skip to end of line.
+    while ( in.get(c) ) {
+        if ( (c == '\n') || (c == '\r') ) {
+            break;
+        }
+    }
+    return in;
+}
+
+istream& skip_ws( istream& in ) {
+    char c;
+    while ( in.get(c) ) {
+        if ( ! isspace( c ) ) {
+            // put back the non-space character
+            in.putback(c);
+            break;
+        }
+    }
+    return in;
+}
+
+istream& skip_comment( istream& in )
+{
+    while ( in ) {
+        // skip whitespace
+        in >> skip_ws;
+        char c;
+        if ( in.get( c ) && c != '#' ) {
+            // not a comment
+            in.putback(c);
+            break;
+        }
+        in >> skip_eol;
+    }
+    return in;
+}
+
+
 /* program name */
-extern char *
-  prog;
+extern char *prog;
+extern const char * default_root;
 
-extern const char *
-  default_root;
+static std::string config;
 
-static
-  std::string
-  config;
+static OptionEntry *fgcomOptionArray;
 
-static OptionEntry *
-  fgcomOptionArray;
-
-static void
-_doOptions (int argc, char **argv);
-static int
-_parseOption (const std::string & arg, const std::string & next_arg);
-static void
-_fgcomParseArgs (int argc, char **argv);
-static void
-_fgcomParseOptions (const std::string & path);
+static void _doOptions (int argc, char **argv);
+static int _parseOption (const std::string & arg, const std::string & next_arg);
+static void _fgcomParseArgs (int argc, char **argv);
+static void _fgcomParseOptions (const std::string & path);
 
 // Read in configuration (file and command line)
-bool
-fgcomInitOptions (const OptionEntry * fgcomOptions, int argc, char **argv)
+bool fgcomInitOptions (const OptionEntry * fgcomOptions, int argc, char **argv)
 {
-  if (!fgcomOptions)
-    {
-      std::cerr << "Error! Uninitialized fgcomOptionArray!" << std::endl;
-      return false;
+    if (!fgcomOptions) {
+        std::cerr << "Error! Uninitialized fgcomOptionArray!" << std::endl;
+        return false;
     }
 
-  // set option array
-  int
-    n_options;
-  for (n_options = 0; fgcomOptions[n_options].long_option != NULL;
-       n_options++);
-  fgcomOptionArray =
-    (OptionEntry *) realloc (fgcomOptionArray,
-			     sizeof (OptionEntry) * (n_options + 1));
-  memcpy (fgcomOptionArray, fgcomOptions,
-	  sizeof (OptionEntry) * (n_options + 1));
+    // set option array
+    int n_options;
+    for (n_options = 0; fgcomOptions[n_options].long_option != NULL; n_options++) {}
 
-  // parse options
-  _doOptions (argc, argv);
+    fgcomOptionArray = (OptionEntry *) realloc (fgcomOptionArray, sizeof (OptionEntry) * (n_options + 1));
+    memcpy (fgcomOptionArray, fgcomOptions, sizeof (OptionEntry) * (n_options + 1));
 
-  return true;
+    // parse options
+    _doOptions (argc, argv);
+
+    return true;
 }
 
 // Create usage information out of fgcomOptionArray
@@ -749,60 +775,50 @@ _fgcomParseArgs (int argc, char **argv)
 static void
 _fgcomParseOptions (const std::string & path)
 {
-  sg_gzifstream
-  in (path);
-
-  if (!in.is_open ())
-    {
-      return;
+    std::ifstream in(path);
+    if (!in.is_open ()) {
+        SG_LOG(SG_GENERAL, SG_ALERT, "Error: Unable to open " << path);
+        return;
     }
 
-#ifdef DEBUG
-  std::cout << "Processing config file: " << path << "." << std::endl;
-#endif
 
-  SG_LOG (SG_GENERAL, SG_INFO, "Processing config file: " << path);
+    SG_LOG (SG_GENERAL, SG_INFO, "Processing config file: " << path);
 
-  in >> skipcomment;
+    in >> skip_comment;
 #ifndef __MWERKS__
-  while (!in.eof ())
-    {
+    while (!in.eof ()) {
 #else
-  char
-    c = '\0';
-  while (in.get (c) && c != '\0')
-    {
-      in.putback (c);
+    char c = '\0';
+    while (in.get (c) && c != '\0') {
+        in.putback (c);
 #endif
-      std::string line;
+        std::string line;
 
 #if defined( macintosh )
-      getline (in, line, '\r');
+        getline (in, line, '\r');
 #else
-      getline (in, line, '\n');
+        getline (in, line, '\n');
 #endif
 
-      // catch extraneous (DOS) line ending character
-      int
-	i;
-      for (i = line.length (); i > 0; i--)
-	{
-	  if (line[i - 1] > 32)
-	    {
-	      break;
-	    }
-	}
-      line = line.substr (0, i);
+        // catch extraneous (DOS) line ending character
+        int i;
+        for (i = line.length(); i > 0; i--) {
+            if (line[i - 1] > 32) {
+                break;
+            }
+        }
 
-      std::string next_arg;
-      if (_parseOption (line, next_arg) == FGCOM_OPTIONS_ERROR)
-	{
-	  std::cerr << std::
-	    endl << "Config file parse error: " << path << " '" << line << "'"
-	    << std::endl;
-	  fgcomUsage ();
-	  exit (-1);
-	}
-      in >> skipcomment;
+        line = line.substr(0, i);
+
+        std::string next_arg;
+        if (_parseOption (line, next_arg) == FGCOM_OPTIONS_ERROR) {
+            SG_LOG(SG_GENERAL, SG_ALERT, "ERROR: Config file parse error: " << path << " '" << line << "'" );
+            fgcomUsage ();
+            exit(1);
+        }
+
+        in >> skip_comment;
     }
 }
+
+/* eof - fgcom_init.cpp */

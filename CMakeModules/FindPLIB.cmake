@@ -1,4 +1,4 @@
-# Locate PLIB
+# Locate PLIB - v20120620
 # This module defines
 # PLIB_LIBRARIES
 # PLIB_FOUND, if false, do not try to link to PLIB 
@@ -48,7 +48,10 @@ FIND_PATH(PLIB_INCLUDE_DIR ul.h
 )
 set(CMAKE_FIND_FRAMEWORK ${save_FIND_FRAMEWORK})
 
-if(NOT PLIB_INCLUDE_DIR)
+if(PLIB_INCLUDE_DIR)
+message(STATUS "*** PLIB: Found 'framework' in ${PLIB_INCLUDE_DIR}")
+else(PLIB_INCLUDE_DIR)
+message(STATUS "*** PLIB: NOT FOUND 'framework' - doing FIND_PATH")
     FIND_PATH(PLIB_INCLUDE_DIR plib/ul.h
       PATH_SUFFIXES include 
       HINTS $ENV{PLIBDIR}
@@ -57,9 +60,8 @@ if(NOT PLIB_INCLUDE_DIR)
       /opt/local
       /usr
     )
-endif()
+endif(PLIB_INCLUDE_DIR)
 
-message(STATUS ${PLIB_INCLUDE_DIR})
 
 # check for dynamic framework on Mac ()
 FIND_LIBRARY(PLIB_LIBRARIES
@@ -110,12 +112,12 @@ macro(find_static_component comp libs)
     select_library_configurations( ${compLibBase} )
 
     set(componentLibRelease ${${compLibName}_RELEASE})
-    #message(STATUS "Simgear ${compLibName}_RELEASE ${componentLibRelease}")
+    #message(STATUS "*** Simgear ${compLibName}_RELEASE ${componentLibRelease}")
     set(componentLibDebug ${${compLibName}_DEBUG})
-    #message(STATUS "Simgear ${compLibName}_DEBUG ${componentLibDebug}")
+    #message(STATUS "*** Simgear ${compLibName}_DEBUG ${componentLibDebug}")
     if (NOT ${compLibName}_DEBUG)
         if (NOT ${compLibName}_RELEASE)
-            #message(STATUS "found ${componentLib}")
+            #message(STATUS "*** found ${componentLib}")
             list(APPEND ${libs} ${componentLibRelease})
         endif()
     else()
@@ -125,9 +127,9 @@ endmacro()
 
 if(${PLIB_LIBRARIES} STREQUAL "PLIB_LIBRARIES-NOTFOUND")    
     set(PLIB_LIBRARIES "") # clear value
-    
-# based on the contents of deps, add other required PLIB
-# static library dependencies. Eg PUI requires FNT
+    message(STATUS "*** PLIB: 'framework' library NOT FOUND")
+    # based on the contents of deps, add other required PLIB
+    # static library dependencies. Eg PUI requires FNT
     set(outDeps ${PLIB_FIND_COMPONENTS})
     
     foreach(c ${PLIB_FIND_COMPONENTS})
@@ -146,17 +148,18 @@ if(${PLIB_LIBRARIES} STREQUAL "PLIB_LIBRARIES-NOTFOUND")
     list(APPEND outDeps "ul") # everything needs ul
     list(REMOVE_DUPLICATES outDeps) # clean up
 
-    
-
     # look for traditional static libraries
     foreach(component ${outDeps})
         find_static_component(${component} PLIB_LIBRARIES)
     endforeach()
+    message(STATUS "*** PLIB: Found libraries ${PLIB_LIBRARIES}")
+else()
+    message(STATUS "*** PLIB: Found 'framework' library ${PLIB_LIBRARIES}")
 endif()
 
 list(FIND outDeps "js" haveJs)
 if(${haveJs} GREATER -1)
-    message(STATUS "adding runtime JS dependencies")
+    message(STATUS "*** Adding runtime JS dependencies")
     if(APPLE)
     # resolve frameworks to full paths
         find_library(IOKIT_LIBRARY IOKit)
