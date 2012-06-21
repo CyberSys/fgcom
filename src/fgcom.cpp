@@ -103,7 +103,7 @@ struct airport *airportlist;
 struct fgdata data;
 char icao[5];
 double special_frq[] =
-  { 999.999, 910.0, 123.45, 122.75, 123.5, 121.5, 732.34 - 1.0 };
+  { 999.999, 910.0, 123.45, 122.75, 123.5, 121.5, 732.34, -1.0 };
 double *special_frequencies;
 
 double previous_com_frequency = 0.0;
@@ -115,7 +115,7 @@ int max_com_instruments = 2;
 char *prog;
 
 /* configuration values */
-static bool debug;
+static bool debug = false;
 static int port;
 static const char *voipserver;
 static const char *fgserver;
@@ -130,6 +130,8 @@ static char codec_option;
 static const char *username;
 static const char *password;
 static bool list_audio;
+static char *positions_file;
+static char *frequency_file;
 
 static const OptionEntry fgcomOptionArray[] = {
   {"debug", 'd', false, OPTION_NONE, &debug, 0, "show debugging information",
@@ -161,6 +163,10 @@ static const OptionEntry fgcomOptionArray[] = {
    "use <devicename> as audio output", 0},
   {"codec", 'c', true, OPTION_CHAR, &codec_option, 0,
    "use codec <codec> as transfer codec", &codec_option},
+  {"positions", 'T', true, OPTION_STRING, &positions_file, 0,
+   "location positions file", &DEFAULT_POSITIONS_FILE},
+  {"special", 'Q', true, OPTION_STRING, &frequency_file, 0,
+   "location spl. frequency file (opt)", &SPECIAL_FREQUENCIES_FILE},
   {NULL}
 };
 
@@ -243,6 +249,43 @@ static char *base_name( char *name )
     return bn;
 }
 
+/* adjust default input per OS 
+   but no adjustment if it is a user input
+#ifdef MACOSX
+#endif // MACOSX   
+*/
+
+#define MX_PATH_SIZE 2000
+
+// if default FAILS, for OSX and WIN try EXE path
+int fix_input_files()
+{
+    int iret = 0;
+    char *def_freq = (char *) SPECIAL_FREQUENCIES_FILE;
+    char *def_pos  = (char *) DEFAULT_POSITIONS_FILE;
+    char exepath[MX_PATH_SIZE+2];
+    exepath[0] = 0;
+    if (strcmp( frequency_file,def_freq) == 0) {
+        /* ok is default value - do some fixes */
+        if (is_file_or_directory( frequency_file ) != 1) {
+            exepath[0] = 0;
+            iret |= get_data_path_per_os( exepath, MX_PATH_SIZE );
+            strcat(exepath,def_freq);
+            frequency_file = strdup(exepath);
+        }
+    }
+    if (strcmp( positions_file,def_pos) == 0) {
+        // if default FAILS, for OSX and WIN try EXE path
+        if (is_file_or_directory( positions_file ) != 1) {
+            exepath[0] = 0;
+            iret |= get_data_path_per_os( exepath, MX_PATH_SIZE );
+            strcat(exepath,def_pos);
+            positions_file = strdup(exepath);
+        }
+    }
+    return iret;
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -269,6 +312,8 @@ main (int argc, char *argv[])
   password = DEFAULT_PASSWORD;
   codec_option = DEFAULT_CODEC;
   mode = 0;			/* 0 = ATC mode, 1 = FG mode */
+  positions_file = (char *) DEFAULT_POSITIONS_FILE;
+  frequency_file = (char *) SPECIAL_FREQUENCIES_FILE;
 
 #ifndef _WIN32
   /* catch signals */
@@ -398,11 +443,18 @@ main (int argc, char *argv[])
 	 * If no file $(INSTALL_DIR)/special_frequencies.txt exists, then default frequencies
 	 * are used and are hard coded.
 	 */
-	if((special_frequencies = read_special_frequencies(SPECIAL_FREQUENCIES_FILE)) == NULL)
-		special_frequencies = special_frq;
+
+    fix_input_files();  /* adjust default input per OS */
+
+	if((special_frequencies = read_special_frequencies(frequency_file)) == 0) {
+        std::cout << "Failed to load file [" << frequency_file << "]!\nUsing internal defaults." << std::endl;
+        special_frequencies = special_frq;
+    } else {
+        std::cout << "Loaded file [" << frequency_file << "]." << std::endl;
+    }
 
 	/* read airport frequencies and positions */
-	airportlist = read_airports (DEFAULT_POSITIONS_FILE);
+	airportlist = read_airports (positions_file);   /* never returns if fail! */
 
   /* preconfigure iax */
   std::cout << "Initializing IAX client as " << username << ":" <<
@@ -739,7 +791,7 @@ event_unknown (int type)
 void
 report (char *text)
 {
-  if (debug > 0)
+  if (debug)
     {
       std::cout << text << std::endl;
       fflush (stdout);
@@ -965,7 +1017,12 @@ double *read_special_frequencies(const char *file)
 			if(l_count == l_allocated)
 				l_pfrq = (double *)realloc(l_pfrq, (l_count + 1) * sizeof(double));
 			l_pfrq[l_count] = -1.0;
-		}
+		} else {
+            // failed to open file
+            parser_exit();
+            free(l_pfrq);
+            return 0;
+        }
 	}
 
 	parser_exit();
@@ -983,11 +1040,13 @@ read_airports (const char *file)
   struct airport *first = NULL;
   struct airport *my_airport = NULL;
   struct airport *previous_airport = NULL;
-  printf ("Reading list of airports...");
+  size_t counter = 0;
+
+  printf ("Reading airports [%s]... ",file);
 
   if ((fp = fopen (file, "rt")) == NULL)
     {
-      printf ("Cannot open %s\n", DEFAULT_POSITIONS_FILE);
+      printf ("ERROR: open failed!\n");
       perror ("fopen");
       exitcode = 120;
       quit (0);
@@ -999,6 +1058,7 @@ read_airports (const char *file)
 			&airport_tmp.lat, &airport_tmp.lon,
 			airport_tmp.type, airport_tmp.text)) == 6)
     {
+        counter++;
       if ((my_airport =
 	   (struct airport *) malloc (sizeof (struct airport))) == NULL)
 	{
@@ -1020,12 +1080,12 @@ read_airports (const char *file)
   fclose (fp);
   if (ret != EOF)
     {
-      printf ("error during reading airports!\n");
+      printf ("ERROR during reading airports!\n");
       exitcode = 900;
       quit (0);
     }
 
-  printf ("done.\n");
+  printf ("loaded %d entries.\n",counter);
   return (first);
 }
 
@@ -1259,3 +1319,5 @@ do_iaxc_call (const char *username, const char *password,
   iaxc_call (dest);
   iaxc_millisleep (DEFAULT_MILLISLEEP);
 }
+
+/* eof - fgcom.cpp */

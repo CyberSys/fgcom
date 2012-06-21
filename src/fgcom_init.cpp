@@ -132,7 +132,7 @@ extern const char * default_root;
 
 static std::string config;
 
-static OptionEntry *fgcomOptionArray;
+static OptionEntry *fgcomOptionArray = 0;
 
 static void _doOptions (int argc, char **argv);
 static int _parseOption (const std::string & arg, const std::string & next_arg);
@@ -777,7 +777,9 @@ _fgcomParseOptions (const std::string & path)
 {
     std::ifstream in(path);
     if (!in.is_open ()) {
+#ifdef DEBUG
         SG_LOG(SG_GENERAL, SG_ALERT, "Error: Unable to open " << path);
+#endif /* ONLY FOR DEBUG */
         return;
     }
 

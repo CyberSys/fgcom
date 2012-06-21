@@ -24,9 +24,11 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
-#ifndef _MSC_VER
+#ifdef _MSC_VER
+#include <Windows.h>
+#else /* !_MSC_VER */
 #include <unistd.h>
-#endif /* !_MSC_VER */
+#endif /* _MSC_VER y/n */
 #include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -53,10 +55,14 @@ int parser_init(const char *filename)
 	struct stat l_stat;
 	ssize_t l_nbytes;
 	int l_status;
+    int oflag = O_RDONLY;
+#ifdef _MSC_VER
+    oflag |= _O_BINARY; /* if comparing to stat size then must be binary */
+#endif
 
 	s_index = 0;
 
-	if((s_file_handle = open(filename, O_RDONLY)) < 0)
+	if((s_file_handle = open(filename, oflag)) < 0)
 		return (s_file_handle);
 
 	fstat(s_file_handle, &l_stat);
@@ -172,6 +178,75 @@ int parser_get_next_value(double *value)
 	return(0);
 }
 
+#ifdef _MSC_VER
+#define M_ISDIR _S_IFDIR
+#else
+#define M_ISDIR __S_IFDIR
+#endif
 
+int is_file_or_directory( const char * path )
+{
+    struct stat buf;
+    if ( stat(path,&buf) == 0 ) {
+        if (buf.st_mode & M_ISDIR)
+            return 2;
+        return 1;
+    }
+    return 0;
+}
+
+/* trim to base path IN BUFFER */
+void trim_base_path_ib( char *path )
+{
+    size_t len = strlen(path);
+    size_t i, off;
+    int c;
+    off = 0;
+    for (i = 0; i < len; i++) {
+        c = path[i];
+        if (( c == '/' ) || ( c == '\\')) {
+            off = i + 1;    // get after separator
+#ifdef _MSC_VER
+            if ( c == '/' )
+                path[i] = '\\';
+#endif // _MSC_VER
+        }
+    }
+    path[off] = 0;
+}
+
+/* get data path per OS */
+int get_data_path_per_os( char *path, size_t len )
+{
+#if defined(MACOSX)
+    uint32_t size = len;
+    if (_NSGetExecutablePath(path, &sizefreq) == 0)  {
+        // success
+        trim_base_path_ib(path);
+    } else {
+        printf("ERROR: path buffer too small; need size %u\n", size);
+        return 1;
+    }
+#elif defined(_MSC_VER)
+    unsigned int size = GetModuleFileName(NULL,path, len);
+    if (size && (size != len)) {
+        // success
+        trim_base_path_ib(path);
+    } else {
+        if (size) {
+            printf("ERROR:GetModuleFileName: path buffer too small; need size more than %u\n", len);
+        } else {
+            printf("ERROR:GetModuleFileName: FAILED!\n");
+        }
+        return 1;
+    }
+#else
+    strcpy(path,"/usr/local/shared");
+#endif // MACOSX | _MSC_VER | others   
+    return 0;
+}
+
+
+/* eof - utils.cpp */
 
 
