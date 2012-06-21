@@ -229,6 +229,20 @@ process_packet (char *buf)
     }
 }
 
+static char *base_name( char *name )
+{
+    char *bn = name;
+    size_t len = strlen(name);
+    size_t i;
+    int c;
+    for ( i = 0; i < len; i++ ) {
+        c = name[i];
+        if (( c == '/' ) || ( c == '\\'))
+            bn = &name[i+1];
+    }
+    return bn;
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -237,11 +251,11 @@ main (int argc, char *argv[])
   //int c;
   //int ret = 0;
 
-	prog = strdup( argv[0] );
+	prog = strdup( base_name(argv[0]) );
   
 	/* program header */
 	std::cout << prog << " - a communication radio based on VoIP with IAX/Asterisk" << std::endl;
-	std::cout << "(c)2007-2011 by H. Wirtz <wirtz@dfn.de>" << std::endl;
+	std::cout << "Original (c) 2007-2011 by H. Wirtz <wirtz@dfn.de>" << std::endl;
     std::cout << "OSX and Windows ports 2012 by Yves Sablonier and Geoff R. McLane, respectively." << std::endl;
 	std::cout << "Version " << FGCOM_VERSION << " build " << SVN_REV << " date " << __DATE__ << ", at " << __TIME__ << std::endl;
 	std::cout << "Using iaxclient library Version " << iaxc_version (tmp) << std::endl;

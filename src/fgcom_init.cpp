@@ -288,7 +288,7 @@ fgcomUsage ()
     DEFAULT_FG_PORT << std::endl;
   std::cout << "  \t" << "$ " << prog << " -sother.host.tld -p23456" <<
     std::endl;
-  std::cout << "  - connects %s to fgfs at other.host.tld:23456" << std::endl;
+  std::cout << "  - connects " << prog << " to fgfs at other.host.tld:23456" << std::endl;
 
   std::cout << std::endl;
 
