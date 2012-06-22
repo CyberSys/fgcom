@@ -1085,7 +1085,7 @@ read_airports (const char *file)
       quit (0);
     }
 
-  printf ("loaded %d entries.\n",counter);
+  printf ("loaded %lu entries.\n",counter);
   return (first);
 }
 
