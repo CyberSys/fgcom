@@ -186,7 +186,7 @@ EXPORT struct iaxc_ev_call_state *iaxc_get_event_state(iaxc_event *e) {
 // Messaging functions
 static void default_message_callback(char *message) {
   fprintf(stderr, "IAXCLIENT: ");
-  fprintf(stderr, message);
+  fprintf(stderr, "%s", message);
   fprintf(stderr, "\n");
 }
 
