@@ -154,7 +154,7 @@ int parser_get_next_value(double *value)
 				l_j = s_index + 1;
 				while(  ((s_content[l_j] >= '0' && s_content[l_j] <= '9') ||
 						 (s_content[l_j] == '.' || s_content[l_j] == ',')) &&
-						((s_content[l_j] != '\n') && (l_j < s_size)) )
+						((s_content[l_j] != '\n') && (l_j < (unsigned int)s_size)) )
 					l_j++;
 
 				l_size = l_j - s_index + 1;
