@@ -18,7 +18,6 @@ void
 icao2number (char *icao, float frequency, char *buf)
 {
   char icao_work[5];
-  int i;
 
   if (strlen (icao) == 0)
     strcpy (icao, "ZZZZ");
@@ -34,7 +33,6 @@ const char *
 icaobypos (struct airport *airports, double frequency,
 	   double plane_lat, double plane_lon, double range)
 {
-  char icao[5];
   double r;
 
   if (frequency >= DEFAULT_LOWER_FRQ_LIMIT

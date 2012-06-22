@@ -68,6 +68,7 @@
 #endif /* _MSC_VER y/n */
 #include "fgcom_init.h"
 #include "fgcom.h"
+#include "utils.h"
 
 using namespace std;
 using std::string;
@@ -588,6 +589,7 @@ _parseOption (const std::string & arg, const std::string & next_arg)
 		}
 	      break;
 	    case OPTION_DOUBLE:
+        case OPTION_FREQ:
 	      if (!arg_value.empty ())
 		{
 		  char *
@@ -775,7 +777,16 @@ _fgcomParseArgs (int argc, char **argv)
 static void
 _fgcomParseOptions (const std::string & path)
 {
-    std::ifstream in(path);
+    if (is_file_or_directory(path.c_str()) != 1) {
+#ifdef DEBUG
+        SG_LOG(SG_GENERAL, SG_ALERT, "Error: Unable to open " << path);
+#endif /* ONLY FOR DEBUG */
+        return;
+    }
+
+    std::fstream in;
+    std::ios_base::openmode mode = std::ios_base::in;
+    in.open(path.c_str(),mode);
     if (!in.is_open ()) {
 #ifdef DEBUG
         SG_LOG(SG_GENERAL, SG_ALERT, "Error: Unable to open " << path);
