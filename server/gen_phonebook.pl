@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 #
 # gen_phonebook.pl
+# 20120622 - Add LOTS more
 # 20120616 - Add strict and warnings
 use strict;
 use warnings;
@@ -9,6 +10,8 @@ use IO::File;
 use File::Slurp;
 use Data::Dumper;
 use File::Basename;  # split path ($name,$dir,$ext) = fileparse($file [, qr/\.[^.]*/] )
+use File::stat;
+use Time::gmtime;
 
 my ($pgmname,$pgmpath) = fileparse($0);
 
@@ -17,22 +20,29 @@ my $verbosity = 0;
 my $FG_AIRPORTS = "/usr/local/tmp/apt.dat.gz";
 my $FG_NAVAIDS = "/usr/local/tmp/nav.dat.gz";
 
-my $phonebook_post="ZZZZ                        910.000  0190909090910000  Echo-Box\n".
+my $phonebook_post = "ZZZZ                        910.000  0190909090910000  Echo-Box\n".
 "ZZZZ                        123.450  0190909090123450  Air2Air\n".
 "ZZZZ                        122.750  0190909090122750  Air2Air\n";
 
-my %APT = ();
-my %NAV = ();
-my %CONF = ();
+my $def_extensions_post = "\n; default post extensions - what should be added?\n\n"; 
 
 my $use_ws_location = 0; # add airport of av. windsock location, if no tower.
 my $use_ctaf_freq = 0;   # add CTAF freq. 127.6 if no others given.
 my $overwrite_flag = 1;
 my $ctaf_freq = 126.7;
+my $exclude_closed = 1;
+my $allow_no_post_ext = 1;  # use the above DEFAULT nothing as extensions POST if no $CONF{'CONFIG'} dir given
 
 ### program variables
+my %APT = ();
+my %XAPT = ();  # closed
+my %NAV = ();
+my %CONF = ();
+
 my @warnings = ();
 my $out_dir = '';
+my $apt_dat_stat = '';
+my $nav_dat_stat = '';
 
 my $conf_extensions = 'extensions.conf';    # base extensions configuration
 
@@ -62,7 +72,7 @@ sub show_warnings($) {
         }
         prt("\n");
     } else {
-        prt( "\nNo warnings issued.\n\n" ) if (VERB9());
+        prt( "No warnings issued.\n" ) if (VERB9());
     }
 }
 
@@ -84,24 +94,79 @@ sub prtw($) {
    push(@warnings,$tx);
 }
 
+sub get_file_stat_stg($) {
+    my $fil = shift;
+    my ($nm,$dr) = fileparse($fil);
+    my ($sb, $msg);
+    $dr = '' if ($dr eq ".\\");
+    $msg = '';
+    if ($sb = stat($fil)) {
+        my @lt = localtime($sb->mtime);
+        if (-d $fil) {
+            $msg = sprintf( "%02d/%02d/%04d %02d:%02d %12s %s %s", $lt[3], $lt[4]+1, $lt[5]+1900,
+                $lt[2], $lt[1], "<DIR>", $nm, $dr );
+        } else {
+            $msg = sprintf( "%02d/%02d/%04d %02d:%02d %12d %s %s", $lt[3], $lt[4]+1, $lt[5]+1900,
+                $lt[2], $lt[1], $sb->size, $nm, $dr );
+        }
+    } else {
+        prtw("WARNING: stat of $nm $dr FAILED! $!");
+    }
+    #prt( "$msg\n" ) if $pr;
+    return $msg;
+}
+
+sub lu_get_YYYYMMDD_hhmmss_UTC($) {
+    my ($t) = shift;
+    # sec, min, hour, mday, mon, year, wday, yday, and isdst.
+    my $tm = gmtime($t);
+    my $m = sprintf( "%04d/%02d/%02d %02d:%02d:%02d",
+        $tm->year() + 1900, $tm->mon() + 1, $tm->mday(), $tm->hour(), $tm->min(), $tm->sec());
+    return $m;
+}
+
 ##############################################################################
 # Read config
 ##############################################################################
 sub read_config()
 {
+    my ($infil,@arr,$line,$conf,$val,$bad,$try);
+    # user 'strict' must READ config file, and set %CONF accordingly
+    # using require like this does NOT work.
+    $bad = 1;
+    $infil = '';
+    $try = 0;
     if ((exists $ENV{'HOME'}) && (-e $ENV{'HOME'}."/.fgreg/fgreg.conf"))
     {
             $CONF{'CONFIG'} = $ENV{'HOME'}."/.fgreg";
-            require $CONF{'CONFIG'}."/fgreg.conf";
+            # require $CONF{'CONFIG'}."/fgreg.conf";
+            $infil = $CONF{'CONFIG'}."/fgreg.conf";
+            $try = 1;
     }
     elsif(-e "./fgreg.conf")
     {
             $CONF{'CONFIG'}=".";
-            require $CONF{'CONFIG'}."/fgreg.conf";
+            #require $CONF{'CONFIG'}."/fgreg.conf";
+            $infil = $CONF{'CONFIG'}."/fgreg.conf";
+            $try = 1;
     }
-    else
-    {
-        prt("WARNING: Found no configuration file...\n");
+    if ($try) {
+        if (open INF, "<$infil") {
+            @arr = <INF>;
+            close INF;
+            foreach $line (@arr) {
+                chomp $line;
+                if ($line =~ /^\$CONF\{['"]{1}(.+)["']{1}\}\s*=\s*['"]{1}(.+)["']{1}/) {
+                    $conf = $1;
+                    $val = $2;
+                    $CONF{$conf} = $val;
+                    $bad = 0;
+                }
+            }
+        }
+    }
+    if ($bad) {
+        prt("WARNING: Found no configuration file...\n") if (VERB5());
         ### exit(1);
     }
 }
@@ -138,14 +203,16 @@ sub read_ap_data() {
     $wslon = 0;
     my $had_ap = 0;
     my $ap_cnt = 0;
+    my $closed = 0;
     my $fh = new IO::Zlib;
-    if( $fh->open($FG_AIRPORTS, "r") )
-    {
+    if( $fh->open($FG_AIRPORTS, "r") ) {
         prt("Reading Airports [$FG_AIRPORTS]\n") if (VERB1());
+        $apt_dat_stat = get_file_stat_stg($FG_AIRPORTS);
         while( $z = <$fh> ) {
             chop($z);
             if ( $z =~ /^\s*$/ ) {
                 next if (!$had_ap);
+
                 $cnt = scalar(keys(%frq));
                 if (($cnt == 0) && $use_ctaf_freq) {
                     $com = sprintf("%3.3f",$ctaf_freq);
@@ -160,26 +227,45 @@ sub read_ap_data() {
                     $lon = $wslon / $ws_cnt;
                     $add_ws_loc++;
                 }
-
-                if($icao && $cnt && $lat && $lon) {
-                    $APT{$icao}{'text'}=$text;
-                    $APT{$icao}{'lat'}=$lat;
-                    $APT{$icao}{'lon'}=$lon;
-                    foreach $f (keys(%frq)) {
-                        $APT{$icao}{'com'}{$f}=$frq{$f};
+                $closed = 0;
+                if ($exclude_closed) {
+                    $closed = 1 if ( ($text =~ /^\s*\[X\]/) || ($text =~ /\s*X\s+CLOSED/) );
+                }
+                if ($closed) {
+                    if ($icao) {
+                        $XAPT{$icao}{'text'} = $text; # name
+                        if (!$lat || !$lon) {
+                            $lat = 0;
+                            $lon = 0;
+                        }
+                        $XAPT{$icao}{'lat'}  = $lat;
+                        $XAPT{$icao}{'lon'}  = $lon;
+                        if ($cnt) {
+                            foreach $f (keys(%frq)) {
+                                $XAPT{$icao}{'com'}{$f} = $frq{$f};
+                            }
+                        }
                     }
                 } else {
-                    $missed++;
-                    if ($icao) {
-                        if (! $cnt) {
-                            $no_freq++;
+                    if ($icao && $cnt && $lat && $lon) {
+                        $APT{$icao}{'text'} = $text; # name
+                        $APT{$icao}{'lat'}  = $lat;
+                        $APT{$icao}{'lon'}  = $lon;
+                        foreach $f (keys(%frq)) {
+                            $APT{$icao}{'com'}{$f} = $frq{$f};
                         }
-                        if ((! defined $lat)||( ! defined $lon)) {
-                            $no_tower++;
+                    } else {
+                        $missed++;
+                        if ($icao) {
+                            if (! $cnt) {
+                                $no_freq++;
+                            }
+                            if ((! defined $lat)||( ! defined $lon)) {
+                                $no_tower++;
+                            }
                         }
                     }
                 }
-
                 undef($icao);
                 undef($text);
                 undef($lon);
@@ -192,12 +278,12 @@ sub read_ap_data() {
                 %frq=();
                 next;
             }
-            elsif ($z =~ /^1\s+/ )
-            {
+            elsif ($z =~ /^1\s+/ ) {
+                # got airport line
                 if ($z=~/^1\s+-?\d+\s+[01]\s+[01]\s+([A-Z0-9]+)\s+(.+)$/) {
                     # Airport Header
-                    $icao=$1;
-                    $text=$2;
+                    $icao = $1;
+                    $text = $2;
                     $had_ap = 1;
                     $ap_cnt++;
                 } else {
@@ -252,6 +338,32 @@ sub read_ap_data() {
                 }
                 prt("\n");
             }
+            if ($exclude_closed) {
+                $cnt = scalar keys(%XAPT);
+                if ($cnt) {
+                    prt("Excluded $cnt airports marked CLOSED [X].\n");
+                    if (VERB9()) {
+                        $cnt = 0;
+                        foreach $icao (sort keys %XAPT) {
+                            $text = $XAPT{$icao}{'text'}; # name
+                            $lat  = $XAPT{$icao}{'lat'};
+                            $lon  = $XAPT{$icao}{'lon'};
+                            $z = '';
+                            foreach $f (keys(%{$XAPT{$icao}{'com'}})) {
+                                $z .= $XAPT{$icao}{'com'}{$f}." $f ";
+                            #foreach $f (keys(%frq)) {
+                            #    $XAPT{$icao}{'com'}{$f} = $frq{$f};
+                            }
+                            # display it
+                            $cnt++;
+                        	$icao=" ".$icao if(length($icao)==3);
+	                        $icao="  ".$icao if(length($icao)==2);
+	                        $icao="   ".$icao if(length($icao)==1);
+                            prt("$cnt: $icao [$text] $z $lat $lon\n");
+                        }
+                    }
+                }
+            }
         }
     }
     else
@@ -269,6 +381,7 @@ sub read_navaids() {
     my $nav_cnt = 0;
     if($nav->open($FG_NAVAIDS, "r")) {
         prt("Reading Navaids [$FG_NAVAIDS]\n") if (VERB1());
+        $nav_dat_stat = get_file_stat_stg($FG_NAVAIDS);
         while( $z = <$nav> ) {
             chop($z);
             if( $z =~ /^3\s+(-?\d+\.\d+)\s+(-?\d+\.\d+)\s+\d+\s+(\d+)\s+\d+\s+-?\d+\.\d+\s+([A-Z]+)\s+(.*)\s*$/ )
@@ -311,12 +424,20 @@ sub write_files() {
     # set file names from %CONF
     $out_conf = $CONF{'ASTERISK_CONFIG_DIR'}."/$conf_extensions";
     $in_conf = $CONF{'CONFIG_DIR'}."/$conf_extensions";
-    $in_post = $CONF{'CONFIG'}."/$conf_extensions";
+    if (defined $CONF{'CONFIG'}) {
+        $in_post = $CONF{'CONFIG'}."/$conf_extensions";
+    } else {
+        $in_post = '';
+    }
 
     # read pre data for extensions
     $extensions_pre = read_file($in_conf);
     # read post data for extensions
-    $extensions_post = read_file($in_post);
+    if (length($in_post) && (-f $in_post)) {
+        $extensions_post = read_file($in_post);
+    } else {
+        $extensions_post = $def_extensions_post;    # use nothing until something found!!!
+    }
 
     # open positions phonebook and extensions file
     $positions=new IO::File;
@@ -345,6 +466,10 @@ sub write_files() {
     print $phonebook "-" x 79,"\n";
 
     print $extensions $extensions_pre;
+    if (length($apt_dat_stat)) {
+        print $extensions "; $acnt APT source data from $apt_dat_stat\n";
+    }
+    print $extensions "; generated by $pgmname, on ".lu_get_YYYYMMDD_hhmmss_UTC(time())." UTC\n;\n";
 
     # Print all known airports
     foreach $airport (sort(keys(%APT)))
@@ -383,6 +508,9 @@ sub write_files() {
         }
     }
 
+    if (length($nav_dat_stat)) {
+        print $extensions "; $ncnt NAV source data from $nav_dat_stat\n;\n";
+    }
     # write VORs to extensions.conf
     foreach $vor (sort(keys(%NAV)))
     {
@@ -471,8 +599,12 @@ sub check_for_valid_inputs() {
     }
 
     if (! defined $CONF{'CONFIG'}) {
-        $bad++;
-        prt("ERROR: NO directory to find POST $conf_extensions file! Use -p dir\n");
+        if ($allow_no_post_ext) {
+            prt("Due to allow_no_post_ext, using internal default.\n") if (VERB5());
+        } else {
+            $bad++;
+            prt("ERROR: NO directory to find POST $conf_extensions file! Use -p dir\n");
+        }
     } else {
         $nf = $CONF{'CONFIG'};
         if (-d $nf) {
@@ -529,14 +661,15 @@ sub check_for_valid_inputs() {
         }
     }
 
-    pgm_exit(1,"ABORTING due to the above problem(s)!\n") if ($bad);;
+    pgm_exit(1,"ABORTING due to the above $bad problem(s)!\n") if ($bad);;
 }
 
 ##############################################################################
 # Main program
 ##############################################################################
+set_verbosity(@ARGV);
 # read config, if available
-read_config();
+read_config();      # check for and load and 'fgreg.conf' file - unsure of contents
 # parse arguments
 parse_args(@ARGV);
 # check program can continue
@@ -554,6 +687,33 @@ pgm_exit(0,"");
 sub need_arg {
     my ($arg,@av) = @_;
     pgm_exit(1,"ERROR: [$arg] must have a following argument!\n") if (!@av);
+}
+
+sub set_verbosity {
+    my (@av) = @_;
+    my ($arg,$sarg,$ff);
+    $arg = scalar @av;
+    ###prt("Checking $arg args...\n");
+    while (@av) {
+        $arg = $av[0];
+        if ($arg =~ /^-/) {
+            $sarg = substr($arg,1);
+            $sarg = substr($sarg,1) while ($sarg =~ /^-/);
+            if ($sarg =~ /^v/) {
+                ###prt("Found -v [$arg]\n");
+                if ($sarg =~ /^v.*(\d+)$/) {
+                    $verbosity = $1;
+                } else {
+                    while ($sarg =~ /^v/) {
+                        $verbosity++;
+                        $sarg = substr($sarg,1);
+                    }
+                }
+                ###prt("Verbosity = $verbosity\n") if (VERB1());
+            }
+        }
+        shift @av;
+    }
 }
 
 sub parse_args {
@@ -634,15 +794,11 @@ sub parse_args {
                 $use_ctaf_freq = 1;
                 prt("Enable adding airport using CTAF 126.7 if no other frequencies given. ($use_ctaf_freq)\n") if (VERB1());
             } elsif ($sarg =~ /^v/) {
-                if ($sarg =~ /^v.*(\d+)$/) {
-                    $verbosity = $1;
-                } else {
-                    while ($sarg =~ /^v/) {
-                        $verbosity++;
-                        $sarg = substr($sarg,1);
-                    }
-                }
-                prt("Verbosity = $verbosity\n") if (VERB1());
+                # already done
+                prt("Set Verbosity = $verbosity\n") if (VERB1());
+            } elsif ($sarg =~ /^i/) {
+                $exclude_closed = 0;
+                prt("Set to include CLOSED airports.\n") if (VERB1());
             } elsif ($sarg =~ /^o/) {
                 need_arg(@av);
                 shift @av;
@@ -677,6 +833,7 @@ sub give_help {
     prt(" --verb[n]     (-v) = Bump [or set] verbosity. def=$verbosity\n");
     prt(" --ws          (-w) = Enable adding an airport on the av. windsock locations if no tower position.\n");
     prt(" --freq        (-f) = Enable adding an airport using CTAF 127.6, if no other frequencies given.\n");
+    prt(" --include     (-i) = To INCLUDE closed airports. Name begins [X] (or X CLOSED).\n"); 
 }
 
 # eof - gen_phonebook.pl

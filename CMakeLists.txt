@@ -520,7 +520,6 @@ add_executable( fgcom ${fgcom_SOURCES} ${fgcom_HEADERS} )
 set_target_properties( fgcom PROPERTIES DEBUG_POSTFIX d )
 
 # Now excluded ${SG_LIBRARIES} 
-
 target_link_libraries( fgcom iaxclient_lib )
 target_link_Libraries( fgcom
     ${win_LIBS}
@@ -538,5 +537,17 @@ install(TARGETS fgcom DESTINATION bin )
 
 ## NO INSTALL OF HEADERS - this is an EXE
 ##install(FILES ${fgcom_HEADERS} DESTINATION include )
+
+# 20120622 - add instalation of the positions and special_frequency files
+set( inst_FILES server/fgcom-data/positions.txt data/special_frequencies.txt )
+if(UNIX)
+  if(APPLE)
+    install( FILES ${inst_FILES} DESTINATION bin/fgcom-data )
+  else(APPLE)
+    install( FILES ${inst_FILES} DESTINATION /usr/local/shared/fgcom-data )
+  endif(APPLE)
+else(UNIX)
+  install( FILES ${inst_FILES} DESTINATION bin/fgcom-data )
+endif(UNIX)
 
 # end of generated root CMakeLists.txt file for fgcom, by dswlist.pl
