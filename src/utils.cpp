@@ -241,7 +241,7 @@ int get_data_path_per_os( char *path, size_t len )
         return 1;
     }
 #else
-    strcpy(path,"/usr/local/shared");
+    strcpy(path,"/usr/local/shared/");
 #endif // MACOSX | _MSC_VER | others   
     return 0;
 }
