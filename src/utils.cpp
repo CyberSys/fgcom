@@ -28,6 +28,7 @@
 #include <Windows.h>
 #else /* !_MSC_VER */
 #include <unistd.h>
+#include <stdint.h>
 #endif /* _MSC_VER y/n */
 #include <fcntl.h>
 #include <stdlib.h>
