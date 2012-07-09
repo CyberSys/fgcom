@@ -45,7 +45,7 @@ icaobypos (struct airport *airports, double frequency,
 	      r =
 		distance (plane_lat, plane_lon, airports->lat, airports->lon);
 #ifdef DEBUG
-	      printf ("      APT: %s (%s %s)\n", airports->text,
+	      printf ("  DEBUG: APT: %s (%s %s)\n", airports->text,
 		      airports->icao, airports->type);
 	      printf ("  APT lat: %2.6f   APT lon: %2.6f\n",
 		      airports->lat, airports->lon);
@@ -84,7 +84,7 @@ posbyicao (struct airport *airports, char *icao)
       if (!strcmp (airports->icao, icao))
 	{
 #ifdef DEBUG
-	  printf ("      APT: %s (%s %s)\n", airports->text,
+	  printf ("  DEBUG: APT: %s (%s %s)\n", airports->text,
 		  airports->icao, airports->type);
 	  printf ("  APT lat: %2.6f   APT lon: %2.6f\n",
 		  airports->lat, airports->lon);

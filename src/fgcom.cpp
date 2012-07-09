@@ -211,7 +211,7 @@ process_packet (char *buf)
 			 data.LON, DEFAULT_RANGE));
       icao2number (icao, selected_frequency, tmp);
 #ifdef DEBUG
-      printf ("dialing %s %3.3f MHz: %s\n", icao, selected_frequency, tmp);
+      printf ("DEBUG: dialing %s %3.3f MHz: %s\n", icao, selected_frequency, tmp);
 #endif
       do_iaxc_call (username, password, voipserver, tmp);
       /* iaxc_select_call (0); */
@@ -444,7 +444,9 @@ main (int argc, char *argv[])
 	 * are used and are hard coded.
 	 */
 
-    fix_input_files();  /* adjust default input per OS */
+    if (fix_input_files()) { /* adjust default input per OS */
+        fatal_error ("cannot adjust default input files per OS!\nHINT: Maybe recompile with larger buffer.");
+    }
 
 	if((special_frequencies = read_special_frequencies(frequency_file)) == 0) {
         std::cout << "Failed to load file [" << frequency_file << "]!\nUsing internal defaults." << std::endl;
@@ -475,12 +477,13 @@ main (int argc, char *argv[])
 		       const_cast < char *>(password),
 		       const_cast < char *>(voipserver));
 #ifdef DEBUG
-      std::cout << "Registered as '" << username << "' at '" << voipserver <<
+      std::cout << "DEBUG: Registered as '" << username << "' at '" << voipserver <<
 	"'." << std::endl;
 #endif
     }
   else
     {
+      std::cout << "Failed iaxc_register!\nHINT: Check user name, pwd and ip of server." << std::endl;
       exitcode = 130;
       quit (0);
     }
@@ -530,7 +533,7 @@ main (int argc, char *argv[])
 		  buf[numbytes] = '\0';
 #ifdef DEBUG
 		  std::
-		    cout << "got packet from " << their_addr.getHost () << ":"
+		    cout << "DEBUG: got packet from " << their_addr.getHost () << ":"
 		    << their_addr.getPort () << std::endl;
 		  std::cout << "packet is " << numbytes << " bytes long" <<
 		    std::endl;
@@ -562,7 +565,7 @@ main (int argc, char *argv[])
 
       icao2number (airport, frequency, tmp);
 #ifdef DEBUG
-      printf ("dialing %s %3.3f MHz: %s\n", airport, frequency, tmp);
+      printf ("DEBUG: dialing %s %3.3f MHz: %s\n", airport, frequency, tmp);
 #endif
       do_iaxc_call (username, password, voipserver, tmp);
       /* iaxc_select_call (0); */
@@ -621,7 +624,7 @@ alarm_handler (int signal)
     {
       icao2number (icao, selected_frequency, tmp);
 #ifdef DEBUG
-      printf ("dialing %s %3.3f MHz: %s\n", icao, selected_frequency, tmp);
+      printf ("DEBUG: dialing %s %3.3f MHz: %s\n", icao, selected_frequency, tmp);
 #endif
       do_iaxc_call (username, password, voipserver, tmp);
 
@@ -1149,7 +1152,7 @@ parse_fgdata (struct fgdata *data, char *buf)
   fields[0] = '\0';
   fields[1] = '\0';
 #ifdef DEBUG
-  std::cout << "Parsing data: [" << buf << "]" << std::endl;
+  std::cout << "DEBUG: Parsing data: [" << buf << "]" << std::endl;
 #endif
   /* Parse data from FG */
   data_pair = strtok (buf, ",");
@@ -1160,118 +1163,118 @@ parse_fgdata (struct fgdata *data, char *buf)
 	{
 	  data->COM1_FRQ = atof (fields[1]);
 #ifdef DEBUG
-	  printf ("COM1_FRQ=%3.3f\n", data->COM1_FRQ);
+	  printf ("DEBUG: COM1_FRQ=%3.3f\n", data->COM1_FRQ);
 #endif
 	}
       else if (strcmp (fields[0], "COM2_FRQ") == 0)
 	{
 	  data->COM2_FRQ = atof (fields[1]);
 #ifdef DEBUG
-	  printf ("COM2_FRQ=%3.3f\n", data->COM2_FRQ);
+	  printf ("DEBUG: COM2_FRQ=%3.3f\n", data->COM2_FRQ);
 #endif
 	}
       else if (strcmp (fields[0], "NAV1_FRQ") == 0)
 	{
 	  data->NAV1_FRQ = atof (fields[1]);
 #ifdef DEBUG
-	  printf ("NAV1_FRQ=%3.3f\n", data->NAV1_FRQ);
+	  printf ("DEBUG: NAV1_FRQ=%3.3f\n", data->NAV1_FRQ);
 #endif
 	}
       else if (strcmp (fields[0], "NAV2_FRQ") == 0)
 	{
 	  data->NAV2_FRQ = atof (fields[1]);
 #ifdef DEBUG
-	  printf ("NAV2_FRQ=%3.3f\n", data->NAV2_FRQ);
+	  printf ("DEBUG: NAV2_FRQ=%3.3f\n", data->NAV2_FRQ);
 #endif
 	}
       else if (strcmp (fields[0], "PTT") == 0)
 	{
 	  data->PTT = atoi (fields[1]);
 #ifdef DEBUG
-	  printf ("PTT=%d\n", data->PTT);
+	  printf ("DEBUG: PTT=%d\n", data->PTT);
 #endif
 	}
       else if (strcmp (fields[0], "TRANSPONDER") == 0)
 	{
 	  data->TRANSPONDER = atoi (fields[1]);
 #ifdef DEBUG
-	  printf ("TRANSPONDER=%d\n", data->TRANSPONDER);
+	  printf ("DEBUG: TRANSPONDER=%d\n", data->TRANSPONDER);
 #endif
 	}
       else if (strcmp (fields[0], "IAS") == 0)
 	{
 	  data->IAS = atof (fields[1]);
 #ifdef DEBUG
-	  printf ("IAS=%f\n", data->IAS);
+	  printf ("DEBUG: IAS=%f\n", data->IAS);
 #endif
 	}
       else if (strcmp (fields[0], "GS") == 0)
 	{
 	  data->GS = atof (fields[1]);
 #ifdef DEBUG
-	  printf ("GS=%f\n", data->GS);
+	  printf ("DEBUG: GS=%f\n", data->GS);
 #endif
 	}
       else if (strcmp (fields[0], "LON") == 0)
 	{
 	  data->LON = atof (fields[1]);
 #ifdef DEBUG
-	  printf ("LON=%f\n", data->LON);
+	  printf ("DEBUG: LON=%f\n", data->LON);
 #endif
 	}
       else if (strcmp (fields[0], "LAT") == 0)
 	{
 	  data->LAT = atof (fields[1]);
 #ifdef DEBUG
-	  printf ("LAT=%f\n", data->LAT);
+	  printf ("DEBUG: LAT=%f\n", data->LAT);
 #endif
 	}
       else if (strcmp (fields[0], "ALT") == 0)
 	{
 	  data->ALT = atoi (fields[1]);
 #ifdef DEBUG
-	  printf ("ALT=%d\n", data->ALT);
+	  printf ("DEBUG: ALT=%d\n", data->ALT);
 #endif
 	}
       else if (strcmp (fields[0], "HEAD") == 0)
 	{
 	  data->HEAD = atof (fields[1]);
 #ifdef DEBUG
-	  printf ("HEAD=%f\n", data->HEAD);
+	  printf ("DEBUG: HEAD=%f\n", data->HEAD);
 #endif
 	}
       else if (strcmp (fields[0], "COM1_SRV") == 0)
 	{
 	  data->COM1_SRV = atoi (fields[1]);
 #ifdef DEBUG
-	  printf ("COM1_SRV=%d\n", data->COM1_SRV);
+	  printf ("DEBUG: COM1_SRV=%d\n", data->COM1_SRV);
 #endif
 	}
       else if (strcmp (fields[0], "COM2_SRV") == 0)
 	{
 	  data->COM2_SRV = atoi (fields[1]);
 #ifdef DEBUG
-	  printf ("COM2_SRV=%d\n", data->COM2_SRV);
+	  printf ("DEBUG: COM2_SRV=%d\n", data->COM2_SRV);
 #endif
 	}
       else if (strcmp (fields[0], "NAV1_SRV") == 0)
 	{
 	  data->NAV1_SRV = atoi (fields[1]);
 #ifdef DEBUG
-	  printf ("NAV1_SRV=%d\n", data->NAV1_SRV);
+	  printf ("DEBUG: NAV1_SRV=%d\n", data->NAV1_SRV);
 #endif
 	}
       else if (strcmp (fields[0], "NAV2_SRV") == 0)
 	{
 	  data->NAV2_SRV = atoi (fields[1]);
 #ifdef DEBUG
-	  printf ("NAV2_SRV=%d\n", data->NAV2_SRV);
+	  printf ("DEBUG: NAV2_SRV=%d\n", data->NAV2_SRV);
 #endif
 	}
 #ifdef DEBUG
       else
 	{
-	  printf ("Unknown val: %s (%s)\n", fields[0], fields[1]);
+	  printf ("DEBUG: Unknown val: %s (%s)\n", fields[0], fields[1]);
 	}
 #endif
 

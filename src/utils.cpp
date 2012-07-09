@@ -34,6 +34,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#ifdef __APPLE__
+#include <mach-o/dyld.h> /* for _NSGetExecutablePath() */
+#endif
 
 #ifndef bcopy
 #define bcopy(from, to, n) memcpy(to, from, n)
@@ -180,16 +183,16 @@ int parser_get_next_value(double *value)
 }
 
 #ifdef _MSC_VER
-#define M_ISDIR _S_IFDIR
+#define M_ISDIR(a) (a & _S_IFDIR)
 #else
-#define M_ISDIR __S_IFDIR
+#define M_ISDIR S_ISDIR
 #endif
 
 int is_file_or_directory( const char * path )
 {
     struct stat buf;
     if ( stat(path,&buf) == 0 ) {
-        if (buf.st_mode & M_ISDIR)
+        if (M_ISDIR(buf.st_mode))
             return 2;
         return 1;
     }
@@ -220,8 +223,8 @@ void trim_base_path_ib( char *path )
 int get_data_path_per_os( char *path, size_t len )
 {
 #if defined(MACOSX)
-    uint32_t size = len;
-    if (_NSGetExecutablePath(path, &sizefreq) == 0)  {
+    unsigned int size = (unsigned int) len;
+    if (_NSGetExecutablePath(path, &size) == 0)  {
         // success
         trim_base_path_ib(path);
     } else {

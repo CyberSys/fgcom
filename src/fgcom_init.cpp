@@ -442,7 +442,7 @@ _parseOption (const std::string & arg, const std::string & next_arg)
 		{
 		  // ok, value cannot be in next_arg
 #ifdef DEBUG
-		  std::cout << "option " << arg_name << std::endl;
+		  std::cout << "DEBUG: option " << arg_name << std::endl;
 #endif
 		}
 	      else
@@ -451,7 +451,7 @@ _parseOption (const std::string & arg, const std::string & next_arg)
 		    {
 		      // there is no value, new option starts in next_arg
 #ifdef DEBUG
-		      std::cout << "option " << arg_name << std::endl;
+		      std::cout << "DEBUG: option " << arg_name << std::endl;
 #endif
 		    }
 		  else
@@ -459,7 +459,7 @@ _parseOption (const std::string & arg, const std::string & next_arg)
 		      // the value is in next_arg
 		      arg_value = std::string (next_arg);
 #ifdef DEBUG
-		      std::cout << "option " << arg_name << " with argument "
+		      std::cout << "DEBUG: option " << arg_name << " with argument "
 			<< arg_value << std::endl;
 #endif
 		    }
@@ -472,7 +472,7 @@ _parseOption (const std::string & arg, const std::string & next_arg)
 	      arg_value = arg.substr (pos + 1);
 
 #ifdef DEBUG
-	      std::cout << "option " << arg_name << " with argument " <<
+	      std::cout << "DEBUG: option " << arg_name << " with argument " <<
 		arg_value << std::endl;
 #endif
 	    }
@@ -493,7 +493,7 @@ _parseOption (const std::string & arg, const std::string & next_arg)
 	    }
 
 #ifdef DEBUG
-	  std::cout << "option " << arg_name << " with argument " << arg_value
+	  std::cout << "DEBUG: option " << arg_name << " with argument " << arg_value
 	    << std::endl;
 #endif
 
@@ -728,7 +728,7 @@ static void
 _fgcomParseArgs (int argc, char **argv)
 {
 #ifdef DEBUG
-  std::cout << "Processing commandline options." << std::endl;
+  std::cout << "DEBUG: Processing commandline options." << std::endl;
 #endif
 
   for (int i = 1; i < argc; i++)
@@ -789,7 +789,7 @@ _fgcomParseOptions (const std::string & path)
     in.open(path.c_str(),mode);
     if (!in.is_open ()) {
 #ifdef DEBUG
-        SG_LOG(SG_GENERAL, SG_ALERT, "Error: Unable to open " << path);
+        SG_LOG(SG_GENERAL, SG_ALERT, "Error: DEBUG: Unable to open " << path);
 #endif /* ONLY FOR DEBUG */
         return;
     }
