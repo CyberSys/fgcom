@@ -1,8 +1,42 @@
 FGCOM
 =====
 
-For information about FGCOM look at: http://squonk.abacab.org/dokuwiki/fgcom
+This project can be build using CMake 2.8 or later
+See : http://www.cmake.org/ for download and install details.
 
-For installtion instructions look at: http://squonk.abacab.org/dokuwiki/fgcom-manual
+Dependencies:
+ OpenAL - sound libraries
+ PLIB - for network code plib net.lib and ul.lib
+ SimGear - for SG_LOG (sgdebug;sgmisc)
 
+Building FGCOM in any system
+
+1. Create an out of source 'build' directory
+
+# mkdir build-fgcom
+# cd build-fgcom
+
+Windows MSVC users musts copy config.h.msvc to that 
+'build' folder naming it config.h
+
+# cmake /path/to/fgcom [-G <desired generator] \
+ [-DCMAKE_INSTALL_PREFIX:/where/to/install] \
+ [-DCMAKE_PREFIX_PATH:/sg/path/include[;/plib][;OpenAL]]
+ [-DCMAKE_LIBRARY_PATH:/sg/path/lib[;/plib/libs][;OpenAL/libs]]
+
+Now depending on the generator chosen, load the build files 
+in the generators IDE, or
+
+# cmake --build . --config Release
+
+And if installation desired -
+
+# cmake -DBUILD_TYPE=Release -P cmake_install.cmake
+
+
+That's it folks ;=))
+Geoff.
+20120615
+
+; eof
 

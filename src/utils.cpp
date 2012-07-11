@@ -1,12 +1,46 @@
+/*
+ * fgcom - VoIP-Client for the FlightGear-Radio-Infrastructure
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA  02110-1301, USA.
+ *
+ */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#ifdef _MSC_VER
+#include <Windows.h>
+#else /* !_MSC_VER */
 #include <unistd.h>
+#include <stdint.h>
+#endif /* _MSC_VER y/n */
 #include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#ifdef __APPLE__
+#include <mach-o/dyld.h> /* for _NSGetExecutablePath() */
+#endif
 
+#ifndef bcopy
+#define bcopy(from, to, n) memcpy(to, from, n)
+#endif
 
 static int s_index;
 static int s_file_handle;
@@ -25,10 +59,14 @@ int parser_init(const char *filename)
 	struct stat l_stat;
 	ssize_t l_nbytes;
 	int l_status;
+    int oflag = O_RDONLY;
+#ifdef _MSC_VER
+    oflag |= _O_BINARY; /* if comparing to stat size then must be binary */
+#endif
 
 	s_index = 0;
 
-	if((s_file_handle = open(filename, O_RDONLY)) < 0)
+	if((s_file_handle = open(filename, oflag)) < 0)
 		return (s_file_handle);
 
 	fstat(s_file_handle, &l_stat);
@@ -120,7 +158,7 @@ int parser_get_next_value(double *value)
 				l_j = s_index + 1;
 				while(  ((s_content[l_j] >= '0' && s_content[l_j] <= '9') ||
 						 (s_content[l_j] == '.' || s_content[l_j] == ',')) &&
-						((s_content[l_j] != '\n') && (l_j < s_size)) )
+						((s_content[l_j] != '\n') && (l_j < (unsigned int)s_size)) )
 					l_j++;
 
 				l_size = l_j - s_index + 1;
@@ -144,6 +182,75 @@ int parser_get_next_value(double *value)
 	return(0);
 }
 
+#ifdef _MSC_VER
+#define M_ISDIR(a) (a & _S_IFDIR)
+#else
+#define M_ISDIR S_ISDIR
+#endif
 
+int is_file_or_directory( const char * path )
+{
+    struct stat buf;
+    if ( stat(path,&buf) == 0 ) {
+        if (M_ISDIR(buf.st_mode))
+            return 2;
+        return 1;
+    }
+    return 0;
+}
+
+/* trim to base path IN BUFFER */
+void trim_base_path_ib( char *path )
+{
+    size_t len = strlen(path);
+    size_t i, off;
+    int c;
+    off = 0;
+    for (i = 0; i < len; i++) {
+        c = path[i];
+        if (( c == '/' ) || ( c == '\\')) {
+            off = i + 1;    // get after separator
+#ifdef _MSC_VER
+            if ( c == '/' )
+                path[i] = '\\';
+#endif // _MSC_VER
+        }
+    }
+    path[off] = 0;
+}
+
+/* get data path per OS */
+int get_data_path_per_os( char *path, size_t len )
+{
+#if defined(MACOSX)
+    unsigned int size = (unsigned int) len;
+    if (_NSGetExecutablePath(path, &size) == 0)  {
+        // success
+        trim_base_path_ib(path);
+    } else {
+        printf("ERROR: path buffer too small; need size %u\n", size);
+        return 1;
+    }
+#elif defined(_MSC_VER)
+    unsigned int size = GetModuleFileName(NULL,path, len);
+    if (size && (size != len)) {
+        // success
+        trim_base_path_ib(path);
+    } else {
+        if (size) {
+            printf("ERROR:GetModuleFileName: path buffer too small; need size more than %u\n", len);
+        } else {
+            printf("ERROR:GetModuleFileName: FAILED!\n");
+        }
+        return 1;
+    }
+#else
+    strcpy(path,"/usr/local/shared/");
+#endif // MACOSX | _MSC_VER | others   
+    return 0;
+}
+
+
+/* eof - utils.cpp */
 
 

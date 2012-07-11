@@ -18,7 +18,6 @@ void
 icao2number (char *icao, float frequency, char *buf)
 {
   char icao_work[5];
-  int i;
 
   if (strlen (icao) == 0)
     strcpy (icao, "ZZZZ");
@@ -34,7 +33,6 @@ const char *
 icaobypos (struct airport *airports, double frequency,
 	   double plane_lat, double plane_lon, double range)
 {
-  char icao[5];
   double r;
 
   if (frequency >= DEFAULT_LOWER_FRQ_LIMIT
@@ -47,7 +45,7 @@ icaobypos (struct airport *airports, double frequency,
 	      r =
 		distance (plane_lat, plane_lon, airports->lat, airports->lon);
 #ifdef DEBUG
-	      printf ("      APT: %s (%s %s)\n", airports->text,
+	      printf ("  DEBUG: APT: %s (%s %s)\n", airports->text,
 		      airports->icao, airports->type);
 	      printf ("  APT lat: %2.6f   APT lon: %2.6f\n",
 		      airports->lat, airports->lon);
@@ -86,7 +84,7 @@ posbyicao (struct airport *airports, char *icao)
       if (!strcmp (airports->icao, icao))
 	{
 #ifdef DEBUG
-	  printf ("      APT: %s (%s %s)\n", airports->text,
+	  printf ("  DEBUG: APT: %s (%s %s)\n", airports->text,
 		  airports->icao, airports->type);
 	  printf ("  APT lat: %2.6f   APT lon: %2.6f\n",
 		  airports->lat, airports->lon);

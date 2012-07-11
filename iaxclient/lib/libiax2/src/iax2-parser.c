@@ -56,7 +56,7 @@ static unsigned short get_uint16(unsigned char *p)
 
 static void internaloutput(const char *str)
 {
-	printf(str);
+	printf("%s", str); // avoid compiler warning, giving format
 }
 
 static void internalerror(const char *str)
@@ -111,6 +111,7 @@ static void dump_byte(char *output, int maxlen, void *value, int len)
 		snprintf(output, maxlen, "Invalid BYTE");
 }
 
+/* avoid compiler warnings about this two functions not used yet
 static void dump_ipaddr(char *output, int maxlen, void *value, int len)
 {
 	struct sockaddr_in sin;
@@ -130,6 +131,7 @@ static void dump_prov_flags(char *output, int maxlen, void *value, int len)
 	else
 		snprintf(output, maxlen, "Invalid INT");
 }
+*/
 
 static void dump_samprate(char *output, int maxlen, void *value, int len)
 {

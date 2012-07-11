@@ -26,11 +26,20 @@
  *
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+#include<sys/types.h>
 #include <iostream>
+#include <stdlib.h>
+#include <errno.h>
+#include <string.h>
+#include <ctype.h>
 #include <plib/netSocket.h>
 #include "fgcom.h"
 #include "fgcom_init.h"
 #include "utils.h"
+#include "version.h"
 
 /**
  *
@@ -76,9 +85,11 @@ static const char *map[] = {
   "busy", "transfer", NULL
 };
 
+#ifdef DEBUG /* only used in DEBUG, to show mode */
 static const char *mode_map[] = {
-  "ATC", "Flightgear"
+  (const char *)"ATC", (const char *)"Flightgear"
 };
+#endif
 
 static const char *radio_map[] = {
   "COM1", "NAV1", "COM2", "NAV2"
@@ -92,7 +103,7 @@ struct airport *airportlist;
 struct fgdata data;
 char icao[5];
 double special_frq[] =
-  { 999.999, 910.0, 123.45, 122.75, 123.5, 121.5, 732.34 - 1.0 };
+  { 999.999, 910.0, 123.45, 122.75, 123.5, 121.5, 732.34, -1.0 };
 double *special_frequencies;
 
 double previous_com_frequency = 0.0;
@@ -104,7 +115,7 @@ int max_com_instruments = 2;
 char *prog;
 
 /* configuration values */
-static bool debug;
+static bool debug = false;
 static int port;
 static const char *voipserver;
 static const char *fgserver;
@@ -119,6 +130,8 @@ static char codec_option;
 static const char *username;
 static const char *password;
 static bool list_audio;
+static char *positions_file;
+static char *frequency_file;
 
 static const OptionEntry fgcomOptionArray[] = {
   {"debug", 'd', false, OPTION_NONE, &debug, 0, "show debugging information",
@@ -150,6 +163,10 @@ static const OptionEntry fgcomOptionArray[] = {
    "use <devicename> as audio output", 0},
   {"codec", 'c', true, OPTION_CHAR, &codec_option, 0,
    "use codec <codec> as transfer codec", &codec_option},
+  {"positions", 'T', true, OPTION_STRING, &positions_file, 0,
+   "location positions file", &DEFAULT_POSITIONS_FILE},
+  {"special", 'Q', true, OPTION_STRING, &frequency_file, 0,
+   "location spl. frequency file (opt)", &SPECIAL_FREQUENCIES_FILE},
   {NULL}
 };
 
@@ -194,7 +211,7 @@ process_packet (char *buf)
 			 data.LON, DEFAULT_RANGE));
       icao2number (icao, selected_frequency, tmp);
 #ifdef DEBUG
-      printf ("dialing %s %3.3f MHz: %s\n", icao, selected_frequency, tmp);
+      printf ("DEBUG: dialing %s %3.3f MHz: %s\n", icao, selected_frequency, tmp);
 #endif
       do_iaxc_call (username, password, voipserver, tmp);
       /* iaxc_select_call (0); */
@@ -218,20 +235,72 @@ process_packet (char *buf)
     }
 }
 
+static char *base_name( char *name )
+{
+    char *bn = name;
+    size_t len = strlen(name);
+    size_t i;
+    int c;
+    for ( i = 0; i < len; i++ ) {
+        c = name[i];
+        if (( c == '/' ) || ( c == '\\'))
+            bn = &name[i+1];
+    }
+    return bn;
+}
+
+/* adjust default input per OS 
+   but no adjustment if it is a user input
+#ifdef MACOSX
+#endif // MACOSX   
+*/
+
+#define MX_PATH_SIZE 2000
+
+// if default FAILS, for OSX and WIN try EXE path
+int fix_input_files()
+{
+    int iret = 0;
+    char *def_freq = (char *) SPECIAL_FREQUENCIES_FILE;
+    char *def_pos  = (char *) DEFAULT_POSITIONS_FILE;
+    char exepath[MX_PATH_SIZE+2];
+    exepath[0] = 0;
+    if (strcmp( frequency_file,def_freq) == 0) {
+        /* ok is default value - do some fixes */
+        if (is_file_or_directory( frequency_file ) != 1) {
+            exepath[0] = 0;
+            iret |= get_data_path_per_os( exepath, MX_PATH_SIZE );
+            strcat(exepath,def_freq);
+            frequency_file = strdup(exepath);
+        }
+    }
+    if (strcmp( positions_file,def_pos) == 0) {
+        // if default FAILS, for OSX and WIN try EXE path
+        if (is_file_or_directory( positions_file ) != 1) {
+            exepath[0] = 0;
+            iret |= get_data_path_per_os( exepath, MX_PATH_SIZE );
+            strcat(exepath,def_pos);
+            positions_file = strdup(exepath);
+        }
+    }
+    return iret;
+}
+
 int
 main (int argc, char *argv[])
 {
   int numbytes;
   static char buf[MAXBUFLEN];
-  int c;
-  int ret = 0;
+  //int c;
+  //int ret = 0;
 
-	prog = strdup( argv[0] );
+	prog = strdup( base_name(argv[0]) );
   
 	/* program header */
 	std::cout << prog << " - a communication radio based on VoIP with IAX/Asterisk" << std::endl;
-	std::cout << "(c)2007-2011 by H. Wirtz <wirtz@dfn.de>" << std::endl;
-	std::cout << "Version " << VERSION << " build " << SVN_REV << std::endl;
+	std::cout << "Original (c) 2007-2011 by H. Wirtz <wirtz@dfn.de>" << std::endl;
+    std::cout << "OSX and Windows ports 2012 by Yves Sablonier and Geoff R. McLane, respectively." << std::endl;
+	std::cout << "Version " << FGCOM_VERSION << " build " << SVN_REV << " date " << __DATE__ << ", at " << __TIME__ << std::endl;
 	std::cout << "Using iaxclient library Version " << iaxc_version (tmp) << std::endl;
 	std::cout << std::endl;
 
@@ -243,6 +312,8 @@ main (int argc, char *argv[])
   password = DEFAULT_PASSWORD;
   codec_option = DEFAULT_CODEC;
   mode = 0;			/* 0 = ATC mode, 1 = FG mode */
+  positions_file = (char *) DEFAULT_POSITIONS_FILE;
+  frequency_file = (char *) SPECIAL_FREQUENCIES_FILE;
 
 #ifndef _WIN32
   /* catch signals */
@@ -257,7 +328,8 @@ main (int argc, char *argv[])
 #else
   if (iaxc_initialize (DEFAULT_IAX_AUDIO, DEFAULT_MAX_CALLS))
 #endif
-    fatal_error ("cannot initialize iaxclient!");
+    fatal_error ("cannot initialize iaxclient!\nHINT: Have you checked the mic and speakers?");
+
   initialized = 1;
 
   // option parser
@@ -371,11 +443,20 @@ main (int argc, char *argv[])
 	 * If no file $(INSTALL_DIR)/special_frequencies.txt exists, then default frequencies
 	 * are used and are hard coded.
 	 */
-	if((special_frequencies = read_special_frequencies(SPECIAL_FREQUENCIES_FILE)) == NULL)
-		special_frequencies = special_frq;
+
+    if (fix_input_files()) { /* adjust default input per OS */
+        fatal_error ("cannot adjust default input files per OS!\nHINT: Maybe recompile with larger buffer.");
+    }
+
+	if((special_frequencies = read_special_frequencies(frequency_file)) == 0) {
+        std::cout << "Failed to load file [" << frequency_file << "]!\nUsing internal defaults." << std::endl;
+        special_frequencies = special_frq;
+    } else {
+        std::cout << "Loaded file [" << frequency_file << "]." << std::endl;
+    }
 
 	/* read airport frequencies and positions */
-	airportlist = read_airports (DEFAULT_POSITIONS_FILE);
+	airportlist = read_airports (positions_file);   /* never returns if fail! */
 
   /* preconfigure iax */
   std::cout << "Initializing IAX client as " << username << ":" <<
@@ -396,12 +477,13 @@ main (int argc, char *argv[])
 		       const_cast < char *>(password),
 		       const_cast < char *>(voipserver));
 #ifdef DEBUG
-      std::cout << "Registered as '" << username << "' at '" << voipserver <<
+      std::cout << "DEBUG: Registered as '" << username << "' at '" << voipserver <<
 	"'." << std::endl;
 #endif
     }
   else
     {
+      std::cout << "Failed iaxc_register!\nHINT: Check user name, pwd and ip of server." << std::endl;
       exitcode = 130;
       quit (0);
     }
@@ -451,7 +533,7 @@ main (int argc, char *argv[])
 		  buf[numbytes] = '\0';
 #ifdef DEBUG
 		  std::
-		    cout << "got packet from " << their_addr.getHost () << ":"
+		    cout << "DEBUG: got packet from " << their_addr.getHost () << ":"
 		    << their_addr.getPort () << std::endl;
 		  std::cout << "packet is " << numbytes << " bytes long" <<
 		    std::endl;
@@ -483,7 +565,7 @@ main (int argc, char *argv[])
 
       icao2number (airport, frequency, tmp);
 #ifdef DEBUG
-      printf ("dialing %s %3.3f MHz: %s\n", airport, frequency, tmp);
+      printf ("DEBUG: dialing %s %3.3f MHz: %s\n", airport, frequency, tmp);
 #endif
       do_iaxc_call (username, password, voipserver, tmp);
       /* iaxc_select_call (0); */
@@ -542,7 +624,7 @@ alarm_handler (int signal)
     {
       icao2number (icao, selected_frequency, tmp);
 #ifdef DEBUG
-      printf ("dialing %s %3.3f MHz: %s\n", icao, selected_frequency, tmp);
+      printf ("DEBUG: dialing %s %3.3f MHz: %s\n", icao, selected_frequency, tmp);
 #endif
       do_iaxc_call (username, password, voipserver, tmp);
 
@@ -712,7 +794,7 @@ event_unknown (int type)
 void
 report (char *text)
 {
-  if (debug > 0)
+  if (debug)
     {
       std::cout << text << std::endl;
       fflush (stdout);
@@ -916,11 +998,11 @@ double *read_special_frequencies(const char *file)
 	{
 		l_allocated += ALLOC_CHUNK_SIZE;
 
-		if(SUCCESS(parser_init(file)))
+		if(FGC_SUCCESS(parser_init(file)))
 		{
 			l_count = 0;
 
-			while(SUCCESS(parser_get_next_value(&l_value)))
+			while(FGC_SUCCESS(parser_get_next_value(&l_value)))
 			{
 				if(l_count >= l_allocated)
 				{
@@ -938,7 +1020,12 @@ double *read_special_frequencies(const char *file)
 			if(l_count == l_allocated)
 				l_pfrq = (double *)realloc(l_pfrq, (l_count + 1) * sizeof(double));
 			l_pfrq[l_count] = -1.0;
-		}
+		} else {
+            // failed to open file
+            parser_exit();
+            free(l_pfrq);
+            return 0;
+        }
 	}
 
 	parser_exit();
@@ -956,10 +1043,13 @@ read_airports (const char *file)
   struct airport *first = NULL;
   struct airport *my_airport = NULL;
   struct airport *previous_airport = NULL;
-  printf ("Reading list of airports...");
+  size_t counter = 0;
+
+  printf ("Reading airports [%s]... ",file);
+
   if ((fp = fopen (file, "rt")) == NULL)
     {
-      printf ("Cannot open %s\n", DEFAULT_POSITIONS_FILE);
+      printf ("ERROR: open failed!\n");
       perror ("fopen");
       exitcode = 120;
       quit (0);
@@ -971,6 +1061,7 @@ read_airports (const char *file)
 			&airport_tmp.lat, &airport_tmp.lon,
 			airport_tmp.type, airport_tmp.text)) == 6)
     {
+        counter++;
       if ((my_airport =
 	   (struct airport *) malloc (sizeof (struct airport))) == NULL)
 	{
@@ -992,12 +1083,12 @@ read_airports (const char *file)
   fclose (fp);
   if (ret != EOF)
     {
-      printf ("error during reading airports!\n");
+      printf ("ERROR during reading airports!\n");
       exitcode = 900;
       quit (0);
     }
 
-  printf ("done.\n");
+  printf ("loaded %lu entries.\n",counter);
   return (first);
 }
 
@@ -1061,7 +1152,7 @@ parse_fgdata (struct fgdata *data, char *buf)
   fields[0] = '\0';
   fields[1] = '\0';
 #ifdef DEBUG
-  std::cout << "Parsing data: [" << buf << "]" << std::endl;
+  std::cout << "DEBUG: Parsing data: [" << buf << "]" << std::endl;
 #endif
   /* Parse data from FG */
   data_pair = strtok (buf, ",");
@@ -1072,118 +1163,118 @@ parse_fgdata (struct fgdata *data, char *buf)
 	{
 	  data->COM1_FRQ = atof (fields[1]);
 #ifdef DEBUG
-	  printf ("COM1_FRQ=%3.3f\n", data->COM1_FRQ);
+	  printf ("DEBUG: COM1_FRQ=%3.3f\n", data->COM1_FRQ);
 #endif
 	}
       else if (strcmp (fields[0], "COM2_FRQ") == 0)
 	{
 	  data->COM2_FRQ = atof (fields[1]);
 #ifdef DEBUG
-	  printf ("COM2_FRQ=%3.3f\n", data->COM2_FRQ);
+	  printf ("DEBUG: COM2_FRQ=%3.3f\n", data->COM2_FRQ);
 #endif
 	}
       else if (strcmp (fields[0], "NAV1_FRQ") == 0)
 	{
 	  data->NAV1_FRQ = atof (fields[1]);
 #ifdef DEBUG
-	  printf ("NAV1_FRQ=%3.3f\n", data->NAV1_FRQ);
+	  printf ("DEBUG: NAV1_FRQ=%3.3f\n", data->NAV1_FRQ);
 #endif
 	}
       else if (strcmp (fields[0], "NAV2_FRQ") == 0)
 	{
 	  data->NAV2_FRQ = atof (fields[1]);
 #ifdef DEBUG
-	  printf ("NAV2_FRQ=%3.3f\n", data->NAV2_FRQ);
+	  printf ("DEBUG: NAV2_FRQ=%3.3f\n", data->NAV2_FRQ);
 #endif
 	}
       else if (strcmp (fields[0], "PTT") == 0)
 	{
 	  data->PTT = atoi (fields[1]);
 #ifdef DEBUG
-	  printf ("PTT=%d\n", data->PTT);
+	  printf ("DEBUG: PTT=%d\n", data->PTT);
 #endif
 	}
       else if (strcmp (fields[0], "TRANSPONDER") == 0)
 	{
 	  data->TRANSPONDER = atoi (fields[1]);
 #ifdef DEBUG
-	  printf ("TRANSPONDER=%d\n", data->TRANSPONDER);
+	  printf ("DEBUG: TRANSPONDER=%d\n", data->TRANSPONDER);
 #endif
 	}
       else if (strcmp (fields[0], "IAS") == 0)
 	{
 	  data->IAS = atof (fields[1]);
 #ifdef DEBUG
-	  printf ("IAS=%f\n", data->IAS);
+	  printf ("DEBUG: IAS=%f\n", data->IAS);
 #endif
 	}
       else if (strcmp (fields[0], "GS") == 0)
 	{
 	  data->GS = atof (fields[1]);
 #ifdef DEBUG
-	  printf ("GS=%f\n", data->GS);
+	  printf ("DEBUG: GS=%f\n", data->GS);
 #endif
 	}
       else if (strcmp (fields[0], "LON") == 0)
 	{
 	  data->LON = atof (fields[1]);
 #ifdef DEBUG
-	  printf ("LON=%f\n", data->LON);
+	  printf ("DEBUG: LON=%f\n", data->LON);
 #endif
 	}
       else if (strcmp (fields[0], "LAT") == 0)
 	{
 	  data->LAT = atof (fields[1]);
 #ifdef DEBUG
-	  printf ("LAT=%f\n", data->LAT);
+	  printf ("DEBUG: LAT=%f\n", data->LAT);
 #endif
 	}
       else if (strcmp (fields[0], "ALT") == 0)
 	{
 	  data->ALT = atoi (fields[1]);
 #ifdef DEBUG
-	  printf ("ALT=%d\n", data->ALT);
+	  printf ("DEBUG: ALT=%d\n", data->ALT);
 #endif
 	}
       else if (strcmp (fields[0], "HEAD") == 0)
 	{
 	  data->HEAD = atof (fields[1]);
 #ifdef DEBUG
-	  printf ("HEAD=%f\n", data->HEAD);
+	  printf ("DEBUG: HEAD=%f\n", data->HEAD);
 #endif
 	}
       else if (strcmp (fields[0], "COM1_SRV") == 0)
 	{
 	  data->COM1_SRV = atoi (fields[1]);
 #ifdef DEBUG
-	  printf ("COM1_SRV=%d\n", data->COM1_SRV);
+	  printf ("DEBUG: COM1_SRV=%d\n", data->COM1_SRV);
 #endif
 	}
       else if (strcmp (fields[0], "COM2_SRV") == 0)
 	{
 	  data->COM2_SRV = atoi (fields[1]);
 #ifdef DEBUG
-	  printf ("COM2_SRV=%d\n", data->COM2_SRV);
+	  printf ("DEBUG: COM2_SRV=%d\n", data->COM2_SRV);
 #endif
 	}
       else if (strcmp (fields[0], "NAV1_SRV") == 0)
 	{
 	  data->NAV1_SRV = atoi (fields[1]);
 #ifdef DEBUG
-	  printf ("NAV1_SRV=%d\n", data->NAV1_SRV);
+	  printf ("DEBUG: NAV1_SRV=%d\n", data->NAV1_SRV);
 #endif
 	}
       else if (strcmp (fields[0], "NAV2_SRV") == 0)
 	{
 	  data->NAV2_SRV = atoi (fields[1]);
 #ifdef DEBUG
-	  printf ("NAV2_SRV=%d\n", data->NAV2_SRV);
+	  printf ("DEBUG: NAV2_SRV=%d\n", data->NAV2_SRV);
 #endif
 	}
 #ifdef DEBUG
       else
 	{
-	  printf ("Unknown val: %s (%s)\n", fields[0], fields[1]);
+	  printf ("DEBUG: Unknown val: %s (%s)\n", fields[0], fields[1]);
 	}
 #endif
 
@@ -1231,3 +1322,5 @@ do_iaxc_call (const char *username, const char *password,
   iaxc_call (dest);
   iaxc_millisleep (DEFAULT_MILLISLEEP);
 }
+
+/* eof - fgcom.cpp */

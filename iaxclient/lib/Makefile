@@ -300,12 +300,20 @@ RANLIB= ranlib
 CFLAGS:= $(CFLAGS) -DPA_USE_COREAUDIO=1 -Iportaudio/src/hostapi/coreaudio -Iportmixer/px_common -Iportaudio/src/common -Iportaudio/include
 
 #architecture
-CC=NEXT_ROOT=/Developer/SDKs/MacOSX10.4u.sdk/ gcc -arch i386 -arch ppc
+#
+# for building old universal binaries (means 10.4/5 i386/ppx
+#CC=NEXT_ROOT=/Developer/SDKs/MacOSX10.4u.sdk/ gcc -arch i386 -arch ppc
+# changed to "new universal", means 10.5/6 i386/x86_64
+# ppc and 10.4 not supported anymore with this change
+CC=NEXT_ROOT=/Developer/SDKs/MacOSX10.5.sdk/ gcc -arch i386 -arch x86_64
 
 
 #CFLAGS:= $(CFLAGS) -isystem /Developer/SDKs/MacOSX10.2.7.sdk/usr/include
 # Build Universal Binaries on MacOSX
-CC=NEXT_ROOT=/Developer/SDKs/MacOSX10.4u.sdk/ MACOSX_DEPLOYMENT_TARGET=10.4 gcc -arch i386 -arch ppc
+# old, see above:
+#CC=NEXT_ROOT=/Developer/SDKs/MacOSX10.4u.sdk/ MACOSX_DEPLOYMENT_TARGET=10.4 gcc -arch i386 -arch ppc
+# new
+CC=NEXT_ROOT=/Developer/SDKs/MacOSX10.5.sdk/ MACOSX_DEPLOYMENT_TARGET=10.5 gcc -arch i386 -arch x86_64
 DYNLIB=libiaxclient.dylib
 endif
 
