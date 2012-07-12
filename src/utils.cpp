@@ -182,6 +182,16 @@ int parser_get_next_value(double *value)
 	return(0);
 }
 
+/* cross-platform stat and check if directory or file
+ * return 2 == directory
+ * return 1 == file
+ * return 0 == neither
+ * NOTE: Think this fails in Windows if 
+ *       the path has a trailing path separator
+ *       and in some cases even if the path contains a forward (unix) separator
+ * TODO: Should copy the path, and fix it for stat
+ */
+
 #ifdef _MSC_VER
 #define M_ISDIR(a) (a & _S_IFDIR)
 #else
@@ -199,7 +209,9 @@ int is_file_or_directory( const char * path )
     return 0;
 }
 
-/* trim to base path IN BUFFER */
+/* trim to base binary path IN BUFFER,
+ * essentially removing the executable name
+ */
 void trim_base_path_ib( char *path )
 {
     size_t len = strlen(path);
@@ -219,7 +231,13 @@ void trim_base_path_ib( char *path )
     path[off] = 0;
 }
 
-/* get data path per OS */
+/*
+ * get data path per OS 
+ * In Windows and OSX the compiler only supplies a partial data file path,
+ *  so this is to get the current binary installed path.
+ * In *nix the full path is supplied, so this does nothing, except zero the path
+ *
+ */
 int get_data_path_per_os( char *path, size_t len )
 {
 #if defined(MACOSX)
@@ -245,7 +263,8 @@ int get_data_path_per_os( char *path, size_t len )
         return 1;
     }
 #else
-    strcpy(path,"/usr/local/shared/");
+    // strcpy(path,"/usr/local/shared/");
+    path[0] = 0;
 #endif // MACOSX | _MSC_VER | others   
     return 0;
 }
