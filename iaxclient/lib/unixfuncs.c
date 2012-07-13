@@ -62,27 +62,23 @@ int post_event_callback(iaxc_event ev) {
      * http://lists.apple.com/archives/darwin-development/2004/Feb/msg00079.html
      */
 /* include mach stuff for declaration of thread_policy stuff */
-#include <mach/mach.h>
+
+/* changed completely, following apple docs */
+/* 12.06.2012, ys */
+
+#include <mach/mach_init.h>
+#include <mach/thread_policy.h>
+#include <sched.h>
 
 int iaxc_prioboostbegin() {
+	
       struct thread_time_constraint_policy ttcpolicy;
-      int params [2] = {CTL_HW,HW_BUS_FREQ};
-      int hzms;
-      size_t sz;
       int ret;
-
-      /* get hz */
-      sz = sizeof (hzms);
-      sysctl (params, 2, &hzms, &sz, NULL, 0);
-
-      /* make hzms actually hz per ms */
-      hzms /= 1000;
-
-      /* give us at least how much? 6-8ms every 10ms (we generally need less) */
-      ttcpolicy.period = 10 * hzms; /* 10 ms */
-      ttcpolicy.computation = 2 * hzms;
-      ttcpolicy.constraint = 3 * hzms;
-      ttcpolicy.preemptible = 1;
+	
+	  ttcpolicy.period=1250000; // HZ/160
+	  ttcpolicy.computation=60000; // HZ/3300;
+	  ttcpolicy.constraint=90000; // HZ/2200;
+	  ttcpolicy.preemptible=1;
 
       if ((ret=thread_policy_set(mach_thread_self(),
         THREAD_TIME_CONSTRAINT_POLICY, (int *)&ttcpolicy,

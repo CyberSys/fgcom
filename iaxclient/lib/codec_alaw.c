@@ -8,6 +8,9 @@
  * the GNU Lesser (Library) General Public License
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 #include "codec_alaw.h"
 #include "iaxclient_lib.h"
 

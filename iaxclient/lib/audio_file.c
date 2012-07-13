@@ -46,10 +46,11 @@ static int file_stop (struct iaxc_audio_driver *d ) {
     return 0;
 }
 
+/* not used
 static void file_shutdown_audio() {
     return;
 }
-
+*/
 
 static int file_input(struct iaxc_audio_driver *d, void *samples, int *nSamples) {
 	*nSamples = 0;

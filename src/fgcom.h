@@ -2,7 +2,13 @@
 #include <errno.h>
 #include <string.h>
 #include <sys/types.h>
-#include <getopt.h>
+
+//#ifdef HAVE_GETOPT_H
+//#include <getopt.h>
+//#else
+//#include "fgcom_getopt.h"
+//#endif
+
 #include <ctype.h>
 #include <iaxclient.h>
 #include <math.h>
@@ -23,7 +29,7 @@
 #define DEFAULT_FG_SERVER "localhost"
 #define DEFAULT_FG_PORT 16661
 #define DEFAULT_CODE 1
-#define DEFAULT_VOIP_SERVER "mpserver13.flightgear.org"
+#define DEFAULT_VOIP_SERVER "fgcom.flightgear.org.uk"
 #define DEFAULT_CODEC 'u'
 #define DEFAULT_IAX_CODEC IAXC_FORMAT_ULAW
 #define DEFAULT_IAX_AUDIO AUDIO_INTERNAL
@@ -37,8 +43,9 @@
 #define MAX_COM 4;
 #define DEFAULT_ALARM_TIMER 15
 
-#define SUCCESS(__x__)		(__x__ == 0)
-#define FAILED(__x__)		(__x__ < 0)
+/* avoid name clash with winerror.h */
+#define FGC_SUCCESS(__x__)		(__x__ == 0)
+#define FGC_FAILED(__x__)		(__x__ < 0)
 
 
 struct airport

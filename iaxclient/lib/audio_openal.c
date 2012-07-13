@@ -3,6 +3,9 @@
 #ifdef __APPLE__
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
+#elif defined(OPENALSDK)
+#include <al.h>
+#include <alc.h>
 #else
 #include <AL/al.h>
 #include <AL/alc.h>
@@ -176,16 +179,20 @@ int openal_selected_devices(struct iaxc_audio_driver *d, int *input, int *output
 */
 int openal_start(struct iaxc_audio_driver *d)
 {
+    int iret = 0;
     struct openal_priv_data* priv = (struct openal_priv_data*)(d->priv);
-
-    return 0;
+    if (priv) /* just to stop compiler noise */
+        iret = 0;
+    return iret;
 }
 
 int openal_stop(struct iaxc_audio_driver *d)
 {
+    int iret = 0;
     struct openal_priv_data* priv = (struct openal_priv_data*)(d->priv);
-
-    return 0;
+    if (priv) /* just to stop compiler noise */
+        iret = 0;
+    return iret;
 }
 
 double openal_input_level_get(struct iaxc_audio_driver *d)

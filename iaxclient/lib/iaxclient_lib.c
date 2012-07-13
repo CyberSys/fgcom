@@ -14,6 +14,10 @@
  * This program is free software, distributed under the terms of
  * the GNU Lesser (Library) General Public License
  */
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #if defined(WIN32)  ||  defined(_WIN32_WCE)
 #include <stdlib.h>
 #endif
@@ -34,7 +38,7 @@
 #define DEFAULT_CALLERID_NAME    "Not Available"
 #define DEFAULT_CALLERID_NUMBER  "7005551212"
 
-#undef JB_DEBUGGING
+// #undef JB_DEBUGGING
 
 /* configurable jitterbuffer options */
 static long jb_target_extra = -1; 
@@ -182,7 +186,7 @@ EXPORT struct iaxc_ev_call_state *iaxc_get_event_state(iaxc_event *e) {
 // Messaging functions
 static void default_message_callback(char *message) {
   fprintf(stderr, "IAXCLIENT: ");
-  fprintf(stderr, message);
+  fprintf(stderr, "%s", message);
   fprintf(stderr, "\n");
 }
 
