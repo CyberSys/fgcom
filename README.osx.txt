@@ -36,7 +36,9 @@ is part of Core Audio chez Apple and probably already installed on your Mac,
 otherwise please install Xcode/SDKs from http://developer.apple.com
 
 ### PLIB - for network code plib net.lib and ul.lib
-comes with macports (port install plib +universal) or download latest source at http://plib.sourceforge.net/download.html and patch this source with current macports patches before you compile.
+comes with macports (port install plib +universal) or download latest source 
+at http://plib.sourceforge.net/download.html and patch this source with current 
+macports patches before you compile.
 
 
 Building FGCOM for OSX
@@ -47,10 +49,15 @@ Building FGCOM for OSX
 $ mkdir build-fgcom
 $ cd build-fgcom
 
-$ cmake . ../fg-fgcom \
+$ cmake . ../fgcom \
 -DCMAKE_BUILD_TYPE=RELEASE
 
 $ sudo make install
+
+Distributors: In case you want to set the positions/frequencies files 
+relative to the fgcom binary add -DDEFAULT_POSITIONS_FILE="fgcom-data/positions.txt".
+fgcom will find the data dir in Application.app/Contents/MacOS i.e. this way.
+This will work also for default install on osx of course (/usr/local).
 
 
 Running FGCOM
