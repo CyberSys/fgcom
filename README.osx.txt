@@ -18,10 +18,10 @@ for the FlightGear Radio                      .#.MXd#M#MMM@MNMMF   ..MdM"5J"!..J
 (c) 2007-2012 Holger Wirtz                    J!,Mdd#MNMMFdM#MM`  MjMFJE`!  `.......`WJ
 Licence: GPLv2                                 S`MKNNMMMmMMMMM$   MJM 4jJ.  .`F,.^E .JJ
                                                 J?MeMNMMMHHMM^    JdMJJ.l.  ..;J?.F..^J
-Contribution:                               ..     ."JBWMT"^      JXMN.J.. ..`..&J.?|.$
+Contribution (alphabetically):              ..     ."JBWMT"^      JXMN.J.. ..`..&J.?|.$
 Czsaba Halasz, Charles Ingels,             MNHHB..                JNMM.+!,.. .#dMWHeF`
-Geoff McLane, Yves Sablonier               .WHbMNdMa.              ?NMN,+.jY`.W#Mb.F
-                                              ."TMMNKN.             .J5xMM,xui.#.
+Geoff McLane, Yves Sablonier,              .WHbMNdMa.              ?NMN,+.jY`.W#Mb.F
+Martin Spott and others.                      ."TMMNKN.             .J5xMM,xui.#.
                                                    ?"""WMNmN&&&gMMMMHM ."".  ?#F
                                                                     ?=       .M^
 ---------------------------------------------------------------------------------------
@@ -47,8 +47,11 @@ Building FGCOM for OSX
 $ mkdir build-fgcom
 $ cd build-fgcom
 
-$ cmake . ../fgcom -DCMAKE_BUILD_TYPE=RELEASE
+$ cmake . ../fg-fgcom \
+-DCMAKE_BUILD_TYPE=RELEASE
+
 $ sudo make install
+
 
 Running FGCOM
 =============
@@ -56,7 +59,14 @@ Running FGCOM
 After succesfull install run an echo test with
 $ fgcom -f910 --positions=/usr/local/bin/fgcom-data/positions.txt
 
-Here is an article about how to use FGCOM with FlightGear:
+For an overview of command line options type:
+$ fgcom --help
+
+There are two new command line options for positions and frequency file paths:
+-T, -positions, --positions=    #location positions file
+-Q, -special, --special=        #location special frequencies file (optional)
+
+Here is a guide about how to use FGCOM with FlightGear:
 http://wiki.flightgear.org/Fgcom
 
 2012/07/14/ys
