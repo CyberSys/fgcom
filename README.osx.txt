@@ -35,6 +35,11 @@ Dependencies:
 is part of Core Audio chez Apple and probably already installed on your Mac, 
 otherwise please install Xcode/SDKs from http://developer.apple.com
 
+### ALUT.framework
+You will need the ALUT.framework in your Library/Frameworks path. You can download a
+precompiled ALUT.framework here (thanks to James Turner): 
+http://files.goneabitbursar.com/fg/alut-osx-universal.zip
+
 ### PLIB - for network code plib net.lib and ul.lib
 comes with macports (port install plib +universal) or download latest source 
 at http://plib.sourceforge.net/download.html and patch this source with current 
