@@ -50,7 +50,7 @@ typedef __int64 ssize_t;
 #undef USE_WIN_AUDIO
 #endif
 
-// put this option in cmake, default ON, and added search for ALUT and OpenAL libraries
+// put this option in cmake, default ON, and added search for OpenAL libraries
 // #ifndef AUDIO_OPENAL 
 // #define AUDIO_OPENAL 1  // ok this compiles, but must then LINK with OpenAL for __imp__alSourcePlay() etc...
 // #endif

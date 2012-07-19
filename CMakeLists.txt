@@ -62,7 +62,7 @@ option( USE_PA_JACK "Use PA_JACK. Default OFF." OFF )
 # found 'common' FAILED in linux, so default this OFF
 option( USE_PORTAUDIO "Use common PORTAUDIO if NOT OSS, ALSA OR JACK. Default OFF." OFF )
 option( AUDIO_ALSA "Use AUDIO_ALSA. Default OFF." OFF )
-option( AUDIO_OPENAL "Use AUDIO OpenAL (and ALUT). Default ON." ON )
+option( AUDIO_OPENAL "Use AUDIO OpenAL. Default ON." ON )
 option( USE_OPENAL_SDK "Use installed OpenAL SDK. Default ON." ON )
 option( FIND_PTHREAD_LIB "Find 'pthread.h' and 'pthread' library, added to add_LIBS." OFF )
 
@@ -534,7 +534,6 @@ find_package(PLIB   REQUIRED net)
 ### find_package(SG     REQUIRED sgdebug sgmisc)
 find_package(ZLIB   REQUIRED)
 if(AUDIO_OPENAL)
-find_package(ALUT   REQUIRED)
 find_package(OpenAL REQUIRED)
 message(STATUS "*** OpenAL OPENAL_INCLUDE_DIR=${OPENAL_INCLUDE_DIR}")
 message(STATUS "*** OpenAL OPENAL_LIBRARY=${OPENAL_LIBRARY}")
@@ -576,7 +575,6 @@ target_link_Libraries( fgcom
 
 if(AUDIO_OPENAL)
 target_link_Libraries( fgcom
-        ${ALUT_LIBRARY} 
         ${OPENAL_LIBRARY} )
 endif(AUDIO_OPENAL)
 
