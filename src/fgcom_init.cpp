@@ -29,11 +29,6 @@
 #  include <config.h>
 #endif
 
-// For BC 5.01 this must be included before OpenGL includes.
-#ifdef SG_MATH_EXCEPTION_CLASH
-#  include <math.h>
-#endif
-
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -46,12 +41,6 @@
 #if defined( _MSC_VER) || defined(__MINGW32__)
 #  include <direct.h>		// for getcwd()
 #  define getcwd _getcwd
-#endif
-
-// work around a stdc++ lib bug in some versions of linux, but doesn't
-// seem to hurt to have this here for all versions of Linux.
-#ifdef linux
-#  define _G_NO_EXTERN_TEMPLATES
 #endif
 
 #include <string>
@@ -798,20 +787,9 @@ _fgcomParseOptions (const std::string & path)
     SG_LOG (SG_GENERAL, SG_INFO, "Processing config file: " << path);
 
     in >> skip_comment;
-#ifndef __MWERKS__
     while (!in.eof ()) {
-#else
-    char c = '\0';
-    while (in.get (c) && c != '\0') {
-        in.putback (c);
-#endif
         std::string line;
-
-#if defined( macintosh )
-        getline (in, line, '\r');
-#else
         getline (in, line, '\n');
-#endif
 
         // catch extraneous (DOS) line ending character
         int i;
