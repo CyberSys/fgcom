@@ -526,19 +526,28 @@ set( iaxclient_lib_HEADERS iaxclient/lib/audio_encode.h iaxclient/lib/audio_file
    iaxclient/lib/libspeex/sb_celp.h iaxclient/lib/libspeex/smallft.h iaxclient/lib/libspeex/stack_alloc.h 
    iaxclient/lib/libspeex/vbr.h iaxclient/lib/libspeex/vq.h iaxclient/lib/sox/sox.h iaxclient/lib/spandsp/plc.h )
 
-# UGH - includes some simgear, which then requires boost - removed SG and boost
-include_directories( SYSTEM "${PROJECT_BINARY_DIR}" src ${iax_INCDIRS} ${CMAKE_PREFIX_PATH} ${M3RDPARTY_INCS} )
-
 # always includes ul - will seek "d" or "_d"
 find_package(PLIB   REQUIRED net)
 ### find_package(SG     REQUIRED sgdebug sgmisc)
 find_package(ZLIB   REQUIRED)
-if(AUDIO_OPENAL)
-find_package(OpenAL REQUIRED)
-message(STATUS "*** OpenAL OPENAL_INCLUDE_DIR=${OPENAL_INCLUDE_DIR}")
-message(STATUS "*** OpenAL OPENAL_LIBRARY=${OPENAL_LIBRARY}")
-include_directories( SYSTEM "${OPENAL_INCLUDE_DIR}" )
-endif(AUDIO_OPENAL)
+
+
+include_directories(
+   ${PROJECT_BINARY_DIR} 
+   ${PROJECT_SOURCE_DIR}/src 
+   ${iax_INCDIRS} 
+   ${PLIB_INCLUDE_DIR}
+   ${ZLIB_INCLUDE_DIR}
+   
+)
+
+ if(AUDIO_OPENAL)
+     find_package(OpenAL REQUIRED)
+     message(STATUS "*** OpenAL OPENAL_INCLUDE_DIR=${OPENAL_INCLUDE_DIR}")
+     message(STATUS "*** OpenAL OPENAL_LIBRARY=${OPENAL_LIBRARY}")
+     include_directories( SYSTEM ${OPENAL_INCLUDE_DIR}  )
+ endif(AUDIO_OPENAL)
+
 
 # I think the 'OBJS' has been set exactly per the Makefile now - of course 'sources' NOT 'objects'
 add_library( iaxclient_lib ${LIB_TYPE} ${OBJS} ${iaxclient_lib_HEADERS} )
