@@ -30,8 +30,14 @@ endif(UNIX)
 set( LIB_TYPE STATIC )  # set default static
 
 # add options to set the default data file paths compiled into the binary
-option( DEFAULT_POSITIONS_FILE "Path to 'default positions' file." "${PKGDATAPATH}/positions.txt"  )
-option( SPECIAL_FREQUENCIES_FILE "Path to 'special frequencies' file." "${PKGDATAPATH}/special_frequencies.txt" )
+if(NOT DEFAULT_POSITIONS_FILE)
+    set(DEFAULT_POSITIONS_FILE "${PKGDATAPATH}/positions.txt")
+endif()
+
+if (NOT SPECIAL_FREQUENCIES_FILE)
+    set(SPECIAL_FREQUENCIES_FILE "${PKGDATAPATH}/special_frequencies.txt")
+endif()
+
 option( ADD_DEBUG_OUTPUT "Add a DEBUG define to output more information." OFF )
 
 # Options offered in Makefile
