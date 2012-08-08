@@ -34,8 +34,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
 #ifdef __APPLE__
-#include <mach-o/dyld.h> /* for _NSGetExecutablePath() */
+#  include <CoreFoundation/CoreFoundation.h>
+#  include <mach-o/dyld.h> /* for _NSGetExecutablePath() */
 #endif
 
 #ifndef bcopy
@@ -241,6 +243,20 @@ void trim_base_path_ib( char *path )
 int get_data_path_per_os( char *path, size_t len )
 {
 #if defined(MACOSX)
+// if we're running as part of an application bundle, return the bundle's
+// resources directory
+// The following code looks for the base package inside the application
+// bundle, in the standard Contents/Resources location.
+  CFURLRef resourcesUrl = CFBundleCopyResourcesDirectoryURL(CFBundleGetMainBundle());
+  if (resourcesUrl) {
+    // now convert down to a path, and the a c-string
+    CFStringRef resPath = CFURLCopyFileSystemPath(resourcesUrl, kCFURLPOSIXPathStyle);
+    CFStringGetCString(resPath, path, len, CFStringGetSystemEncoding());
+    CFRelease(resourcesUrl);
+    CFRelease(resPath);
+  }
+  
+// we're unbundled, simply return the executable path
     unsigned int size = (unsigned int) len;
     if (_NSGetExecutablePath(path, &size) == 0)  {
         // success

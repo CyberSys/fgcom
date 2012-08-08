@@ -593,6 +593,11 @@ target_link_Libraries( fgcom
         ${OPENAL_LIBRARY} )
 endif(AUDIO_OPENAL)
 
+if(APPLE)
+    find_library(CF_LIBRARY CoreFoundation)    
+    target_link_Libraries( fgcom  ${CF_LIBRARY})
+endif()
+
 # deal with install 
 install(TARGETS fgcom DESTINATION bin )
 
