@@ -1,4 +1,4 @@
-# Locate PLIB - v20120620
+# Locate PLIB
 # This module defines
 # PLIB_LIBRARIES
 # PLIB_FOUND, if false, do not try to link to PLIB 
@@ -8,9 +8,7 @@
 # correspond to the ./configure --prefix=$PLIBDIR
 # used in building PLIB.
 #
-# Created by Geoff McLane
-# This was influenced by FG FindPLIB.cmake by James Turner.
-# who in turn was influenced by the FindOpenAL.cmake module.
+# Created by James Turner. This was influenced by the FindOpenAL.cmake module.
 
 #=============================================================================
 # Copyright 2005-2009 Kitware, Inc.
@@ -25,52 +23,32 @@
 # (To distributed this file outside of CMake, substitute the full
 #  License text for the above reference.)
 
-# Per my request, CMake should search for frameworks first in
-# the following order:
-# ~/Library/Frameworks/OpenAL.framework/Headers
-# /Library/Frameworks/OpenAL.framework/Headers
-# /System/Library/Frameworks/OpenAL.framework/Headers
-#
-# On OS X, this will prefer the Framework version (if found) over others.
-# People will have to manually change the cache values of 
-# OPENAL_LIBRARY to override this selection or set the CMake environment
-# CMAKE_INCLUDE_PATH to modify the search paths.
-
 include(SelectLibraryConfigurations)
 
 set(save_FIND_FRAMEWORK ${CMAKE_FIND_FRAMEWORK})
 set(CMAKE_FIND_FRAMEWORK ONLY)
 FIND_PATH(PLIB_INCLUDE_DIR ul.h
   PATH_SUFFIXES include/plib include 
-  PATHS
-  ~/Library/Frameworks
-  /Library/Frameworks
+  PATHS ${ADDITIONAL_LIBRARY_PATHS}
 )
 set(CMAKE_FIND_FRAMEWORK ${save_FIND_FRAMEWORK})
 
-if(PLIB_INCLUDE_DIR)
-message(STATUS "*** PLIB: Found 'framework' in ${PLIB_INCLUDE_DIR}")
-else(PLIB_INCLUDE_DIR)
-message(STATUS "*** PLIB: NOT FOUND 'framework' - doing FIND_PATH")
+if(NOT PLIB_INCLUDE_DIR)
     FIND_PATH(PLIB_INCLUDE_DIR plib/ul.h
       PATH_SUFFIXES include 
       HINTS $ENV{PLIBDIR}
-      PATHS
-      /usr/local
-      /opt/local
-      /usr
+      PATHS ${ADDITIONAL_LIBRARY_PATHS}
     )
-endif(PLIB_INCLUDE_DIR)
+endif()
 
+message(STATUS ${PLIB_INCLUDE_DIR})
 
 # check for dynamic framework on Mac ()
 FIND_LIBRARY(PLIB_LIBRARIES
   NAMES plib PLIB
   HINTS
   $ENV{PLIBDIR}
-  PATHS
-  ~/Library/Frameworks
-  /Library/Frameworks
+  PATHS ${ADDITIONAL_LIBRARY_PATHS}
 )
 
 if (MSVC) 
@@ -92,32 +70,26 @@ macro(find_static_component comp libs)
     set( compLibName ${compLibBase}_LIBRARY )
 
     FIND_LIBRARY(${compLibName}_DEBUG
-      NAMES ${compLib}d ${compLib}_d
+      NAMES ${compLib}_d
       HINTS $ENV{PLIBDIR}
       PATH_SUFFIXES lib64 lib libs64 libs libs/Win32 libs/Win64
-      PATHS
-      /usr/local
-      /usr
-      /opt
+      PATHS ${ADDITIONAL_LIBRARY_PATHS}
     )
     FIND_LIBRARY(${compLibName}_RELEASE
       NAMES ${compLib}
       HINTS $ENV{PLIBDIR}
       PATH_SUFFIXES lib64 lib libs64 libs libs/Win32 libs/Win64
-      PATHS
-      /usr/local
-      /usr
-      /opt
+      PATHS ${ADDITIONAL_LIBRARY_PATHS}
     )
     select_library_configurations( ${compLibBase} )
 
     set(componentLibRelease ${${compLibName}_RELEASE})
-    #message(STATUS "*** Simgear ${compLibName}_RELEASE ${componentLibRelease}")
+    #message(STATUS "Simgear ${compLibName}_RELEASE ${componentLibRelease}")
     set(componentLibDebug ${${compLibName}_DEBUG})
-    #message(STATUS "*** Simgear ${compLibName}_DEBUG ${componentLibDebug}")
+    #message(STATUS "Simgear ${compLibName}_DEBUG ${componentLibDebug}")
     if (NOT ${compLibName}_DEBUG)
         if (NOT ${compLibName}_RELEASE)
-            #message(STATUS "*** found ${componentLib}")
+            #message(STATUS "found ${componentLib}")
             list(APPEND ${libs} ${componentLibRelease})
         endif()
     else()
@@ -127,16 +99,16 @@ endmacro()
 
 if(${PLIB_LIBRARIES} STREQUAL "PLIB_LIBRARIES-NOTFOUND")    
     set(PLIB_LIBRARIES "") # clear value
-    message(STATUS "*** PLIB: 'framework' library NOT FOUND")
-    # based on the contents of deps, add other required PLIB
-    # static library dependencies. Eg PUI requires FNT
+    
+# based on the contents of deps, add other required PLIB
+# static library dependencies. Eg PUI requires FNT
     set(outDeps ${PLIB_FIND_COMPONENTS})
     
     foreach(c ${PLIB_FIND_COMPONENTS})
         if (${c} STREQUAL "pu")
             # handle MSVC confusion over pu/pui naming, by removing
             # 'pu' and then adding it back
-            list(REMOVE_ITEM outDeps "pu")
+            list(REMOVE_ITEM outDeps "pu" "fnt" "sg")
             list(APPEND outDeps ${PUNAME} "fnt" "sg")
         elseif (${c} STREQUAL "puaux")
             list(APPEND outDeps ${PUNAME} "fnt" "sg")
@@ -148,18 +120,16 @@ if(${PLIB_LIBRARIES} STREQUAL "PLIB_LIBRARIES-NOTFOUND")
     list(APPEND outDeps "ul") # everything needs ul
     list(REMOVE_DUPLICATES outDeps) # clean up
 
+
     # look for traditional static libraries
     foreach(component ${outDeps})
         find_static_component(${component} PLIB_LIBRARIES)
     endforeach()
-    message(STATUS "*** PLIB: Found libraries ${PLIB_LIBRARIES}")
-else()
-    message(STATUS "*** PLIB: Found 'framework' library ${PLIB_LIBRARIES}")
 endif()
 
 list(FIND outDeps "js" haveJs)
 if(${haveJs} GREATER -1)
-    message(STATUS "*** Adding runtime JS dependencies")
+    message(STATUS "adding runtime JS dependencies")
     if(APPLE)
     # resolve frameworks to full paths
         find_library(IOKIT_LIBRARY IOKit)
@@ -184,4 +154,3 @@ endif()
 include(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(PLIB DEFAULT_MSG PLIB_LIBRARIES PLIB_INCLUDE_DIR)
 
-# eof - FindPLIB.cmake
