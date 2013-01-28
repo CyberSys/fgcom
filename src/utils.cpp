@@ -247,13 +247,16 @@ int get_data_path_per_os( char *path, size_t len )
 // resources directory
 // The following code looks for the base package inside the application
 // bundle, in the standard Contents/Resources location.
+    
   CFURLRef resourcesUrl = CFBundleCopyResourcesDirectoryURL(CFBundleGetMainBundle());
   if (resourcesUrl) {
-    // now convert down to a path, and the a c-string
-    CFStringRef resPath = CFURLCopyFileSystemPath(resourcesUrl, kCFURLPOSIXPathStyle);
-    CFStringGetCString(resPath, path, len, CFStringGetSystemEncoding());
-    CFRelease(resourcesUrl);
-    CFRelease(resPath);
+      CFURLGetFileSystemRepresentation(resourcesUrl, true, (UInt8*) path, len);
+      CFRelease(resourcesUrl);
+      // append trailing seperator since CF doesn't
+      len = strlen(path);
+      path[len] = '/';
+      path[len+1] = 0;
+      return 0;
   }
   
 // we're unbundled, simply return the executable path
