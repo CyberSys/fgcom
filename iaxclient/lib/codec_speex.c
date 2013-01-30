@@ -46,7 +46,7 @@ static int decode ( struct iaxc_audio_codec *c,
     struct state * decstate = (struct state *) c->decstate;
     int ret =0;
     int bits_left = 0;
-    int start_bits = 0;
+    //int start_bits = 0;
 
     if(*inlen == 0) {
 	//return 0;
@@ -60,7 +60,7 @@ static int decode ( struct iaxc_audio_codec *c,
     speex_bits_read_from(&decstate->bits, (char *) in, *inlen);
     *inlen = 0; 
 
-    start_bits = speex_bits_remaining(&decstate->bits);
+    //start_bits = speex_bits_remaining(&decstate->bits);
 
     while(speex_bits_remaining(&decstate->bits) && (*outlen >= decstate->frame_size)) 
     {

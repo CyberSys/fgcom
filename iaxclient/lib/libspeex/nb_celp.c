@@ -1012,8 +1012,8 @@ void *nb_decoder_init(const SpeexMode *m)
 
 void nb_decoder_destroy(void *state)
 {
-   DecState *st;
-   st=(DecState*)state;
+   //DecState *st;
+   //st=(DecState*)state;
    
    speex_free(state);
 }

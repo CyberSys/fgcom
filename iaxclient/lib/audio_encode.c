@@ -110,13 +110,13 @@ void iaxc_set_speex_filters()
 
 static void calculate_level(short *audio, int len, double *level) {
     short now = 0;
-    double nowd;
+    //double nowd;
     int i;
 
     for(i=0;i<len;i++)
       if(abs(audio[i]) > now) now = abs(audio[i]); 
 
-    nowd = now/32767; 
+    //nowd = now/32767; 
 
     *level += (((double)now/32767) - *level) / 5;
 }

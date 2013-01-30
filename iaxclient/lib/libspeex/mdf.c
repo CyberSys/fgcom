@@ -238,7 +238,8 @@ void speex_echo_cancel(SpeexEchoState *st, short *ref, short *echo, short *out, 
    float scale;
    float ESR;
    float SER;
-   float Sry=0,Srr=0,Syy=0,Sey=0,See=0,Sxx=0;
+   //float Sry=0
+   float Srr=0,Syy=0,Sey=0,See=0,Sxx=0;
    float leak_estimate;
    
    leak_estimate = .1+(.9/(1+2*st->sum_adapt));
@@ -358,7 +359,7 @@ void speex_echo_cancel(SpeexEchoState *st, short *ref, short *echo, short *out, 
    }
 
    /* Compute a bunch of correlations */
-   Sry = inner_prod(st->y+st->frame_size, st->d+st->frame_size, st->frame_size);
+   //Sry = inner_prod(st->y+st->frame_size, st->d+st->frame_size, st->frame_size);
    Sey = inner_prod(st->y+st->frame_size, st->E+st->frame_size, st->frame_size);
    See = inner_prod(st->E+st->frame_size, st->E+st->frame_size, st->frame_size);
    Syy = inner_prod(st->y+st->frame_size, st->y+st->frame_size, st->frame_size);
