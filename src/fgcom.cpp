@@ -299,8 +299,8 @@ main (int argc, char *argv[])
 	/* program header */
 	std::cout << prog << " - a communication radio based on VoIP with IAX/Asterisk" << std::endl;
 	std::cout << "Original (c) 2007-2011 by H. Wirtz <wirtz@dfn.de>" << std::endl;
-    std::cout << "OSX and Windows ports 2012 by Yves Sablonier and Geoff R. McLane, respectively." << std::endl;
-	std::cout << "Version " << FGCOM_VERSION << " build " << SVN_REV << " date " << __DATE__ << ", at " << __TIME__ << std::endl;
+    std::cout << "OSX and Windows ports 2012-2013 by Yves Sablonier and Geoff R. McLane, resp." << std::endl;
+	std::cout << "Version " << FGCOM_VERSION << " compiled " << __DATE__ << ", at " << __TIME__ << std::endl;
 	std::cout << "Using iaxclient library Version " << iaxc_version (tmp) << std::endl;
 	std::cout << std::endl;
 

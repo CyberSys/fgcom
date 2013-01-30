@@ -1,4 +1,4 @@
-# Locate PLIB
+# Locate PLIB - v20130130 - v20120620
 # This module defines
 # PLIB_LIBRARIES
 # PLIB_FOUND, if false, do not try to link to PLIB 
@@ -8,7 +8,9 @@
 # correspond to the ./configure --prefix=$PLIBDIR
 # used in building PLIB.
 #
-# Created by James Turner. This was influenced by the FindOpenAL.cmake module.
+# Created in fgcom by Geoff R. McLane
+# This was influenced by FG FindPLIB.cmake by James Turner.
+# who in turn was influenced by the FindOpenAL.cmake module.
 
 #=============================================================================
 # Copyright 2005-2009 Kitware, Inc.
@@ -70,7 +72,7 @@ macro(find_static_component comp libs)
     set( compLibName ${compLibBase}_LIBRARY )
 
     FIND_LIBRARY(${compLibName}_DEBUG
-      NAMES ${compLib}_d
+      NAMES ${compLib}_d ${compLib}d
       HINTS $ENV{PLIBDIR}
       PATH_SUFFIXES lib64 lib libs64 libs libs/Win32 libs/Win64
       PATHS ${ADDITIONAL_LIBRARY_PATHS}
