@@ -7,7 +7,7 @@ it config.h
 
 And as that README advises fgcom building has 
 dependencies on -
-1. OpenAL - either built from the OPenAL-soft 
+1. OpenAL - either built from the OpenAL-soft 
    source, or from the Creative OpenAL SDK.
 
 2. PLIB - for network code plib net.lib and ul.lib
@@ -23,8 +23,8 @@ installed, or other generators if desired.
 There are also quite a number of *.sln and 
 *.vcproj files still in the source for MSVC 7.1,
 vs2003, and vs2005. And some Makefile files.
-These have NOT been used or updated, and may 
-fail.
+These have NOT been used or updated, and WILL 
+probaly fail. Use CMake instead...
 
 The current cmake build builds two items -
 1. iaxclient_lib.lib - a STATIC library which is linked into
@@ -45,3 +45,30 @@ by default, and no check has been done on such
 DLL building.
 
 The running of fgcom.exe 
+========================
+
+After succesfull build run an echo test with
+>Release\fgcom -f910 --positions=..\fgcom\data\positions.txt
+
+You MUST of course have a working microphone, and speakers attached 
+to your system. If all successful you should see -
+Call 0 accepted
+Call 0 answered
+output to the console, and you may need to allow fgcom access to 
+the net, then words spoken into the mic should be echoed to the 
+speaker(s). Use Ctrl+C to abort the application.
+
+For an overview of command line options type:
+>Release\fgcom --help
+
+There are two new command line options for positions and frequency file paths:
+-T, -positions, --positions=    #location positions file
+-Q, -special, --special=        #location special frequencies file (optional)
+
+Here is a guide about how to use FGCOM with FlightGear:
+http://wiki.flightgear.org/Fgcom
+
+Enjoy,
+Geoff.
+2013/01/30
+
