@@ -1299,6 +1299,7 @@ parse_fgdata (struct fgdata *data, char *buf)
 int check_special_frq (double frq)
 {
 	int i = 0;
+    frq = ceilf(frq*1000.0)/1000.0; // 20130602: By Clement de l'Hamaide, to 'Make 123.450Mhz usable'
 	while (special_frequencies[i] >= 0.0)
 	{
 		if (frq == special_frequencies[i])
