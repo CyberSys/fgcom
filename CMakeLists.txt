@@ -96,12 +96,13 @@ if(FIND_PTHREAD_LIB)
 		PATH_SUFFIXES lib )
       if(thread_LIB)
 		list(APPEND add_LIBS ${thread_LIB})
-		message(STATUS "*** Found ${thread_LIB})" )
+		message(STATUS "*** list(APPEND add_LIBS ${thread_LIB})" )
       else(thread_LIB)
 		message( FATAL_ERROR "*** NOT FOUND target_link_libraries(pthread1 ${thread_LIB})" )
       endif(thread_LIB)
     else(WIN32)
       list(APPEND add_LIBS ${CMAKE_THREAD_LIBS_INIT})
+      message(STATUS "*** list(APPEND add_LIBS ${CMAKE_THREAD_LIBS_INIT})")
     endif(WIN32)
   else(Threads_FOUND)
     message( FATAL_ERROR "*** THREADS NOT FOUND!")
@@ -586,7 +587,8 @@ target_link_libraries( fgcom iaxclient_lib )
 target_link_Libraries( fgcom
     ${win_LIBS}
     ${PLIB_LIBRARIES}
-    ${ZLIB_LIBRARIES} )
+    ${ZLIB_LIBRARIES}
+    ${add_LIBS} )
 
 if(AUDIO_OPENAL)
 target_link_Libraries( fgcom
