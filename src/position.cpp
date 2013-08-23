@@ -29,6 +29,22 @@ icao2number (char *icao, float frequency, char *buf)
   buf[16] = '\0';
 }
 
+void
+icao2atisnumber (char *icao, float frequency, char *buf)
+{
+  char icao_work[5];
+
+  if (strlen (icao) == 0)
+    strcpy (icao, "ZZZZ");
+
+  sprintf (icao_work, "%4s", icao);
+  sprintf (buf, "%02d%02d%02d%02d%02d%06d", ATIS_CODE, icao_work[0],
+          icao_work[1], icao_work[2], icao_work[3],
+          (int) (frequency * 1000 + 0.5));
+  buf[16] = '\0';
+}
+
+
 const char *
 icaobypos (struct airport *airports, double frequency,
 	   double plane_lat, double plane_lon, double range)

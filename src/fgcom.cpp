@@ -29,7 +29,7 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include<sys/types.h>
+#include <sys/types.h>
 #include <iostream>
 #include <stdlib.h>
 #include <errno.h>
@@ -553,17 +553,11 @@ main (int argc, char *argv[])
     }
   else
     {
-      /* only in ATC mode */
-      struct pos p;
-
       /* mic on, speaker on */
-      iaxc_input_level_set (level_in);
-      iaxc_output_level_set (level_out);
+      iaxc_input_level_set (1.0);
+      iaxc_output_level_set (0.0);
 
-      /* get geo positions of the airport */
-      p = posbyicao (airportlist, airport);
-
-      icao2number (airport, frequency, tmp);
+      icao2atisnumber (airport, frequency, tmp);
 #ifdef DEBUG
       printf ("DEBUG: dialing %s %3.3f MHz: %s\n", airport, frequency, tmp);
 #endif

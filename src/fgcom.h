@@ -29,6 +29,7 @@
 #define DEFAULT_FG_SERVER "localhost"
 #define DEFAULT_FG_PORT 16661
 #define DEFAULT_CODE 1
+#define ATIS_CODE 99
 #define DEFAULT_VOIP_SERVER "fgcom.flightgear.org.uk"
 #define DEFAULT_CODEC 'u'
 #define DEFAULT_IAX_CODEC IAXC_FORMAT_ULAW
@@ -103,6 +104,7 @@ void event_unknown (int type);
 void event_netstats (struct iaxc_ev_netstats stat);
 void event_level (double in, double out);
 void icao2number (char *icao, float frequency, char *buf);
+void icao2atisnumber (char *icao, float frequency, char *buf);
 void ptt (int mode);
 double distance (double lat1, double lon1, double lat2, double lon2);
 int split (char *string, char *fields[], int nfields, const char *sep);
