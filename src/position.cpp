@@ -50,13 +50,19 @@ icaobypos (struct airport *airports, double frequency,
 	   double plane_lat, double plane_lon, double range)
 {
   double r;
+  int frq = (int) (frequency * 1000 + 0.5);
+
+  if( (frq%10) !=0 && (frq%5) == 0 ){
+    frequency -= 0.005;
+    frequency  = ceilf(frequency*1000.0)/1000.0;
+  }
 
   if (frequency >= DEFAULT_LOWER_FRQ_LIMIT
       && frequency <= DEFAULT_UPPER_FRQ_LIMIT)
     {
       while (airports->next != NULL)
 	{
-	  if (airports->frequency == frequency)
+	  if ( ceilf(airports->frequency*1000.0)/1000.0 == frequency || airports->frequency == frequency)
 	    {
 	      r =
 		distance (plane_lat, plane_lon, airports->lat, airports->lon);

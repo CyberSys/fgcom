@@ -1308,9 +1308,21 @@ int check_special_frq (double frq)
 
 void
 do_iaxc_call (const char *username, const char *password,
-	      const char *voipserver, const char *number)
+	      const char *voipserver, char *number)
 {
   char dest[256];
+
+  if( strcmp(voipserver, "fgcom.flightgear.org") == 0 ) {
+    if( (number[strlen(number)-2] == '2' || number[strlen(number)-2] == '7') && (number[strlen(number)-1] == '0') ) {
+      number[strlen(number)-1] = '5';
+    }
+  }
+
+  if( strcmp(voipserver, "delta384.server4you.de") == 0 ) {
+    if( number[strlen(number)-1] == '5' ) {
+      number[strlen(number)-1] = '0';
+    }
+  }
 
   snprintf (dest, sizeof (dest), "%s:%s@%s/%s", username, password,
 	    voipserver, number);
