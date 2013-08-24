@@ -30,7 +30,7 @@
 #define DEFAULT_FG_PORT 16661
 #define DEFAULT_CODE 1
 #define ATIS_CODE 99
-#define DEFAULT_VOIP_SERVER "fgcom.flightgear.org.uk"
+#define DEFAULT_VOIP_SERVER "fgcom.flightgear.org"
 #define DEFAULT_CODEC 'u'
 #define DEFAULT_IAX_CODEC IAXC_FORMAT_ULAW
 #define DEFAULT_IAX_AUDIO AUDIO_INTERNAL
