@@ -555,7 +555,7 @@ main (int argc, char *argv[])
     {
       /* mic on, speaker on */
       iaxc_input_level_set (1.0);
-      iaxc_output_level_set (0.0);
+      iaxc_output_level_set (1.0);
 
       icao2atisnumber (airport, frequency, tmp);
 #ifdef DEBUG
@@ -1323,6 +1323,9 @@ do_iaxc_call (const char *username, const char *password,
       number[strlen(number)-1] = '0';
     }
   }
+
+  if( strcmp(number, "9990909090910000") == 0)
+    number = "0190909090910000";
 
   snprintf (dest, sizeof (dest), "%s:%s@%s/%s", username, password,
 	    voipserver, number);
