@@ -5,15 +5,15 @@ the first step for MSVC is the copy the file
 config.h.msvc to your build directory, naming 
 it config.h
 
+=============================
+THIS IS AN ESSENTIAL STEP!!!
+=============================
+
 And as that README advises fgcom building has 
 dependencies on -
 1. OpenAL - either built from the OpenAL-soft 
    source, or from the Creative OpenAL SDK.
-
 2. PLIB - for network code plib net.lib and ul.lib
-
-3. SimGear - for SG_LOG (sgdebug;sgmisc)
-
 
 This is a cmake build project, which will 
 write a version.h file, and generate build 
@@ -36,13 +36,8 @@ to the names
  iaxclient_libd.lib and fgcomd.exe
 
 Like most cmake built projects, there are also 
-MinSizeRel and RelWithDebInfo configurations. None of 
-these have been built or used by the maintainers.
-
-While the cmake files contains as options to 
-build a shared library, a DLL this is disabled 
-by default, and no check has been done on such 
-DLL building.
+MinSizeRel and RelWithDebInfo configurations. These are not usually 
+built or used by the maintainers.
 
 The running of fgcom.exe 
 ========================
@@ -70,5 +65,8 @@ http://wiki.flightgear.org/Fgcom
 
 Enjoy,
 Geoff.
-2013/01/30
+20130825 - 2013/01/30
+
+# eof
+
 

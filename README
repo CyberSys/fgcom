@@ -7,7 +7,6 @@ See : http://www.cmake.org/ for download and install details.
 Dependencies:
  OpenAL - sound libraries
  PLIB - for network code plib net.lib and ul.lib
- SimGear - for SG_LOG (sgdebug;sgmisc)
 
 Building FGCOM in any system
 
@@ -16,27 +15,102 @@ Building FGCOM in any system
 # mkdir build-fgcom
 # cd build-fgcom
 
-Windows MSVC users musts copy config.h.msvc to that 
+==================================================
+Windows MSVC users MUST copy config.h.msvc to that 
 'build' folder naming it config.h
+==================================================
 
 # cmake /path/to/fgcom [-G <desired generator] \
  [-DCMAKE_INSTALL_PREFIX:/where/to/install] \
  [-DCMAKE_PREFIX_PATH:/sg/path/include[;/plib][;OpenAL]]
  [-DCMAKE_LIBRARY_PATH:/sg/path/lib[;/plib/libs][;OpenAL/libs]]
 
-Now depending on the generator chosen, load the build files 
-in the generators IDE, or
+Now depending on the generator chosen -
 
-# cmake --build . --config Release
+1: Unix/Linux Makefile, the standard unix mantra
+# make
+# [sudo] make install
 
+2: MSVC solutions files
+(a) load the build files in the generators IDE, F7, to 
+compile and link. INSTALL must be done separatley.
+or
+(b) In command prompt
+> cmake --build . --config Release
 And if installation desired -
+> cmake --build . --config Release --target INSTAll
+OR
+> cmake -DBUILD_TYPE=Release -P cmake_install.cmake
 
-# cmake -DBUILD_TYPE=Release -P cmake_install.cmake
+3: cmake supports a considerable number of different generators. Run
+cmake --help to see the list supported on your platform.
 
+Echo Test:
+=========
 
-That's it folks ;=))
+To see the command line options run fgcom --help
+
+Run fgcom binary with command -f910... 
+$ ./fgcom -f910
+
+You should see...
+Reading airports [/some/path/positions.txt]... loaded NNNNN entries.
+Call 0 accepted
+Echo-Box
+Call 0 answered
+
+Speak 'one' into your microphone and you should hear an 
+echoed 'one' from your speakers.
+
+If the airports load fails, you may have to add -T/path/to/positions.txt
+
+Ctrl+C to exit the application.
+
+This is using the internal default voip server of fgcom.flightgear.org.
+If you want to connect to another server use -Sdelta384.server4you.de
+on the command line.
+
+Running with FGFS:
+=================
+
+This is only required with fgfs version 2.12 or less. fgfs 2.99 onwards has fgcom 
+integrated. Use the Multiplayer -> FGCom setting dialog to configure 
+fgcom. Normally the space-bar is the PTT button.
+
+But with earlier fgfs versions...
+
+1: Run fgfs with the added command - 
+ --generic=socket,out,10,localhost,16661,udp,fgcom
+
+This causes fgfs to output the information per the file <fgdata>/Protcol/fgcom.xml 
+as udp data on port 16661. This includes your selected com and nav frequencies, 
+your position, speed, callsign, altitude, etc - see the xml for details.
+
+YOu can check the udp data stream with utilities like 'netcat'.
+
+2: Run fgcom. There are command line options to change the port, the 
+voip server etc. As stated above use --help to see all the options, 
+but the default port is 16661 on localhost.
+
+When you select a com frequency in fgfs, fgcom will see that selection, and establish 
+a call to the chosen voip server, and you should hear other nearby pilots who 
+are on speaking on that same frequency.
+
+When you want to speak your intentions, like starting engine, taxing, 
+taking off, arriving, landing, etc, press the PTT key (usually space bar), 
+and talk clearly into your microphone, and you transmission will be relayed 
+to other nearby pilots or any active ATC if that is the chosen frequency.
+
+3: There is also a fgcomgui, that offers a graphical front end to using 
+fgcom - see https://code.google.com/p/fgcomgui/
+
+4: If you want to set up an ATC service at an airport of your choice, 
+then the OpenRadar java app can also use fgcom for voice communications.
+See http://wiki.flightgear.org/OpenRadar
+
+That's it folks ;=)) ENJOY!
 Geoff.
-20120615
+20130825 - 20120615
 
 ; eof
 
