@@ -1320,21 +1320,21 @@ do_iaxc_call (const char *username, const char *password,
 	      const char *voipserver, char *number)
 {
   char dest[256];
+  size_t len = strlen(number);
 
   if( strcmp(voipserver, "fgcom.flightgear.org") == 0 ) {
-    if( (number[strlen(number)-2] == '2' || number[strlen(number)-2] == '7') && (number[strlen(number)-1] == '0') ) {
-      number[strlen(number)-1] = '5';
+    if( (number[len-2] == '2' || number[len-2] == '7') && (number[len-1] == '0') ) {
+      number[len-1] = '5';
     }
-  }
-
+  } else
   if( strcmp(voipserver, "delta384.server4you.de") == 0 ) {
-    if( number[strlen(number)-1] == '5' ) {
-      number[strlen(number)-1] = '0';
+    if( number[len-1] == '5' ) {
+      number[len-1] = '0';
     }
   }
 
   if( strcmp(number, "9990909090910000") == 0)
-    number = "0190909090910000";
+    number = (char *)"0190909090910000";
 
   snprintf (dest, sizeof (dest), "%s:%s@%s/%s", username, password,
 	    voipserver, number);
