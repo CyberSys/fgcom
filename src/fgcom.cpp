@@ -76,7 +76,9 @@ int codec = DEFAULT_IAX_CODEC;
  */
 static double selected_frequency = 0.0;
 static char mode = 0;
-static char tmp[1024];		/* report output buffer */
+#define MX_REPORT_BUF 1024
+static char rep_buf[MX_REPORT_BUF+2]; /* report output buffer - used on iax callback thread - note +2 to ensure null termination */
+static char num_buf[1024];		/* number generation buffer - used on main thread */
 static int last_state = 0;	/* previous state of the channel */
 static char states[256];	/* buffer to hold ascii states */
 static char delim = '\t';	/* output field delimiter */
@@ -209,11 +211,11 @@ process_packet (char *buf)
       strcpy (icao,
 	      icaobypos (airportlist, selected_frequency, data.LAT,
 			 data.LON, DEFAULT_RANGE));
-      icao2number (icao, selected_frequency, tmp);
+      icao2number (icao, selected_frequency, num_buf);
 #ifdef DEBUG
-      printf ("DEBUG: dialing %s %3.3f MHz: %s\n", icao, selected_frequency, tmp);
+      printf ("DEBUG: dialing %s %3.3f MHz: %s\n", icao, selected_frequency, num_buf);
 #endif
-      do_iaxc_call (username, password, voipserver, tmp);
+      do_iaxc_call (username, password, voipserver, num_buf);
       /* iaxc_select_call (0); */
 
       connected = 1;
@@ -290,7 +292,7 @@ int
 main (int argc, char *argv[])
 {
   int numbytes;
-  static char buf[MAXBUFLEN];
+  static char pkt_buf[MAXBUFLEN+2];
   //int c;
   //int ret = 0;
 
@@ -301,7 +303,7 @@ main (int argc, char *argv[])
 	std::cout << "Original (c) 2007-2011 by H. Wirtz <wirtz@dfn.de>" << std::endl;
     std::cout << "OSX and Windows ports 2012-2013 by Yves Sablonier and Geoff R. McLane, resp." << std::endl;
 	std::cout << "Version " << FGCOM_VERSION << " compiled " << __DATE__ << ", at " << __TIME__ << std::endl;
-	std::cout << "Using iaxclient library Version " << iaxc_version (tmp) << std::endl;
+	std::cout << "Using iaxclient library Version " << iaxc_version (pkt_buf) << std::endl;
 	std::cout << std::endl;
 
   /* init values */
@@ -524,23 +526,20 @@ main (int argc, char *argv[])
 		{
 		  netAddress their_addr;
 		  if ((numbytes =
-		       fgsocket.recvfrom (buf, MAXBUFLEN - 1, 0,
+		       fgsocket.recvfrom (pkt_buf, MAXBUFLEN - 1, 0,
 					  &their_addr)) == -1)
 		    {
 		      perror ("recvfrom");
 		      exit (1);
 		    }
-		  buf[numbytes] = '\0';
+		  pkt_buf[numbytes] = '\0';
 #ifdef DEBUG
-		  std::
-		    cout << "DEBUG: got packet from " << their_addr.getHost () << ":"
+		  std::cout << "DEBUG: got packet from " << their_addr.getHost () << ":"
 		    << their_addr.getPort () << std::endl;
-		  std::cout << "packet is " << numbytes << " bytes long" <<
-		    std::endl;
-		  std::
-		    cout << "packet contains \"" << buf << "\"" << std::endl;
+		  std::cout << "packet is " << numbytes << " bytes long" << std::endl;
+		  std::cout << "packet contains \"" << pkt_buf << "\"" << std::endl;
 #endif
-		  process_packet (buf);
+		  process_packet (pkt_buf);
 		}
 	    }
 	  else
@@ -557,11 +556,11 @@ main (int argc, char *argv[])
       iaxc_input_level_set (1.0);
       iaxc_output_level_set (1.0);
 
-      icao2atisnumber (airport, frequency, tmp);
+      icao2atisnumber (airport, frequency, num_buf);
 #ifdef DEBUG
-      printf ("DEBUG: dialing %s %3.3f MHz: %s\n", airport, frequency, tmp);
+      printf ("DEBUG: dialing %s %3.3f MHz: %s\n", airport, frequency, num_buf);
 #endif
-      do_iaxc_call (username, password, voipserver, tmp);
+      do_iaxc_call (username, password, voipserver, num_buf);
       /* iaxc_select_call (0); */
 
       while (1)
@@ -616,11 +615,11 @@ alarm_handler (int signal)
   /* Check if we are now in range */
   else if (strlen (icao) != 0 && connected == 0)
     {
-      icao2number (icao, selected_frequency, tmp);
+      icao2number (icao, selected_frequency, num_buf);
 #ifdef DEBUG
-      printf ("DEBUG: dialing %s %3.3f MHz: %s\n", icao, selected_frequency, tmp);
+      printf ("DEBUG: dialing %s %3.3f MHz: %s\n", icao, selected_frequency, num_buf);
 #endif
-      do_iaxc_call (username, password, voipserver, tmp);
+      do_iaxc_call (username, password, voipserver, num_buf);
 
       connected = 1;
     }
@@ -687,19 +686,21 @@ event_state (int state, char *remote, char *remote_name,
       /* in fg mode the next incoming packet will do that anyway */
     }
 
-  snprintf (tmp, sizeof (tmp),
+  snprintf (rep_buf, MX_REPORT_BUF,
 	    "S%c0x%x%c%s%c%.50s%c%.50s%c%.50s%c%.50s", delim, state,
 	    delim, map_state (state), delim, remote, delim, remote_name,
 	    delim, local, delim, local_context);
-  report (tmp);
+  rep_buf[MX_REPORT_BUF] = 0; /* ensure null termination */
+  report (rep_buf);
 }
 
 void
 event_text (int type, char *message)
 {
-  snprintf (tmp, sizeof (tmp), "T%c%d%c%.200s", delim, type, delim, message);
+  snprintf (rep_buf, MX_REPORT_BUF, "T%c%d%c%.200s", delim, type, delim, message);
   std::cout << message << std::endl;
-  report (tmp);
+  rep_buf[MX_REPORT_BUF] = 0; /* ensure null termination */
+  report (rep_buf);
 }
 
 void
@@ -726,9 +727,10 @@ event_register (int id, int reply, int count)
     default:
       reason = "unknown";
     }
-  snprintf (tmp, sizeof (tmp), "R%c%d%c%s%c%d", delim, id, delim,
+  snprintf (rep_buf, MX_REPORT_BUF, "R%c%d%c%s%c%d", delim, id, delim,
 	    reason, delim, count);
-  report (tmp);
+  rep_buf[MX_REPORT_BUF] = 0; /* ensure null termination */
+  report (rep_buf);
 }
 
 void
@@ -736,7 +738,7 @@ event_netstats (struct iaxc_ev_netstats stat)
 {
   struct iaxc_netstat local = stat.local;
   struct iaxc_netstat remote = stat.remote;
-  snprintf (tmp, sizeof (tmp),
+  snprintf (rep_buf, MX_REPORT_BUF,
 	    "N%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c%d",
 	    delim, stat.callNo, delim, stat.rtt,
 	    delim, local.jitter, delim, local.losspct, delim,
@@ -745,14 +747,16 @@ event_netstats (struct iaxc_ev_netstats stat)
 	    remote.jitter, delim, remote.losspct, delim, remote.losscnt,
 	    delim, remote.packets, delim, remote.delay, delim,
 	    remote.dropped, delim, remote.ooo);
-  report (tmp);
+  rep_buf[MX_REPORT_BUF] = 0; /* ensure null termination */
+  report (rep_buf);
 }
 
 void
 event_level (double in, double out)
 {
-  snprintf (tmp, sizeof (tmp), "L%c%.1f%c%.1f", delim, in, delim, out);
-  report (tmp);
+  snprintf (rep_buf, MX_REPORT_BUF, "L%c%.1f%c%.1f", delim, in, delim, out);
+  rep_buf[MX_REPORT_BUF] = 0; /* ensure null termination */
+  report (rep_buf);
 }
 
 const char *
@@ -781,8 +785,9 @@ map_state (int state)
 void
 event_unknown (int type)
 {
-  snprintf (tmp, sizeof (tmp), "U%c%d", delim, type);
-  report (tmp);
+  snprintf (rep_buf, MX_REPORT_BUF, "U%c%d", delim, type);
+  rep_buf[MX_REPORT_BUF] = 0; /* ensure null termination */
+  report (rep_buf);
 }
 
 void
@@ -1096,16 +1101,20 @@ report_devices (int in)
   int flag = in ? IAXC_AD_INPUT : IAXC_AD_OUTPUT;
   iaxc_audio_devices_get (&devs, &ndevs, &input, &output, &ring);
   current = in ? input : output;
-  snprintf (tmp, sizeof (tmp), "%s\n", devs[current].name);
+  snprintf (rep_buf, MX_REPORT_BUF, "%s\n", devs[current].name);
   for (i = 0; i < ndevs; i++)
     {
       if (devs[i].capabilities & flag && i != current)
 	{
-	  snprintf (tmp + strlen (tmp), sizeof (tmp) - strlen (tmp), "%s\n",
+	  snprintf (rep_buf + strlen (rep_buf), MX_REPORT_BUF - strlen (rep_buf), "%s\n",
 		    devs[i].name);
 	}
+        rep_buf[MX_REPORT_BUF] = 0; /* ensure null termination */
+        if (strlen(rep_buf) >= MX_REPORT_BUF)
+            break;
     }
-  return tmp;
+  rep_buf[MX_REPORT_BUF] = 0; /* ensure null termination */
+  return rep_buf;
 }
 
 int
