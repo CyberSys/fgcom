@@ -127,6 +127,7 @@
 #define IAX_IE_RR_DELAY                         49              /* Max playout delay for received frames (in ms) u16 */
 #define IAX_IE_RR_DROPPED                       50              /* Dropped frames (presumably by jitterbuf) u32 */
 #define IAX_IE_RR_OOO                           51              /* Frames received Out of Order u32 */
+#define IAX_IE_FORMAT2                          56              /* used for expanded codec negotiation */
 
 
 

@@ -219,6 +219,7 @@ static struct iax2_ie {
 	{ IAX_IE_RR_DELAY, "RR_DELAY", dump_short },
 	{ IAX_IE_RR_DROPPED, "RR_DROPPED", dump_int },
 	{ IAX_IE_RR_OOO, "RR_OOO", dump_int },
+	{ IAX_IE_FORMAT2, "FORMAT2", dump_int }
 };
 
 const char *iax_ie2str(int ie)
@@ -770,6 +771,8 @@ int iax_parse_ies(struct iax_ies *ies, unsigned char *data, int datalen)
 			} else {
 				ies->rr_ooo = ntohl(get_uint32(data + 2));
 			}
+			break;
+		case IAX_IE_FORMAT2:
 			break;
 		default:
 			snprintf(tmp, (int)sizeof(tmp), "Ignoring unknown information element '%s' (%d) of length %d\n", iax_ie2str(ie), ie, len);
