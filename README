@@ -15,11 +15,6 @@ Building FGCOM in any system
 # mkdir build-fgcom
 # cd build-fgcom
 
-==================================================
-Windows MSVC users MUST copy config.h.msvc to that 
-'build' folder naming it config.h
-==================================================
-
 # cmake /path/to/fgcom [-G <desired generator] \
  [-DCMAKE_INSTALL_PREFIX:/where/to/install] \
  [-DCMAKE_PREFIX_PATH:/sg/path/include[;/plib][;OpenAL]]
@@ -110,7 +105,7 @@ See http://wiki.flightgear.org/OpenRadar
 
 That's it folks ;=)) ENJOY!
 Geoff.
-20130825 - 20120615
+20130905 - 20130825 - 20120615
 
 ; eof
 

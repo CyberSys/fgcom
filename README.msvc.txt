@@ -1,13 +1,6 @@
 Building FGCOM using MSVC
 
-Read the README file for general details, but 
-the first step for MSVC is the copy the file
-config.h.msvc to your build directory, naming 
-it config.h
-
-=============================
-THIS IS AN ESSENTIAL STEP!!!
-=============================
+Read the README file for general details...
 
 And as that README advises fgcom building has 
 dependencies on -
@@ -65,7 +58,7 @@ http://wiki.flightgear.org/Fgcom
 
 Enjoy,
 Geoff.
-20130825 - 2013/01/30
+20120905 - 20130825 - 2013/01/30
 
 # eof
 
