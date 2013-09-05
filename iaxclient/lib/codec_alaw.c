@@ -14,6 +14,10 @@
 #include "codec_alaw.h"
 #include "iaxclient_lib.h"
 
+#ifdef _MSC_VER // remove need that this be in config.h
+#define inline __inline
+#endif
+
 struct state {
     plc_state_t plc;
 };

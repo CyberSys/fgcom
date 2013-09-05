@@ -41,6 +41,10 @@
 #include "utils.h"
 #include "version.h"
 
+#ifdef _MSC_VER // remove need that this be in config.h
+#define snprintf _snprintf
+#endif
+
 /**
  *
  * \define ALLOCK_CHUNK_SIZE

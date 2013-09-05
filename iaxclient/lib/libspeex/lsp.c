@@ -53,6 +53,10 @@ Heavily modified by Jean-Marc Valin (fixed-point, optimizations,
 #include "stack_alloc.h"
 #include "math_approx.h"
 
+#ifdef _MSC_VER // remove need that this be in config.h
+#define inline __inline
+#endif
+
 #ifndef M_PI
 #define M_PI           3.14159265358979323846  /* pi */
 #endif

@@ -35,6 +35,16 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifdef _MSC_VER // remove need that these be in config.h
+#include <io.h> // for open, read, close...
+#ifdef WIN64
+typedef __int64 ssize_t;
+#else
+typedef int ssize_t;
+#endif
+#endif
+
+
 #ifdef __APPLE__
 #  include <CoreFoundation/CoreFoundation.h>
 #  include <mach-o/dyld.h> /* for _NSGetExecutablePath() */
